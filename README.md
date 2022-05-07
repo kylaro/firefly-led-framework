@@ -2,22 +2,22 @@
 
 ## Welcome to the FireFly LED Controller by kylarLEDs!
 
-The project currently uses a Raspberry Pi Pico on the kylarLEDs FireFly board
+    The project uses a Raspberry Pi Pico on the kylarLEDs FireFly board!
 
-The sensors on the board are:
-    1. Microphone (not yet supported) -> for sound reactive LEDs
-    2. Rotary encoder (not yet supported) -> for color/hue control
-    3. Potentiometer (not yet supported) -> for brightness control
+    The sensors on the board are:
+        1. Microphone (not yet supported) -> for sound reactive LEDs
+        2. Rotary encoder (not yet supported) -> for color/hue control
+        3. Potentiometer (not yet supported) -> for brightness control
 
-The outputs from the board are:
-    1. 2 x WS2812B LED output pins (not yet supported)
-        a. Each pin has 2 output pads, one on front and one on back
-        b. Each pin has a 0.1 inch header port
-    2. 2 x USBC 5V power up to 3A
+    The outputs from the board are:
+        1. 2 x WS2812B LED output pins (not yet supported)
+            a. Each pin has 2 output pads, one on front and one on back
+            b. Each pin has a 0.1 inch header port
+        2. 2 x USBC 5V power up to 3A
 
-The input to the boards are:
-    1. Pico programming micro usb port (not meant for power)
-    2. 1 x USBC 5V power up to 3A
+    The input to the boards are:
+        1. Pico programming micro usb port (not meant for power)
+        2. 1 x USBC 5V power up to 3A
 
 ## Quick start
 ### You don't want the source, you just want to put it on your Pico
@@ -36,9 +36,9 @@ The input to the boards are:
         a. https://www.mouser.com/ProductDetail/GCT/USB4125-GF-A-0190?qs=QNEnbhJQKvbCz4hEJBS24w%3D%3D
     5. PDM Mic
         a. https://www.mouser.com/ProductDetail/CUI-Devices/CMM-4737DT-26186-TR
-    6. 0805 10K Ohm Resistors (for Encoder)
+    6. Resistors - 0805 10K Ohm (for Encoder)
         a. https://www.mouser.com/ProductDetail/Xicon/260-10K-RC
-    7. 0805 0.10 uF Capacitors (for Encoder)
+    7. Capacitors - 0805 0.10 uF (for Encoder)
         a. https://www.mouser.com/ProductDetail/KEMET/C0805C104M5RAC
 
 
