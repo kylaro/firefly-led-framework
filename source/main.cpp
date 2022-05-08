@@ -59,7 +59,6 @@ int main(){
             currentPatternIndex = nextPatternIndex;     //Set current pattern index to the new one
             currentPattern->init();                      //Init the new current pattern
         }
-        printf("69");
 
     }
     

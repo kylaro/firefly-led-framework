@@ -4,6 +4,9 @@
 
 FireFlyController::FireFlyController(){
     initCommunication();
+    initBrightness();
+    initHue();
+    initPatternButton();
 }
 
 void FireFlyController::initCommunication(){
@@ -25,5 +28,21 @@ void FireFlyController::initCommunication(){
 
 
     sleep_ms(100);
-    printf("my value = %d\n", this->value);
+}
+
+
+void FireFlyController::outputLEDs(uint32_t *leds, uint32_t N){
+
+}
+
+void FireFlyController::initHue(){
+
+}
+
+void FireFlyController::initBrightness(){
+    
+}
+
+void FireFlyController::initPatternButton(){
+    
 }
