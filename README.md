@@ -6,8 +6,9 @@
 
     The sensors on the board are:
         1. Microphone (not yet supported) -> for sound reactive LEDs
-        2. Rotary encoder (not yet supported) -> for color/hue control
-        3. Potentiometer (not yet supported) -> for brightness control
+        2. Potentiometer (not yet supported) -> for brightness control
+        3. Rotary encoder (not yet supported) -> for color/hue control
+        4. Rotary encoder button (not yet supported) -> for changing patterns
 
     The outputs from the board are:
         1. 2 x WS2812B LED output pins (not yet supported)
@@ -33,7 +34,7 @@
     3. Encoder
         a. https://www.mouser.com/ProductDetail/652-PEC12R-4020F-S24
     4. USBC
-        a. https://www.mouser.com/ProductDetail/GCT/USB4125-GF-A-0190?qs=QNEnbhJQKvbCz4hEJBS24w%3D%3D
+        a. https://www.mouser.com/ProductDetail/GCT/USB4125-GF-A-0190
     5. PDM Mic
         a. https://www.mouser.com/ProductDetail/CUI-Devices/CMM-4737DT-26186-TR
     6. Resistors - 0805 10K Ohm (for Encoder)
@@ -73,6 +74,46 @@
 ## Pico Documentation:
     SDK: https://raspberrypi.github.io/pico-sdk-doxygen/index.html
     C: https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
+    RP2040: https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf
 
 
+## LED Library Architecture
+### Patterns (user created)
+    • Pattern object is parent, user creates subclasses
+	• Patterns have logic to decide which Effects to start
+        • Ex. using microphone data to spawn an effect
+    • Patterns manage their effects and add them to the EffectEngine
+    • Patterns do not directly write LEDs
 
+### Effects (user created)
+	• Effect object is parent, user creates subclasses
+	• Have LED write control
+    • Use generators, LEDOutput,
+
+### Generators (user created)
+	• Time dependent sin/triangle waves
+    • Noise functions (perlin )
+
+### Effect Engine (library)
+	• Manage all effects
+	• Combine every loop
+	• Output using LED output
+
+### Controller functionality (library)
+	• Hue, brightness, pattern change
+	• Contains the way that LED output is handled on the lowest level
+    • Also allows Sensors to connect somehow
+
+### Sensors library (library)
+	• Mic data
+	• Enc data
+	• Pot data
+    • Should each sensor be a Sensor object? Probably
+	
+### LED output (library)
+	• HW independent
+	• Manages LEDs, count, current values, conversions
+    • Calls upon controller object to output
+    • Everything is normalized to 1.0 (this makes life easier)
+        • Fixed vs Floating performance is negligible from my quick test
+	• HSV/RGB support

@@ -13,9 +13,17 @@ project(firefly-led-controller)
 # initialize the Pico SDK
 pico_sdk_init()
 
+file(GLOB_RECURSE SRCS source/*.cpp)
+file(GLOB_RECURSE HDRS source/*.h)
+
 add_executable(firefly
-    ${CMAKE_CURRENT_LIST_DIR}/source/main.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/source/main.cpp
+    ${SRCS}
+    ${HDRS}
 )
+
+
+
 
 target_link_libraries(firefly pico_stdlib)
 
