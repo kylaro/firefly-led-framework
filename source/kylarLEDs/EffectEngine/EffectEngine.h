@@ -8,5 +8,6 @@ class EffectEngine{
     */
     public:
         EffectEngine();
+        void run();
 
 };

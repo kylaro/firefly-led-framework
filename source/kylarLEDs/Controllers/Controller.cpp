@@ -2,9 +2,15 @@
 
 
 Controller::Controller(){
-    this->value = 5;
+    initCommunication();
 }
 
-int Controller::getValue(){
-    return this->value;
+void Controller::givePatternIndex(uint32_t *patternIndex){
+    this->patternIndex = patternIndex;
+}
+
+
+void Controller::initCommunication(){
+
+    this->value = 72;
 }

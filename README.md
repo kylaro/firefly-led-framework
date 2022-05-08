@@ -104,6 +104,7 @@
         • Fixed vs Floating performance is negligible from my quick test4
 	• HSV/RGB support
     • Adaptive framerate based on furthest LED index updated
+    • 1 interface per strip output
 
 #### Effect Engine (library)
 	• Manage all effects

@@ -1,10 +1,12 @@
 #pragma once
-
+#include <stdint.h>
 
 class Controller {
     public:
         Controller();
-        int getValue();
-    private:
-        int value = 1;
+        void givePatternIndex(uint32_t *patternIndex);
+        int value = 9;
+    protected:
+        uint32_t *patternIndex = 0;
+        virtual void initCommunication();
 };

@@ -1,4 +1,5 @@
 #pragma once
+#include "../Controllers/Controller.h"
 
 class LEDInterface{
     /*
@@ -13,7 +14,11 @@ class LEDInterface{
 
     public:
         LEDInterface();
+        void run();   // Apply the changes and output
         void setRGB();
         void setHSV();
+        void giveController(Controller *);
 
+    private:
+        Controller * ledController;
 };

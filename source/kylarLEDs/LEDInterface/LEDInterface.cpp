@@ -6,10 +6,19 @@ LEDInterface::LEDInterface(){
 }
 
 
-void setRGB(){
+void LEDInterface::setRGB(){
 
 }
 
-void setHSV(){
-    
+void LEDInterface::setHSV(){
+
+}
+
+void LEDInterface::run(){
+
+}
+
+void LEDInterface::giveController(Controller * ledController){
+
+    this->ledController = ledController;
 }

@@ -5,3 +5,7 @@ EffectEngine::EffectEngine(){
 
     
 }
+
+void EffectEngine::run(){
+
+}

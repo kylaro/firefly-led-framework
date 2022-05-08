@@ -1,9 +1,9 @@
 #include "Pattern.h"
 
 
-Pattern::Pattern(){
-
-
+Pattern::Pattern(EffectEngine * effectEngine, LEDInterface * LEDs){
+    this->effectEngine = effectEngine;
+    this->LEDs = LEDs;
 }
 
 
