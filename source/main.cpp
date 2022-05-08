@@ -1,6 +1,7 @@
 #include "pico/stdlib.h"
 #include "stdio.h"
-#include "kylarLEDs/Controllers/Controller.h"
+#include "Effects/ExampleEffect.h"
+#include "Patterns/ExamplePattern.h"
 
 int main(){
     int LED_PIN = 25; // Built-in LED pin
@@ -12,8 +13,9 @@ int main(){
     // initialize stdio
     stdio_init_all();
 
-    Controller *controller = new Controller();
-    
+    Pattern *examplePattern = new ExamplePattern();
+    Effect *exampleEffect = new ExampleEffect();
+
     while(1){
         printf("off\n");
         gpio_put(LED_PIN, 0);
@@ -21,7 +23,6 @@ int main(){
         printf("on\n");
         gpio_put(LED_PIN, 1);
         sleep_ms(250);
-        printf("object proof 5 = %d\n",controller->getValue());
     }
     
 

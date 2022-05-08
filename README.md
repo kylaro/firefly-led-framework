@@ -78,42 +78,55 @@
 
 
 ## LED Library Architecture
-### Patterns (user created)
+### You are encouraged to add to and edit:
+#### Patterns (user created)
     • Pattern object is parent, user creates subclasses
 	• Patterns have logic to decide which Effects to start
         • Ex. using microphone data to spawn an effect
     • Patterns manage their effects and add them to the EffectEngine
     • Patterns do not directly write LEDs
 
-### Effects (user created)
+#### Effects (user created)
 	• Effect object is parent, user creates subclasses
 	• Have LED write control
-    • Use generators, LEDOutput,
+    • Use generators, LEDOutput
 
-### Generators (user created)
-	• Time dependent sin/triangle waves
-    • Noise functions (perlin )
+#### source/main.cpp (carefully)
+    • You will need to add your patterns here for them to become selectable
+    • You should only need to change 1 line per pattern
 
-### Effect Engine (library)
-	• Manage all effects
-	• Combine every loop
-	• Output using LED output
-
-### Controller functionality (library)
-	• Hue, brightness, pattern change
-	• Contains the way that LED output is handled on the lowest level
-    • Also allows Sensors to connect somehow
-
-### Sensors library (library)
-	• Mic data
-	• Enc data
-	• Pot data
-    • Should each sensor be a Sensor object? Probably
-	
-### LED output (library)
+### You do not need to worry about:
+#### LED Interface (library)
 	• HW independent
 	• Manages LEDs, count, current values, conversions
     • Calls upon controller object to output
     • Everything is normalized to 1.0 (this makes life easier)
-        • Fixed vs Floating performance is negligible from my quick test
+        • Fixed vs Floating performance is negligible from my quick test4
 	• HSV/RGB support
+    • Adaptive framerate based on furthest LED index updated
+
+#### Effect Engine (library)
+	• Manage all effects
+	• Combine every loop
+	• Output using LED output
+
+#### Controller functionality (library)
+	• Hue, brightness, pattern change
+	• Contains the way that LED output is handled on the lowest level
+    • Also allows Sensors to connect somehow
+
+#### Sensors library (library)
+	• Microphone
+        • This requires a lot of processing power for FFT/PDM
+    • Potentiometer
+    • Encoder
+    • Encoder Button
+    • Future Sensor ideas:
+        • Accel/Gyro
+        • Temp/Humidity
+        • Magnetic Sensor
+
+
+### Generators (library)
+	• Time dependent sin/triangle waves
+    • Noise functions (perlin )
