@@ -2,11 +2,11 @@
 #include "Controller.h"
 
 class FireFlyController : public Controller{
-
     public:
         FireFlyController();
         //using Controller::Controller;
         void outputLEDs(uint32_t *leds, uint32_t N); // leds is an array, N is the length
+        uint32_t getCurrentTimeMillis();
     protected:
         void initCommunication();
         void initHue(); // Change hue via encoder

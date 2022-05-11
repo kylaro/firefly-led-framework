@@ -9,11 +9,6 @@
 
 using namespace std;
 int main(){
-
-
-    // initialize stdio
-    //
-
     // Initialize framework infrastructure
     Controller *ledController = new FireFlyController();
     EffectEngine *effectEngine = new EffectEngine();
@@ -52,14 +47,14 @@ int main(){
             LEDs->run();            //Apply changes and output to strip
         }else{
             //We are changing pattern
-            currentPattern->release();                   //Finish the current pattern
-            nextPatternIndex %= numPatterns;            //Protect from out of bounds
+            currentPattern->release();                      //Finish the current pattern
+            nextPatternIndex %= numPatterns;                //Protect from out of bounds
             nextPattern = patterns->at(nextPatternIndex);   //Get the next pattern
-            currentPattern = nextPattern;               //Set the current pattern to be the next
-            currentPatternIndex = nextPatternIndex;     //Set current pattern index to the new one
-            currentPattern->init();                      //Init the new current pattern
+            currentPattern = nextPattern;                   //Set the current pattern to be the next
+            currentPatternIndex = nextPatternIndex;         //Set current pattern index to the new one
+            currentPattern->init();                         //Init the new current pattern
         }
-
+        //printf("Main Loop\n");
     }
     
 

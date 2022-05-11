@@ -1,12 +1,15 @@
 #include "FireFlyController.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
+#include "pico/time.h"
+#include "../Generators/Generator.h"
 
 FireFlyController::FireFlyController(){
     initCommunication();
     initBrightness();
     initHue();
     initPatternButton();
+    Generator::giveControllerForTiming(this); // If you have an idea for a cleaner way to do this, let me know!
 }
 
 void FireFlyController::initCommunication(){
@@ -23,13 +26,16 @@ void FireFlyController::initCommunication(){
     gpio_put(LED_PIN, 0);
     sleep_ms(500);
     gpio_put(LED_PIN, 1);
-
-
-
-
-    sleep_ms(100);
+    sleep_ms(5000);
+    printf("Communication established");
 }
 
+
+uint32_t FireFlyController::getCurrentTimeMillis(){
+    absolute_time_t new_time = get_absolute_time(); //Microseconds
+    uint32_t millis = new_time /= 1000;
+    return millis;
+}
 
 void FireFlyController::outputLEDs(uint32_t *leds, uint32_t N){
 
