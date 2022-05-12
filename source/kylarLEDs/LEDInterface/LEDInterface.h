@@ -1,6 +1,6 @@
 #pragma once
 #include "../Controllers/Controller.h"
-#include "colorUtil.h"
+#include "ColorUtil.h"
 #include "LEDChange.h"
 
 #define NUM_CHANGES 300

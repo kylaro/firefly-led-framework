@@ -1,5 +1,5 @@
 #pragma once
-#include "colorUtil.h"
+#include "ColorUtil.h"
 
 class LEDChange {
 
@@ -9,6 +9,6 @@ class LEDChange {
         int count = 0;
     private:
         int index;
-        rgb_t color;
+        rgb_t rgb;
         
 };

@@ -2,13 +2,13 @@
 
 
 LEDChange::LEDChange(int i, rgb_t rgb){
-    color = rgb;
+    this->rgb = rgb;
     index = i;
 }
 
 void LEDChange::combine(rgb_t newrgb){
     if (count == 0) {
-		color = newrgb;
+		rgb = newrgb;
 		count++;
 		return;
 	} else {
