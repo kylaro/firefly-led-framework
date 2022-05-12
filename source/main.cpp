@@ -13,6 +13,7 @@ int main(){
     Controller *ledController = new FireFlyController();
     EffectEngine *effectEngine = new EffectEngine();
     LEDInterface *LEDs = new LEDInterface();
+    Generator::giveControllerForTiming(ledController);
     
     vector<Pattern*> *patterns = new vector<Pattern*>();
     //Push back all the patterns you want!

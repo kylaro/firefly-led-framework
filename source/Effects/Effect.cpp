@@ -5,14 +5,6 @@ Effect::Effect(){
 
 }
 
-void Effect::init(){
-
-}
-
-void Effect::run(){
-
-}
-
-void Effect::release(){
-
+int Effect::isDone(){
+    return this->done;
 }

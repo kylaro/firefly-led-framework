@@ -8,4 +8,6 @@ class ExampleEffect : public Effect{
         void run();
         void init();
         void release();
+    private:
+        double hue = 0;
 };

@@ -10,8 +10,8 @@ void LEDInterface::setRGB(){
 
 }
 
-void LEDInterface::setHSV(){
-
+void LEDInterface::setHSV(int index, hsv_t hsv){
+    
 }
 
 void LEDInterface::run(){

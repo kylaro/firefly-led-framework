@@ -17,7 +17,7 @@ class Pattern {
         virtual void init();
         virtual void release();
 
-    private:
+    protected:
         EffectEngine *effectEngine;
         LEDInterface *LEDs;
 };

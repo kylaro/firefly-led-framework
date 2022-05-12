@@ -12,5 +12,6 @@ class ExamplePattern : public Pattern{
     
     private:
         Generator *myGenerator;
+        
 
 };

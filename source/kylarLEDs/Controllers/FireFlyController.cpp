@@ -2,14 +2,13 @@
 #include "pico/stdlib.h"
 #include <stdio.h>
 #include "pico/time.h"
-#include "../Generators/Generator.h"
 
 FireFlyController::FireFlyController(){
     initCommunication();
     initBrightness();
     initHue();
     initPatternButton();
-    Generator::giveControllerForTiming(this); // If you have an idea for a cleaner way to do this, let me know!
+    
 }
 
 void FireFlyController::initCommunication(){

@@ -9,9 +9,11 @@ class Effect {
     */
     public:
         Effect();
-        virtual void run();
-        virtual void init();
-        virtual void release();
-
+        virtual void run() = 0;
+        virtual void init() = 0;
+        virtual void release() = 0;
         LEDInterface *LEDs;
+        int isDone();
+    protected:
+        int done = 0;
 };
