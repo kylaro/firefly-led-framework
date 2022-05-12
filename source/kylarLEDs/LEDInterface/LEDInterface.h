@@ -1,11 +1,9 @@
 #pragma once
 #include "../Controllers/Controller.h"
+#include "colorUtil.h"
+#include "LEDChange.h"
 
-typedef struct{
-    double hue;         // Color: 0 to 1.0 : 0 is RED, 0.33 is GREEN, 0.66 BLUE
-    double saturation;  // Whiteness: 0 to 1.0 : 0 is WHITE, 1 is COLOR
-    double value;       // Brightness: 0 to 1.0 : 0 is OFF, 1 is ON
-} hsv_t;
+#define NUM_CHANGES 300
 
 class LEDInterface{
     /*
@@ -20,11 +18,13 @@ class LEDInterface{
 
     public:
         LEDInterface();
-        void run();   // Apply the changes and output
+        void apply();   // Apply the changes 
+        void output();  // and output
         void setRGB();
         void setHSV(int index, hsv_t hsv);
         void giveController(Controller *);
-
+        
     private:
         Controller * ledController;
+        LEDChange *changesArray[NUM_CHANGES]; // Need to update this length or make it dynamic!!
 };

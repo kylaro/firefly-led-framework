@@ -94,6 +94,7 @@
 #### source/main.cpp (carefully)
     • You will need to add your patterns here for them to become selectable
     • You should only need to change 1 line per pattern
+    • Just add a line under "ADD YOUR PATTERNS HERE!"
 
 ### You do not need to worry about:
 #### LED Interface (library)
@@ -128,6 +129,25 @@
         • Magnetic Sensor
 
 
-### Generators (library)
+#### Generators (library)
 	• Time dependent sin/triangle waves
     • Noise functions (perlin )
+
+
+
+## KylarLEDs idea pad:
+### I want to benchmark different ways of doing the LEDInterface
+    Is it better to have an static array, dynamically allocated array, or a vector for keeping track of LEDChange objects. Maybe a map?
+        - I'd be interested in timing the different implementations
+        - Maybe I should add some sort of timing interface to easily do this :)
+
+    For the LEDChange objects, how should the combining be done? Simple average, or should there be a more complex way of combining overlapping colors?
+
+### Introduce LED objects, and a linked list of LED objects
+    It would be nice to be able to order LED is certain ways, kind of like a "virtual strip." Having a linkedlist is just the first step, but like the Dome this would expand to being able to make a graph of LEDs.
+
+
+### Noise/color functions in the generator
+    Everyone seems to like perlin noise for cool color maps on grids/strips of LEDs
+    Imagine the generator can also support more color gradients that can be linearly scrolled through.
+    Is the generator class going to exist on its own, or will it have children? In that case, do the children have access to the static member "controller"?

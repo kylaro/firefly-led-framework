@@ -17,6 +17,8 @@ int main(){
     
     vector<Pattern*> *patterns = new vector<Pattern*>();
     //Push back all the patterns you want!
+    //ADD YOU PATTERNS HERE!
+    //ex. patterns->push_back(new ExamplePattern(effectEngine, LEDs));
     patterns->push_back(new ExamplePattern(effectEngine, LEDs));
 
     //Initialize main loop variables
@@ -44,8 +46,9 @@ int main(){
         if(currentPatternIndex == nextPatternIndex){
             //We are remaining on the same pattern
             currentPattern->run();  //Allow pattern to create effects
-            effectEngine->run();    //Run each effect
-            LEDs->run();            //Apply changes and output to strip
+            effectEngine->run();    //Run each effect to generate LED Changes
+            LEDs->apply();          //Apply changes by collapsing LED Changes
+            LEDs->output();         //Output to strip via controller
         }else{
             //We are changing pattern
             currentPattern->release();                      //Finish the current pattern

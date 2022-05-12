@@ -2,6 +2,5 @@
 
 
 Sensor::Sensor(){
-
     
 }
