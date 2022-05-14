@@ -1,5 +1,5 @@
 #pragma once
-#include "Effect.h"
+#include "../Effect.h"
 
 class ExampleEffect : public Effect{
 

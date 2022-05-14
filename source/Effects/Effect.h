@@ -8,7 +8,7 @@ class Effect {
         • Use generators, LEDOutput
     */
     public:
-        Effect();
+        Effect(LEDInterface *);
         virtual void run() = 0;
         virtual void init() = 0;
         virtual void release() = 0;

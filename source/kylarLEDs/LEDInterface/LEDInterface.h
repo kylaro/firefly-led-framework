@@ -3,7 +3,7 @@
 #include "ColorUtil.h"
 #include "LEDChange.h"
 
-#define NUM_CHANGES 300
+#define NUM_LEDS 50
 
 class LEDInterface{
     /*
@@ -20,11 +20,11 @@ class LEDInterface{
         LEDInterface();
         void apply();   // Apply the changes 
         void output();  // and output
-        void setRGB();
+        void setRGB(int index, rgb_t rgb);
         void setHSV(int index, hsv_t hsv);
         void giveController(Controller *);
-        
     private:
         Controller * ledController;
-        LEDChange *changesArray[NUM_CHANGES]; // Need to update this length or make it dynamic!!
+        LEDChange* changesArray[NUM_LEDS]; // Need to update this length or make it dynamic!!
+        uint8_t ledsArray[NUM_LEDS*3];
 };

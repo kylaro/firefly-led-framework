@@ -5,7 +5,7 @@ class Controller {
     public:
         Controller();
         void givePatternIndex(uint32_t *patternIndex);
-        virtual void outputLEDs(uint32_t *leds, uint32_t N) = 0; // leds is an array, N is the length
+        virtual void outputLEDs(uint8_t *leds, uint32_t N) = 0; // leds is an array, N is the length
         double getHue();
         double getBrightness();
         virtual uint32_t getCurrentTimeMillis() = 0;

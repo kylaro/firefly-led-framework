@@ -1,7 +1,7 @@
 #include "Effect.h"
 
-Effect::Effect(){
-
+Effect::Effect(LEDInterface *LEDs){
+    this->LEDs = LEDs;
 
 }
 

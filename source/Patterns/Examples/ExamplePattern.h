@@ -1,6 +1,6 @@
 #pragma once
-#include "Pattern.h"
-#include "../kylarLEDs/Generators/Generator.h"
+#include "../Pattern.h"
+#include "../../kylarLEDs/Generators/Generator.h"
 
 class ExamplePattern : public Pattern{
 

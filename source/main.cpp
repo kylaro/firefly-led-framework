@@ -1,10 +1,10 @@
 
 #include "stdio.h"
-#include "Effects/ExampleEffect.h"
-#include "Patterns/ExamplePattern.h"
+#include "Effects/Examples/ExampleEffect.h"
+#include "Patterns/Examples/ExamplePattern.h"
 #include "kylarLEDs/LEDInterface/LEDInterface.h"
 #include "kylarLEDs/EffectEngine/EffectEngine.h"
-#include "kylarLEDs/Controllers/FireFlyController.h"
+#include "kylarLEDs/Controllers/FireFly/FireFlyController.h"
 #include <vector>
 
 using namespace std;
@@ -58,7 +58,6 @@ int main(){
             currentPatternIndex = nextPatternIndex;         //Set current pattern index to the new one
             currentPattern->init();                         //Init the new current pattern
         }
-        //printf("Main Loop\n");
     }
     
 

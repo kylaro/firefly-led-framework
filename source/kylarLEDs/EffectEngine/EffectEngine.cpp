@@ -1,5 +1,5 @@
 #include "EffectEngine.h"
-
+#include <stdio.h>
 EffectEngine::EffectEngine(){
 
 }
@@ -36,8 +36,9 @@ void EffectEngine::run() {
         } else {
             ++it;
         }
-
+        
         effect->run();
+        return;
     }
     for (Effect* eff : effectsQueue) {
         effects.push_back(eff);

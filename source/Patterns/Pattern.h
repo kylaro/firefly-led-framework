@@ -13,9 +13,9 @@ class Pattern {
     */
     public:
         Pattern(EffectEngine *, LEDInterface *);
-        virtual void run();
-        virtual void init();
-        virtual void release();
+        virtual void run() = 0;
+        virtual void init() = 0;
+        virtual void release() = 0;
 
     protected:
         EffectEngine *effectEngine;
