@@ -1,10 +1,11 @@
 #include "ExamplePattern.h"
 #include <stdio.h>
-#include "../../Effects/Examples/ExampleEffect.h"
+#include "../../Effects/Basics/ExampleEffect.h"
+#include "../../Effects/Effect.h"
 
 void ExamplePattern::init(){
     myTiming = new Timing();
-    effectEngine->apply(new ExampleEffect(LEDs));
+    Effect::engine->apply(new ExampleEffect(LEDs));
 }
 
 void ExamplePattern::run(){

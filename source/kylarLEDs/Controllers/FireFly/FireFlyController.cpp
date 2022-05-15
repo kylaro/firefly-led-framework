@@ -42,12 +42,17 @@ void FireFlyController::initCommunication(){
     gpio_put(LED_PIN, 1);
     sleep_ms(100);
     printf("Communication established\n");
+    // if (!set_sys_clock_khz(250000, false)){
+    //   printf("system clock 250MHz failed\n");
+    // }else{
+    //   printf("system clock now 250MHz\n");
+    // }
 }
 
 
-uint32_t FireFlyController::getCurrentTimeMillis(){
+uint64_t FireFlyController::getCurrentTimeMillis(){
     absolute_time_t new_time = get_absolute_time(); //Microseconds
-    uint32_t millis = new_time / 1000;
+    uint64_t millis = new_time / 1000;
     return millis;
 }
 

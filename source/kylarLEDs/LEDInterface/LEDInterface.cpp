@@ -13,6 +13,9 @@ LEDInterface::LEDInterface(){
 
 
 void LEDInterface::setRGB(int index, rgb_t rgb){
+    if(index >= NUM_LEDS){
+        return;
+    }
     rgb.r = ColorUtil::sanitizeH(rgb.r);
     rgb.g = ColorUtil::sanitizeH(rgb.g);
     rgb.b = ColorUtil::sanitizeH(rgb.b);
@@ -20,6 +23,9 @@ void LEDInterface::setRGB(int index, rgb_t rgb){
 }
 
 void LEDInterface::setHSV(int index, hsv_t hsv){
+    if(index >= NUM_LEDS){
+        index %= NUM_LEDS;
+    }
     hsv.h = ColorUtil::sanitizeH(hsv.h);
     hsv.s = ColorUtil::sanitizeSV(hsv.s);
     hsv.v = ColorUtil::sanitizeSV(hsv.v);
@@ -37,8 +43,8 @@ void LEDInterface::apply(){
             r = (uint8_t) (rgb.r*255.0*ledController->getBrightness());
             g = (uint8_t) (rgb.g*255.0*ledController->getBrightness());
             b = (uint8_t) (rgb.b*255.0*ledController->getBrightness());
-            ledsArray[3*i] = r;
-            ledsArray[3*i+1] = g;
+            ledsArray[3*i] = g;
+            ledsArray[3*i+1] = r;
             ledsArray[3*i+2] = b;
             change->count = 0;
         }

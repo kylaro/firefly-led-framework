@@ -1,11 +1,13 @@
 
 #include "stdio.h"
-#include "Effects/Examples/ExampleEffect.h"
-#include "Patterns/Examples/ExamplePattern.h"
+#include <vector>
+#include "Effects/Effect.h"
 #include "kylarLEDs/LEDInterface/LEDInterface.h"
 #include "kylarLEDs/EffectEngine/EffectEngine.h"
 #include "kylarLEDs/Controllers/FireFly/FireFlyController.h"
-#include <vector>
+#include "Patterns/Examples/ExamplePattern.h"
+#include "Patterns/Examples/FireFlies.h"
+
 
 using namespace std;
 int main(){
@@ -14,12 +16,14 @@ int main(){
     EffectEngine *effectEngine = new EffectEngine();
     LEDInterface *LEDs = new LEDInterface();
     Timing::giveControllerForTiming(ledController);
+    Effect::giveEngine(effectEngine);
     
     vector<Pattern*> *patterns = new vector<Pattern*>();
     //Push back all the patterns you want!
     //ADD YOU PATTERNS HERE!
     //ex. patterns->push_back(new ExamplePattern(effectEngine, LEDs));
-    patterns->push_back(new ExamplePattern(effectEngine, LEDs));
+    patterns->push_back(new FireFlies(LEDs));
+    patterns->push_back(new ExamplePattern(LEDs));
 
     //Initialize main loop variables
     uint32_t numPatterns = patterns->size();

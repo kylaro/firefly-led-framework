@@ -3,7 +3,7 @@
 #include "ColorUtil.h"
 #include "LEDChange.h"
 
-#define NUM_LEDS 50
+#define NUM_LEDS 15
 
 class LEDInterface{
     /*

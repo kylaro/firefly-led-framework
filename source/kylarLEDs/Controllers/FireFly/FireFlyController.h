@@ -9,7 +9,7 @@ class FireFlyController : public Controller{
         FireFlyController();
         //using Controller::Controller;
         void outputLEDs(uint8_t *leds, uint32_t N); // leds is an array, N is the length
-        uint32_t getCurrentTimeMillis();
+        uint64_t getCurrentTimeMillis();
         double getHue();
         double getBrightness();
     protected:

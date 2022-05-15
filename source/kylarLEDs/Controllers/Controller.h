@@ -8,7 +8,7 @@ class Controller {
         virtual void outputLEDs(uint8_t *leds, uint32_t N) = 0; // leds is an array, N is the length
         virtual double getHue();
         virtual double getBrightness();
-        virtual uint32_t getCurrentTimeMillis() = 0;
+        virtual uint64_t getCurrentTimeMillis() = 0;
     protected:
         uint32_t *patternIndex = 0;
         double hue = 0;

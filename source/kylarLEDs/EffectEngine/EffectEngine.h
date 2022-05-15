@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Effects/Effect.h"
 #include <vector>
+class Effect;
 class EffectEngine{
     /*
         • Manage all effects

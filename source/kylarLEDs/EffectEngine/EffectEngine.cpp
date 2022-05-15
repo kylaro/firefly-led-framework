@@ -1,5 +1,6 @@
 #include "EffectEngine.h"
 #include <stdio.h>
+#include <cstdlib>
 EffectEngine::EffectEngine(){
 
 }
@@ -31,14 +32,13 @@ void EffectEngine::run() {
             // erase() invalidates the iterator, use returned iterator
             effect->release();
             it = effects.erase(it);
-            //free(eff);
+            free(effect);
             continue;
         } else {
-            ++it;
+            effect->run();
+            it++;
         }
         
-        effect->run();
-        return;
     }
     for (Effect* eff : effectsQueue) {
         effects.push_back(eff);

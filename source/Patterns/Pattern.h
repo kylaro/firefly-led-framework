@@ -12,12 +12,12 @@ class Pattern {
         • Patterns do not directly write LEDs
     */
     public:
-        Pattern(EffectEngine *, LEDInterface *);
+        Pattern(LEDInterface *);
         virtual void run() = 0;
         virtual void init() = 0;
         virtual void release() = 0;
 
     protected:
-        EffectEngine *effectEngine;
         LEDInterface *LEDs;
+        int initialized = 0;
 };

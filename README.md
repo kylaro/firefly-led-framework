@@ -1,8 +1,9 @@
 # kylarLEDs
 
-## Welcome to the FireFly LED Controller by kylarLEDs!
+## Welcome to the FireFly LED Framework by kylarLEDs!
 
     The project uses a Raspberry Pi Pico on the kylarLEDs FireFly board!
+    Eventually the project will be hardware agnostic, so it should work for anything!
 
     The sensors on the board are:
         1. Microphone (not yet supported) -> for sound reactive LEDs
@@ -160,8 +161,13 @@
     Controller Pattern button
     Make a CMakeFile for the targeted controller to keep CMake hw agnostic
     Add execution timing utility
-    
-    
+    Make the Controller have a static variable for the current controller in use
+    Rename "Examples" for effects to "Basic" and have like single led fades and use them for fireflys
+    Have Basics be various Single LED stuff, and also various "streamers"
+    Make sure memory is being removed when doing done=1
+    Check EffectEngine clear() / rework what release() does
+    Add simple way to do gradients / time based HSV
+    Also a time based brightness to replace doing it manually in SingleTime.cpp
 
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)
