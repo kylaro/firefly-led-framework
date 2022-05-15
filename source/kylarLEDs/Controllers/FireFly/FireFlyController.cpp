@@ -10,6 +10,7 @@ FireFlyController::FireFlyController(){
     initHue();
     initPatternButton();
     initOutput();
+    this->timing = new Timing();
 }
 
 void FireFlyController::initOutput(){
@@ -46,7 +47,7 @@ void FireFlyController::initCommunication(){
 
 uint32_t FireFlyController::getCurrentTimeMillis(){
     absolute_time_t new_time = get_absolute_time(); //Microseconds
-    uint32_t millis = new_time /= 1000;
+    uint32_t millis = new_time / 1000;
     return millis;
 }
 
@@ -57,18 +58,24 @@ void FireFlyController::outputLEDs(uint8_t *leds, uint32_t N){
         // Bits for transmission must be shifted to top 8 bits
         pio_sm_put_blocking(PX_pio, PX_sm, ((uint32_t)*pixels++)<< 24);
     }
-    sleep_ms(5);
+    sleep_ms(1);
 }
 
 double FireFlyController::getBrightness(){
-    // static double brightness = 0;
-    // brightness = (brightness*4 + analogPot->getValue()) / 5.0;
-    double brightness = analogPot->getValue();
+    static double brightness = 0;
+    
+    if(timing->everyMs(10)){
+        brightness = analogPot->getValue();
+    }else{
+        return brightness;
+    }
     double threshold = 0.03;
     if(brightness < threshold){
         brightness = 0;
+    }else{
+        brightness -= threshold;
     }
-    return brightness - threshold;
+    return brightness;
 }
 
 double FireFlyController::getHue(){

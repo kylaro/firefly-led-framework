@@ -1,6 +1,6 @@
 #pragma once
 #include "../Pattern.h"
-#include "../../kylarLEDs/Generators/Generator.h"
+#include "../../kylarLEDs/Utility/Timing.h"
 
 class ExamplePattern : public Pattern{
 
@@ -11,7 +11,7 @@ class ExamplePattern : public Pattern{
         void release();
     
     private:
-        Generator *myGenerator;
+        Timing *myTiming;
         
 
 };

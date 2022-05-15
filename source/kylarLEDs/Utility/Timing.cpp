@@ -1,17 +1,17 @@
-#include "Generator.h"
+#include "Timing.h"
 #include <stdio.h>
 
-Controller *Generator::controller;
-Generator::Generator(){
+Controller *Timing::controller;
+Timing::Timing(){
 
 
 }
 
-void Generator::giveControllerForTiming(Controller *theController){
+void Timing::giveControllerForTiming(Controller *theController){
     controller = theController;
 }
 
-int Generator::everyMs(int ms){
+int Timing::everyMs(int ms){
     //Return 1 if ms has passed since the last time it this was called
     //Return 0 if not
     uint32_t current_time = controller->getCurrentTimeMillis();

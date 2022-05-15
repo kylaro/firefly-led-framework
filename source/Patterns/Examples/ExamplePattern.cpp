@@ -3,13 +3,13 @@
 #include "../../Effects/Examples/ExampleEffect.h"
 
 void ExamplePattern::init(){
-    myGenerator = new Generator();
+    myTiming = new Timing();
     effectEngine->apply(new ExampleEffect(LEDs));
 }
 
 void ExamplePattern::run(){
-    if(myGenerator->everyMs(1000)){
-        printf("Generator works!\n");
+    if(myTiming->everyMs(1000)){
+        printf("TimingGenerator works!\n");
     }
 }
 

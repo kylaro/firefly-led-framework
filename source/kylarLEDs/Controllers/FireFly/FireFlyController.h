@@ -2,6 +2,7 @@
 #include "../Controller.h"
 #include "rp2040_pio.h"
 #include "Sensors/Potentiometer/Potentiometer.h"
+#include "../../Utility/Timing.h"
 
 class FireFlyController : public Controller{
     public:
@@ -23,4 +24,5 @@ class FireFlyController : public Controller{
         PIO PX_pio = pio0;
 
         Potentiometer *analogPot;
+        Timing *timing;
 };

@@ -155,7 +155,16 @@
 ### List of things still need to add:
     Support for multiple strips / multiple LED interfaces
     FireFlys example pattern
-    Dynamic strip lengths - no predfined length
-    Controller Hue/ Brightness control
+    Dynamic strip lengths - no predefined length
+    Controller Hue control
+    Controller Pattern button
     Make a CMakeFile for the targeted controller to keep CMake hw agnostic
-    Have ADC sample for pots be time/interrupt based (60hz or something)
+    Add execution timing utility
+    
+    
+
+    Done:
+        Have ADC sample for pots be time/interrupt based (60hz or something)
+            Or have a poll time, so when it is moving it is more polled more
+         Controller Brightness control
+

@@ -2,10 +2,10 @@
 #include "stdint.h"
 #include <time.h>
 #include "../Controllers/Controller.h"
-class Generator{
+class Timing{
 
     public:
-        Generator();
+        Timing();
         int everyMs(int ms);
         static void giveControllerForTiming(Controller *theController);
     
