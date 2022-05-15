@@ -1,6 +1,7 @@
 #pragma once
 #include "../kylarLEDs/LEDInterface/LEDInterface.h"
 #include "../kylarLEDs/EffectEngine/EffectEngine.h"
+#include <cstdlib>
 class EffectEngine;
 class Effect {
     /*

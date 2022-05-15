@@ -9,8 +9,9 @@ class FireFly : public Effect{
         void run();
         void init();
         void release();
-    private:
+        int direction = 1;
         double hue = 0;
+    private:
         double speed = 1;
         double position = 0;
         int lastPosition = -1;

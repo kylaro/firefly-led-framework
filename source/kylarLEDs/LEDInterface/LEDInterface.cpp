@@ -13,19 +13,26 @@ LEDInterface::LEDInterface(){
 
 
 void LEDInterface::setRGB(int index, rgb_t rgb){
-    if(index >= NUM_LEDS){
-        return;
-    }
-    rgb.r = ColorUtil::sanitizeH(rgb.r);
-    rgb.g = ColorUtil::sanitizeH(rgb.g);
-    rgb.b = ColorUtil::sanitizeH(rgb.b);
-    changesArray[index]->combine(rgb);
+    // set RGB is discontinued, HSV is superior
+    // if(index >= NUM_LEDS){
+    //     return;
+    // }
+    // rgb.r = ColorUtil::sanitizeH(rgb.r);
+    // rgb.g = ColorUtil::sanitizeH(rgb.g);
+    // rgb.b = ColorUtil::sanitizeH(rgb.b);
+    // changesArray[index]->combine(rgb);
 }
 
 void LEDInterface::setHSV(int index, hsv_t hsv){
     if(index >= NUM_LEDS){
         index %= NUM_LEDS;
     }
+    if(index < 0){
+        index = abs(index);
+        index %= NUM_LEDS;
+        index = NUM_LEDS - 1 - index;
+    }
+    hsv.h += ledController->getHue();
     hsv.h = ColorUtil::sanitizeH(hsv.h);
     hsv.s = ColorUtil::sanitizeSV(hsv.s);
     hsv.v = ColorUtil::sanitizeSV(hsv.v);

@@ -84,10 +84,15 @@ double FireFlyController::getBrightness(){
 }
 
 double FireFlyController::getHue(){
-    return 0.0;
+    int count = encoder->getCount();
+    //count *= 2;
+    double hue = (count)/360.0;
+    printf("hue set to %f\n", hue);
+    return hue;
 }
 
 void FireFlyController::initHue(){
+    encoder = new Encoder(26, 22);
 
 }
 

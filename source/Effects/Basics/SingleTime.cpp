@@ -53,10 +53,10 @@ void SingleTime::run(){
         done = 1;
         return;
     }
-
+    
     LEDs->setHSV(profile.index, color);
 }
 
 void SingleTime::release(){
-
+    free(timer);
 }

@@ -5,6 +5,10 @@
 void FireFlies::init(){
     myTiming = new Timing();
     Effect::engine->apply(new FireFly(LEDs));
+    FireFly *greenFireFly = new FireFly(LEDs);
+    greenFireFly->hue = 0.33;
+    greenFireFly->direction = -1;
+    Effect::engine->apply(greenFireFly);
     initialized = 1;
 }
 
