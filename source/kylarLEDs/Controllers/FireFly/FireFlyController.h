@@ -1,6 +1,7 @@
 #pragma once
 #include "../Controller.h"
 #include "rp2040_pio.h"
+#include "Sensors/Potentiometer/Potentiometer.h"
 
 class FireFlyController : public Controller{
     public:
@@ -8,6 +9,8 @@ class FireFlyController : public Controller{
         //using Controller::Controller;
         void outputLEDs(uint8_t *leds, uint32_t N); // leds is an array, N is the length
         uint32_t getCurrentTimeMillis();
+        double getHue();
+        double getBrightness();
     protected:
         void initCommunication();
         void initHue(); // Change hue via encoder
@@ -18,4 +21,6 @@ class FireFlyController : public Controller{
         uint8_t PX_pin = 17;
         uint8_t PX_sm = 0;
         PIO PX_pio = pio0;
+
+        Potentiometer *analogPot;
 };

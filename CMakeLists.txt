@@ -25,7 +25,7 @@ add_executable(firefly
 
 
 
-target_link_libraries(firefly pico_stdlib hardware_pio)
+target_link_libraries(firefly pico_stdlib hardware_pio hardware_adc)
 
 # enable usb output, disable uart output
 pico_enable_stdio_usb(firefly 1)

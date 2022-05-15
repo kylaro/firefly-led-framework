@@ -6,8 +6,8 @@ class Controller {
         Controller();
         void givePatternIndex(uint32_t *patternIndex);
         virtual void outputLEDs(uint8_t *leds, uint32_t N) = 0; // leds is an array, N is the length
-        double getHue();
-        double getBrightness();
+        virtual double getHue();
+        virtual double getBrightness();
         virtual uint32_t getCurrentTimeMillis() = 0;
     protected:
         uint32_t *patternIndex = 0;

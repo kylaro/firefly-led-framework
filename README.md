@@ -151,3 +151,11 @@
     Everyone seems to like perlin noise for cool color maps on grids/strips of LEDs
     Imagine the generator can also support more color gradients that can be linearly scrolled through.
     Is the generator class going to exist on its own, or will it have children? In that case, do the children have access to the static member "controller"?
+
+### List of things still need to add:
+    Support for multiple strips / multiple LED interfaces
+    FireFlys example pattern
+    Dynamic strip lengths - no predfined length
+    Controller Hue/ Brightness control
+    Make a CMakeFile for the targeted controller to keep CMake hw agnostic
+    Have ADC sample for pots be time/interrupt based (60hz or something)

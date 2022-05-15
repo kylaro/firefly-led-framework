@@ -57,7 +57,22 @@ void FireFlyController::outputLEDs(uint8_t *leds, uint32_t N){
         // Bits for transmission must be shifted to top 8 bits
         pio_sm_put_blocking(PX_pio, PX_sm, ((uint32_t)*pixels++)<< 24);
     }
-    sleep_ms(50);
+    sleep_ms(5);
+}
+
+double FireFlyController::getBrightness(){
+    // static double brightness = 0;
+    // brightness = (brightness*4 + analogPot->getValue()) / 5.0;
+    double brightness = analogPot->getValue();
+    double threshold = 0.03;
+    if(brightness < threshold){
+        brightness = 0;
+    }
+    return brightness - threshold;
+}
+
+double FireFlyController::getHue(){
+    return 0.0;
 }
 
 void FireFlyController::initHue(){
@@ -65,7 +80,7 @@ void FireFlyController::initHue(){
 }
 
 void FireFlyController::initBrightness(){
-    
+    this->analogPot = new Potentiometer(27, 1);
 }
 
 void FireFlyController::initPatternButton(){

@@ -34,9 +34,9 @@ void LEDInterface::apply(){
         LEDChange* change = changesArray[i];
         if (change->count != 0) {
             rgb = change->getRGB();
-            r = (uint8_t) (rgb.r*255.0);
-            g = (uint8_t) (rgb.g*255.0);
-            b = (uint8_t) (rgb.b*255.0);
+            r = (uint8_t) (rgb.r*255.0*ledController->getBrightness());
+            g = (uint8_t) (rgb.g*255.0*ledController->getBrightness());
+            b = (uint8_t) (rgb.b*255.0*ledController->getBrightness());
             ledsArray[3*i] = r;
             ledsArray[3*i+1] = g;
             ledsArray[3*i+2] = b;
