@@ -3,6 +3,7 @@
 #include "rp2040_pio.h"
 #include "Sensors/Potentiometer/Potentiometer.h"
 #include "Sensors/Encoder/Encoder.h"
+#include "Sensors/Button/Button.h"
 #include "../../Utility/Timing.h"
 
 class FireFlyController : public Controller{
@@ -27,4 +28,5 @@ class FireFlyController : public Controller{
         Potentiometer *analogPot;
         Encoder *encoder;
         Timing *timing;
+        Button *button;
 };

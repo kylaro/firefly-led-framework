@@ -33,15 +33,17 @@ void FireFlyController::initCommunication(){
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
-    gpio_put(LED_PIN, 0);
-    sleep_ms(1000);
+    for(int i = 0; i < 10; i++){
+        gpio_put(LED_PIN, 1);
+        sleep_ms(30);
+        gpio_put(LED_PIN, 0);
+        sleep_ms(30);
+    }
     gpio_put(LED_PIN, 1);
-    sleep_ms(500);
-    gpio_put(LED_PIN, 0);
-    sleep_ms(500);
-    gpio_put(LED_PIN, 1);
-    sleep_ms(100);
+
     printf("Communication established\n");
+
+    // How to overclock (or underclock!)
     // if (!set_sys_clock_khz(250000, false)){
     //   printf("system clock 250MHz failed\n");
     // }else{
@@ -101,5 +103,8 @@ void FireFlyController::initBrightness(){
 }
 
 void FireFlyController::initPatternButton(){
+    // Button::givePatternIndex(this->patternIndex);
+    // this->button = new Button(28);
     
+
 }

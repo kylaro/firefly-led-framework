@@ -27,6 +27,9 @@ void Encoder::interrupt(uint gpio, uint32_t event){
 }
 
 bool Encoder::frequencyReduce(struct repeating_timer *t){
+    // Explain: This was intended to subtract from the "frequency" every x seconds (timer based)
+    // "frequency" was a count of how fast the encoder was being turned, the idea was to change the color
+    // faster if the user is spinning it faster...
     if(Encoder::frequency > 1){
         Encoder::frequency--;
     }
