@@ -89,7 +89,7 @@ double FireFlyController::getHue(){
     int count = encoder->getCount();
     //count *= 2;
     double hue = (count)/360.0;
-    printf("hue set to %f\n", hue);
+    //printf("hue set to %f\n", hue);
     return hue;
 }
 
@@ -103,8 +103,8 @@ void FireFlyController::initBrightness(){
 }
 
 void FireFlyController::initPatternButton(){
-    // Button::givePatternIndex(this->patternIndex);
-    // this->button = new Button(28);
+    Button::givePatternIndex(this->patternIndex);
+    this->button = new Button(28);
     
 
 }

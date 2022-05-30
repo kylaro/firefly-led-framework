@@ -168,8 +168,10 @@
     Check EffectEngine clear() / rework what release() does
     Add simple way to do gradients / time based HSV
     Also a time based brightness to replace doing it manually in SingleTime.cpp
-    Make Encoder class not static
-    Make Encoder counts scale based on delta;
+    Make Encoder class not static - need to do the interrupts TODO
+    Make Encoder counts scale based on how fast it is turning
+    Fix interrupts - note "GPIO parameter is ignored, callback will be called for any enabled GPIO IRQ pin"
+        - see "Button.cpp" initialization for more detail
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)
             Or have a poll time, so when it is moving it is more polled more
