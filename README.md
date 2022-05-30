@@ -1,6 +1,6 @@
 # kylarLEDs
 
-## Welcome to the FireFly LED Framework by kylarLEDs!
+## Welcome to the FireFlies LED Framework by kylarLEDs!
 
     The project uses a Raspberry Pi Pico on the kylarLEDs FireFly board!
     Eventually the project will be hardware agnostic, so it should work for anything!
