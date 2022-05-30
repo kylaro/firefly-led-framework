@@ -52,9 +52,11 @@
         Download ARM Compiler: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/downloads
         Download CMake: https://cmake.org/download/
         Download VS Build tools: https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019
+		- 2022 also works!
         Download Pico SDK: https://github.com/raspberrypi/pico-sdk
-        Set Pico SDK Path: setx PICO_SDK_PATH "..\..\pico-sdk"
-
+        Set Pico SDK Path: setx PICO_SDK_PATH "..\..\pico-sdk" 
+		- "..\..\" is just wherever you installed it, mine is "C:\pico\pico-sdk"
+	Use visual studio code, get CMake Tools extension and configure project
 
     Building Cmake projects for Pico:
         1. Clone the whole git repo
