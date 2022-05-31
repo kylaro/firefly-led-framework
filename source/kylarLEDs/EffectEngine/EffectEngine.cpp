@@ -8,9 +8,14 @@ EffectEngine::EffectEngine(){
 void EffectEngine::clear() {
     for (Effect* eff : effects) {
         eff->release();
+        free(eff);
     }
-    run();
+    for (Effect* eff : effectsQueue){
+        eff->release();
+        free(eff);
+    }
     effects.clear();
+    effectsQueue.clear();
 }
 
 void EffectEngine::apply(Effect *effect) {

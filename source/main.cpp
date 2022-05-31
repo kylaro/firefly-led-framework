@@ -20,8 +20,8 @@ int main(){
     
     vector<Pattern*> *patterns = new vector<Pattern*>();
     //Push back all the patterns you want!
-    //ADD YOU PATTERNS HERE!
-    //ex. patterns->push_back(new ExamplePattern(effectEngine, LEDs));
+    //ADD YOUR PATTERNS HERE!
+    //ex. patterns->push_back(new ExamplePattern(LEDs));
     patterns->push_back(new FireFlies(LEDs));
     patterns->push_back(new ExamplePattern(LEDs));
 
@@ -56,12 +56,16 @@ int main(){
         }else{
             //We are changing pattern
             currentPattern->release();                      //Finish the current pattern
+            effectEngine->clear();                          //Clear the effects
+            LEDs->clear();                                  //Clear the LEDs
+            LEDs->output();                                 //Output the off LEDs
             nextPatternIndex %= numPatterns;                //Protect from out of bounds
             nextPattern = patterns->at(nextPatternIndex);   //Get the next pattern
             currentPattern = nextPattern;                   //Set the current pattern to be the next
             currentPatternIndex = nextPatternIndex;         //Set current pattern index to the new one
             currentPattern->init();                         //Init the new current pattern
         }
+        //printf("next = %d\n", nextPatternIndex);
     }
     
 

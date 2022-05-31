@@ -12,6 +12,7 @@ class ExamplePattern : public Pattern{
     
     private:
         Timing *myTiming;
+        int initted = 0;
         
 
 };

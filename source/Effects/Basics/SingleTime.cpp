@@ -51,12 +51,13 @@ void SingleTime::run(){
         color.v *= brightness;
     }else{
         done = 1;
-        return;
+        color.v = 0;
     }
     
     LEDs->setHSV(profile.index, color);
 }
 
 void SingleTime::release(){
+    done = 1;
     free(timer);
 }

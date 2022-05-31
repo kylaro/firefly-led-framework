@@ -27,6 +27,9 @@ void Encoder::interrupt(uint gpio, uint32_t event){
 }
 
 bool Encoder::frequencyReduce(struct repeating_timer *t){
+    // Explain: This was intended to subtract from the "frequency" every x seconds (timer based)
+    // "frequency" was a count of how fast the encoder was being turned, the idea was to change the color
+    // faster if the user is spinning it faster...
     if(Encoder::frequency > 1){
         Encoder::frequency--;
     }
@@ -47,7 +50,9 @@ Encoder::Encoder(int A, int B){
     gpio_set_dir(B, GPIO_IN);
     gpio_pull_up(A);//Set PULL UP
     gpio_pull_up(B);//Set PULL UP
-    gpio_irq_callback_t callback = &Encoder::interrupt;
+    //INTERRUPTS NOTE: "Currently GPIO parameter is ignored, callback will be called for any enabled GPIO IRQ on any pin"
+    gpio_irq_callback_t callback = &Encoder::interrupt; // warning, spaghetti code, this function is not called by the interrupt...
+    // The callback function being called is actually Button::interrupt.... but this is left here to enable this interrupt
     gpio_set_irq_enabled_with_callback(A, GPIO_IRQ_EDGE_RISE, true, callback);
     
     // struct repeating_timer timer;

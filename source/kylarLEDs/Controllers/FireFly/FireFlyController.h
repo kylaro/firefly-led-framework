@@ -3,6 +3,7 @@
 #include "rp2040_pio.h"
 #include "Sensors/Potentiometer/Potentiometer.h"
 #include "Sensors/Encoder/Encoder.h"
+#include "Sensors/Button/Button.h"
 #include "../../Utility/Timing.h"
 
 class FireFlyController : public Controller{
@@ -13,6 +14,7 @@ class FireFlyController : public Controller{
         uint64_t getCurrentTimeMillis();
         double getHue();
         double getBrightness();
+        void givePatternIndex(uint32_t *patternIndex);
     protected:
         void initCommunication();
         void initHue(); // Change hue via encoder
@@ -27,4 +29,5 @@ class FireFlyController : public Controller{
         Potentiometer *analogPot;
         Encoder *encoder;
         Timing *timing;
+        Button *button;
 };
