@@ -58,8 +58,17 @@ void LEDInterface::apply(){
     }
 }
 
+
 void LEDInterface::output(){
     ledController->outputLEDs(ledsArray, NUM_LEDS);
+}
+
+void LEDInterface::clear(){
+    for(int i = 0; i < NUM_LEDS; i++){
+        ledsArray[i*3] = 0;
+        ledsArray[i*3+1] = 0;
+        ledsArray[i*3+2] = 0;
+    }
 }
 
 void LEDInterface::giveController(Controller * ledController){

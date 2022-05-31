@@ -103,8 +103,10 @@ void FireFlyController::initBrightness(){
 }
 
 void FireFlyController::initPatternButton(){
-    Button::givePatternIndex(this->patternIndex);
     this->button = new Button(28);
-    
+}
 
+void FireFlyController::givePatternIndex(uint32_t *patternIndex){
+    this->patternIndex = patternIndex;
+    Button::givePatternIndex(this->patternIndex);
 }

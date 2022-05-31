@@ -14,6 +14,7 @@ class FireFlyController : public Controller{
         uint64_t getCurrentTimeMillis();
         double getHue();
         double getBrightness();
+        void givePatternIndex(uint32_t *patternIndex);
     protected:
         void initCommunication();
         void initHue(); // Change hue via encoder

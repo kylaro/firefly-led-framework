@@ -58,5 +58,6 @@ void SingleTime::run(){
 }
 
 void SingleTime::release(){
+    done = 1;
     free(timer);
 }

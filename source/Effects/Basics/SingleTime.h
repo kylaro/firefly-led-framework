@@ -30,7 +30,7 @@ class SingleTime : public Effect{
 
 /*
 x = time (milliseconds)
-y = brightness      Trise     Thold
+y = brightness    Trise     Thold
     |     |->       ->|->     ->|
 1   |                xxxxxxxxxxx
     |              xx           xx
@@ -40,7 +40,7 @@ y = brightness      Trise     Thold
     |      xx                           xx
 0   |xxxxxx                               xx___
     |   ->|                    |->       ->|
-         Toffset                         Tfall
+         Toffset                       Tfall
 
 
     |Toffset->Trise->Thold->Tfall

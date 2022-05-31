@@ -20,8 +20,8 @@ int main(){
     
     vector<Pattern*> *patterns = new vector<Pattern*>();
     //Push back all the patterns you want!
-    //ADD YOU PATTERNS HERE!
-    //ex. patterns->push_back(new ExamplePattern(effectEngine, LEDs));
+    //ADD YOUR PATTERNS HERE!
+    //ex. patterns->push_back(new ExamplePattern(LEDs));
     patterns->push_back(new FireFlies(LEDs));
     patterns->push_back(new ExamplePattern(LEDs));
 
@@ -49,18 +49,33 @@ int main(){
     while(1){
         if(currentPatternIndex == nextPatternIndex){
             //We are remaining on the same pattern
+            printf("Current pattern run:\n");
             currentPattern->run();  //Allow pattern to create effects
+            printf("Effect Engine Run:\n");
             effectEngine->run();    //Run each effect to generate LED Changes
+            printf("LEDS APPLY:\n");
             LEDs->apply();          //Apply changes by collapsing LED Changes
+            printf("LEDS OUTPUT\n");
             LEDs->output();         //Output to strip via controller
         }else{
             //We are changing pattern
             currentPattern->release();                      //Finish the current pattern
+            printf("---BUTTON PRESSED----\n");
+            effectEngine->clear();                          //Clear the effects
+            LEDs->clear();
+            LEDs->output();
+            printf("DONE with clear\n");
             nextPatternIndex %= numPatterns;                //Protect from out of bounds
+            printf("next pattern index = %d\n", nextPatternIndex);
             nextPattern = patterns->at(nextPatternIndex);   //Get the next pattern
+            printf("next pattern set\n");
             currentPattern = nextPattern;                   //Set the current pattern to be the next
+            printf("cur pat set\n");
             currentPatternIndex = nextPatternIndex;         //Set current pattern index to the new one
+            printf("unified index\n");
             currentPattern->init();                         //Init the new current pattern
+            printf("finished init\n");
+            printf("NEXT LOOP\n");
         }
         //printf("next = %d\n", nextPatternIndex);
     }

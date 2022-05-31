@@ -12,5 +12,5 @@ void ExampleEffect::run(){
 }
 
 void ExampleEffect::release(){
-
+    done = 1;
 }

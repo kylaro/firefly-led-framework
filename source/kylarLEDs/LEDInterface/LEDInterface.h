@@ -20,6 +20,7 @@ class LEDInterface{
         LEDInterface();
         void apply();   // Apply the changes 
         void output();  // and output
+        void clear();   // clear
         void setRGB(int index, rgb_t rgb);
         void setHSV(int index, hsv_t hsv);
         void giveController(Controller *);

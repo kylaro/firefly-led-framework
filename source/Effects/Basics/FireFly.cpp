@@ -33,5 +33,6 @@ void FireFly::run(){
 }
 
 void FireFly::release(){
+    done = 1;
     free(timer);
 }

@@ -19,5 +19,5 @@ void FireFlies::run(){
 }
 
 void FireFlies::release(){
-    
+    free(myTiming);
 }
