@@ -25,7 +25,6 @@ void Button::interrupt(uint gpio, uint32_t event){
 
     if(press_state == 0){
         (*Button::patternIndex)++; // Increment pattern index
-        printf("BUTTON %d\n", *(Button::patternIndex));
         press_state = 1;
     }else{
         press_state = 0;
