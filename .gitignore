@@ -1,3 +1,4 @@
 build/*
 !build/firefly.uf2
+!build/build.py
 .vscode
