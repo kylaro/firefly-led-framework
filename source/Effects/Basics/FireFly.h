@@ -11,11 +11,12 @@ class FireFly : public Effect{
         void release();
         int direction = 1;
         double hue = 0;
+        single_time_t blueprint;
     private:
         double speed = 1;
         double position = 0;
         int lastPosition = -1;
         int nextPosition = -1;
-        single_time_t blueprint;
+        
         Timing *timer;
 };

@@ -7,6 +7,7 @@
 #include "kylarLEDs/Controllers/FireFly/FireFlyController.h"
 #include "Patterns/Examples/ExamplePattern.h"
 #include "Patterns/Examples/FireFlies.h"
+#include "Patterns/Examples/FireFliesSame.h"
 
 
 using namespace std;
@@ -22,8 +23,10 @@ int main(){
     //Push back all the patterns you want!
     //ADD YOUR PATTERNS HERE!
     //ex. patterns->push_back(new ExamplePattern(LEDs));
-    patterns->push_back(new FireFlies(LEDs));
     patterns->push_back(new ExamplePattern(LEDs));
+    patterns->push_back(new FireFlies(LEDs));
+    patterns->push_back(new FireFliesSame(LEDs));
+    
 
     //Initialize main loop variables
     uint32_t numPatterns = patterns->size();

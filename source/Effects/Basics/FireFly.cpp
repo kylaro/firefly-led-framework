@@ -8,9 +8,9 @@ void FireFly::init(){
     blueprint.hue = hue;
     blueprint.index = 0;
     blueprint.Toffset = 0;
-    blueprint.Trise = 300;
-    blueprint.Thold = 300;
-    blueprint.Tfall = 900;
+    blueprint.Trise = 500;
+    blueprint.Thold = 400;
+    blueprint.Tfall = 1500;
     timer = new Timing();
     initialized = 1;
 }

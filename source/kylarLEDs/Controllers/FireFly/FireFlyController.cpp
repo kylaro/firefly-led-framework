@@ -70,26 +70,21 @@ void FireFlyController::outputLEDs(uint8_t *leds, uint32_t N){
 
 double FireFlyController::getBrightness(){
     static double brightness = 0;
-    
+    static double lastPot = 0;
     if(timing->everyMs(10)){
-        brightness = analogPot->getValue();
+        double newPot = analogPot->getValue();
+        brightness = (lastPot*400 + newPot)/401.0;
+        lastPot = newPot;
     }else{
         return brightness;
     }
-    double threshold = 0.03;
-    if(brightness < threshold){
-        brightness = 0;
-    }else{
-        brightness -= threshold;
-    }
+    brightness = brightness*brightness*brightness;
     return brightness;
 }
 
 double FireFlyController::getHue(){
     int count = encoder->getCount();
-    //count *= 2;
     double hue = (count)/360.0;
-    //printf("hue set to %f\n", hue);
     return hue;
 }
 
