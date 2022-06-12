@@ -8,7 +8,7 @@
 #include "Patterns/Examples/ExamplePattern.h"
 #include "Patterns/Examples/FireFlies.h"
 #include "Patterns/Examples/FireFliesSame.h"
-
+#include "Patterns/SoundReactive/Shakeel.h"
 
 using namespace std;
 int main(){
@@ -16,6 +16,7 @@ int main(){
     Controller *ledController = new FireFlyController();
     EffectEngine *effectEngine = new EffectEngine();
     LEDInterface *LEDs = new LEDInterface();
+    LEDs->setNum(120);
     Timing::giveControllerForTiming(ledController);
     Effect::giveEngine(effectEngine);
     
@@ -23,9 +24,9 @@ int main(){
     //Push back all the patterns you want!
     //ADD YOUR PATTERNS HERE!
     //ex. patterns->push_back(new ExamplePattern(LEDs));
-    patterns->push_back(new ExamplePattern(LEDs));
+    patterns->push_back(new Shakeel(LEDs));
     patterns->push_back(new FireFlies(LEDs));
-    patterns->push_back(new FireFliesSame(LEDs));
+    //patterns->push_back(new FireFliesSame(LEDs));
     
 
     //Initialize main loop variables

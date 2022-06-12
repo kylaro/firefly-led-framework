@@ -68,3 +68,18 @@ rgb_t ColorUtil::hsv2rgb(hsv_t hsv) {
     rgb_t rgb = { R,G,B };
     return rgb;
 }
+
+
+double ColorUtil::remap(double from, double fromMin, double fromMax, double toMin,  double toMax){
+    double fromAbs  =  from - fromMin;
+    double fromMaxAbs = fromMax - fromMin;      
+    
+    double normal = fromAbs / fromMaxAbs;
+
+    double toMaxAbs = toMax - toMin;
+    double toAbs = toMaxAbs * normal;
+
+    double to = toAbs + toMin;
+    
+    return to;
+}

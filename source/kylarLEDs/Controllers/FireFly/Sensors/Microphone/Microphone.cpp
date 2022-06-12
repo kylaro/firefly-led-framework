@@ -10,21 +10,21 @@ void Microphone::start(){
     start_pdm_mic();
 }
 
- float Microphone::getFreqCenter(){
+ double Microphone::getFreqCenter(){
     return get_freq_data()->freq_center;
 }
- float Microphone::getHighFreqCenter(){
+ double Microphone::getHighFreqCenter(){
     return get_freq_data()->high_freq_center;
 }
- float Microphone::getLowFreqCenter(){
+ double Microphone::getLowFreqCenter(){
     return get_freq_data()->low_freq_center;
 }
- float Microphone::getEnergy(){
+ double Microphone::getEnergy(){
     return get_freq_data()->freq_energy;
 }
- float Microphone::getLowEnergy(){
+ double Microphone::getLowEnergy(){
     return get_freq_data()->low_freq_energy;
 }
- float Microphone::getHighEnergy(){
+ double Microphone::getHighEnergy(){
     return get_freq_data()->high_freq_energy;
 }

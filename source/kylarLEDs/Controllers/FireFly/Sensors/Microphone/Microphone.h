@@ -23,12 +23,12 @@ class Microphone{
     public:
         Microphone();
         static void start();
-        static float getFreqCenter();
-        static float getHighFreqCenter();
-        static float getLowFreqCenter();
-        static float getEnergy();
-        static float getLowEnergy();
-        static float getHighEnergy();
+        static double getFreqCenter();
+        static double getHighFreqCenter();
+        static double getLowFreqCenter();
+        static double getEnergy();
+        static double getLowEnergy();
+        static double getHighEnergy();
     private:
         static int count;
         static int frequency;

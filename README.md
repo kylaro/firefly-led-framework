@@ -175,7 +175,12 @@
     Fix interrupts - note "GPIO parameter is ignored, callback will be called for any enabled GPIO IRQ pin"
         - see "Button.cpp" initialization for more detail
     Detect high frequency output so that light doesn't flicker between brightness levels
-    Make sensor classes Static
+    Make sensor classes Static?
+    LEDInterface rework:
+        -remove led interface from main, have it be created by patterns
+        -instead of calling the leds apply and output from main, can be done in engine
+        -patterns would make their own led interface object with specified # leds
+        -controller need a way to change # leds, and save between power cycles
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)
             Or have a poll time, so when it is moving it is more polled more

@@ -7,9 +7,10 @@
 void ExamplePattern::init(){
     myTiming = new Timing();
 
-    for(int i = 0; i < 150; i++){
+    for(int i = 0; i < LEDs->num(); i++){
         ExampleEffect * eff = new ExampleEffect(LEDs);
         eff->i = i;
+        eff->hue = i/LEDs->num();
         Effect::engine->apply(eff);
     }
 

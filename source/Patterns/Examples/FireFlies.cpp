@@ -8,8 +8,8 @@ void FireFlies::init(){
     FireFly *greenFireFly = new FireFly(LEDs);
     greenFireFly->init();
     greenFireFly->blueprint.hue = 0.33;
-    greenFireFly->direction = 1;
-    greenFireFly->blueprint.index = 44;
+    greenFireFly->direction = -1;
+    greenFireFly->blueprint.index = 0;
     Effect::engine->apply(greenFireFly);
     initialized = 1;
 }

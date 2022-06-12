@@ -72,10 +72,10 @@ void FireFlyController::outputLEDs(uint8_t *leds, uint32_t N){
 double FireFlyController::getBrightness(){
     static double brightness = 0;
     static double lastPot = 0;
-    if(timing->everyMs(10)){
+    if(timing->everyMs(20)){
         double newPot = analogPot->getValue();
         brightness = (lastPot*400 + newPot)/401.0;
-        lastPot = newPot;
+        lastPot = (lastPot*2.0 + newPot)/3.0;
     }else{
         return brightness;
     }

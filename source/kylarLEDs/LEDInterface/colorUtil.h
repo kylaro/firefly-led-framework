@@ -17,4 +17,5 @@ class ColorUtil{
         static double sanitizeH(double x);
         static double sanitizeSV(double x);
         static rgb_t hsv2rgb(hsv_t hsv);
+        static double remap(double from, double fromMin, double fromMax, double toMin,  double toMax);
 };

@@ -1,7 +1,7 @@
 #pragma once
 #include "../Effect.h"
 
-class ExampleEffect : public Effect{
+class SoundPixel : public Effect{
 
     public:
         using Effect::Effect;
