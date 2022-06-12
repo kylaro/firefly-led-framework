@@ -10,6 +10,7 @@ FireFlyController::FireFlyController(){
     initHue();
     initPatternButton();
     initOutput();
+    initMicrophone();
     this->timing = new Timing();
 }
 
@@ -39,7 +40,7 @@ void FireFlyController::initCommunication(){
         gpio_put(LED_PIN, 0);
         sleep_ms(30);
     }
-    gpio_put(LED_PIN, 1);
+    gpio_put(LED_PIN, 0);
 
     printf("Communication established\n");
 
@@ -104,4 +105,9 @@ void FireFlyController::initPatternButton(){
 void FireFlyController::givePatternIndex(uint32_t *patternIndex){
     this->patternIndex = patternIndex;
     Button::givePatternIndex(this->patternIndex);
+}
+
+void FireFlyController::initMicrophone(){
+    this->microphone = new Microphone();
+    Microphone::start();
 }

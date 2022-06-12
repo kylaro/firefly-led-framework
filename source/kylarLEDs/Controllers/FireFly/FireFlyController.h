@@ -4,6 +4,7 @@
 #include "Sensors/Potentiometer/Potentiometer.h"
 #include "Sensors/Encoder/Encoder.h"
 #include "Sensors/Button/Button.h"
+#include "Sensors/Microphone/Microphone.h"
 #include "../../Utility/Timing.h"
 
 class FireFlyController : public Controller{
@@ -21,6 +22,7 @@ class FireFlyController : public Controller{
         void initBrightness(); // Change the brightness via potentiometer
         void initPatternButton(); // Change the patternIndex via button press
         void initOutput();
+        void initMicrophone();
     private:
         uint8_t PX_pin = 17;
         uint8_t PX_sm = 0;
@@ -30,4 +32,5 @@ class FireFlyController : public Controller{
         Encoder *encoder;
         Timing *timing;
         Button *button;
+        Microphone *microphone;
 };
