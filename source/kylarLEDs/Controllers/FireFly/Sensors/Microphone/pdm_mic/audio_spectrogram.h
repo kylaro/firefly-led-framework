@@ -17,10 +17,25 @@
 #define FFT_BINS_SKIP     0
 #define FFT_MAG_MAX       2000.0
 
+typedef struct{
+    float high_freq_center;
+    float low_freq_center;
+    float freq_center;
 
+    float high_freq_energy;
+    float low_freq_energy;
+    float freq_energy;
+} freq_data_t;
 
 void input_init_q15();
 void hanning_window_init_q15(q15_t* window, size_t size);
 void on_pdm_samples_ready();
 void pdm_core1_entry();
 void start_pdm_mic();
+
+int freq_to_bin(float freq);
+float bin_to_freq(int bin);
+
+freq_data_t *get_freq_data();
+
+

@@ -108,6 +108,5 @@ void FireFlyController::givePatternIndex(uint32_t *patternIndex){
 }
 
 void FireFlyController::initMicrophone(){
-    this->microphone = new Microphone();
     Microphone::start();
 }

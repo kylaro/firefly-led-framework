@@ -29,6 +29,9 @@ arm_rfft_instance_q15 S_q15;
 q15_t fft_q15[FFT_SIZE * 2];
 q15_t fft_mag_q15[FFT_MAG_SIZE];
 
+freq_data_t freq_data;
+freq_data_t temp_freq_data;
+const int print = 0;
 void pdm_core1_entry(){
     //Init:
     // initialize the hanning window and RFFT instance
@@ -52,6 +55,12 @@ void pdm_core1_entry(){
         while (pdm_microphone_start() < 0) { tight_loop_contents(); }
     }
 
+    
+    float low_bins = 13;
+    float high_bins = 200;
+    float total_bins = low_bins + high_bins;
+    
+    
     while(1) {
         while (new_samples_captured == 0) {
             tight_loop_contents();
@@ -69,29 +78,61 @@ void pdm_core1_entry(){
         arm_rfft_q15(&S_q15, windowed_input_q15, fft_q15);
         arm_cmplx_mag_q15(fft_q15, fft_mag_q15, FFT_MAG_SIZE);
 
-
-
+        
+        
         // Audio processing:
-        printf("|");
+        if(print){
+            printf("|");
+        }
+        temp_freq_data.freq_energy = 0;
+        temp_freq_data.low_freq_energy = 0;
+        temp_freq_data.high_freq_energy = 0;
+        
         // map the FFT magnitude values to pixel values
-        for (int i = 0; i < FFT_MAG_SIZE/3; i++) {
+        for (int i = 2; i < FFT_MAG_SIZE/3; i++) {
             // get the current FFT magnitude value
             q15_t magnitude = fft_mag_q15[i];
+            int bin = i;
 
-            // scale it between 0 to 255 to map, so we can map it to a color based on the color map
-            int color_index = (magnitude / FFT_MAG_MAX) * 255;
-            char symbol = ' ';
-            if (color_index > 160) {
-                color_index = 255;
-                symbol = 'X';
-            }else if(color_index > 80) {
-                symbol= 'x';
-            }else if(color_index > 40) {
-                symbol = '.';
+            
+            if(bin <= low_bins){
+                //LOWS
+                temp_freq_data.freq_energy += magnitude / total_bins;
+                temp_freq_data.low_freq_energy += magnitude / low_bins;
+            }else if(bin - low_bins <= high_bins){
+                //HIGHS
+                temp_freq_data.freq_energy += magnitude / total_bins;
+                temp_freq_data.high_freq_energy += magnitude / high_bins;
+            }else{
+                // Out of range
             }
-            printf("%c", symbol);
+                
+            
+            // scale it between 0 to 255 to map, so we can map it to a color based on the color map
+            if(print){
+                int color_index = (magnitude / FFT_MAG_MAX) * 255;
+                char symbol = ' ';
+                if (color_index > 160) {
+                    color_index = 255;
+                    symbol = 'X';
+                }else if(color_index > 80) {
+                    symbol= 'x';
+                }else if(color_index > 40) {
+                    symbol = '.';
+                }
+                printf("%c", symbol);
+            }
+            
         }
-        printf("|\n");
+        if(print){
+            printf("|\n");
+        }
+
+        freq_data.freq_energy = temp_freq_data.freq_energy;
+        freq_data.low_freq_energy = temp_freq_data.low_freq_energy;
+        freq_data.high_freq_energy = temp_freq_data.high_freq_energy;
+        //printf("CORE1 %.0f %.0f %.0f\n", freq_data.low_freq_energy, freq_data.high_freq_energy, freq_data.freq_energy);
+        
     }
 }
 
@@ -114,4 +155,35 @@ void on_pdm_samples_ready()
 
 void start_pdm_mic(){
     multicore_launch_core1(pdm_core1_entry);
+}
+
+
+int freq_to_bin(float freq){
+    int bin = (int)roundf((freq*0.064 - 0.0154));
+    if(bin < 0){
+        return 1; // This is the lowest valid freq bin
+    }
+    if(bin >= FFT_MAG_SIZE){
+        return FFT_MAG_SIZE - 1; // This is the maximum valid freq bin
+    }
+
+    return bin;
+}
+
+
+float bin_to_freq(int bin){
+    float freq = 15.628*bin + 0.286;
+    if(freq < 0){
+        return 0; 
+    }
+    if(freq >= 32000){
+        return 32000; 
+    }
+
+    return freq;
+}
+
+
+freq_data_t *get_freq_data(){
+    return &freq_data;
 }
