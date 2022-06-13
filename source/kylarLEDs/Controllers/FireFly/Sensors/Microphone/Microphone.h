@@ -29,6 +29,7 @@ class Microphone{
         static double getEnergy();
         static double getLowEnergy();
         static double getHighEnergy();
+        static double getLowNormal();
     private:
         static int count;
         static int frequency;

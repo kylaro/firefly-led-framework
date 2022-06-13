@@ -6,9 +6,9 @@ void SingleTime::init(){
     profile.brightness = 1;
     profile.hue = 0;
     profile.Toffset = 0;
-    profile.Trise = 200;
-    profile.Thold = 600;
-    profile.Tfall = 200;
+    profile.Trise = 400;
+    profile.Thold = 400;
+    profile.Tfall = 400;
     initialized = 1;
 }
 

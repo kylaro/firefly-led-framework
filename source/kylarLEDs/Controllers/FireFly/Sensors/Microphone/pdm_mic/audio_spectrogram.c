@@ -31,6 +31,8 @@ q15_t fft_mag_q15[FFT_MAG_SIZE];
 
 freq_data_t freq_data;
 freq_data_t temp_freq_data;
+sound_profile_t sound_profile;
+
 const int print = 0;
 void pdm_core1_entry(){
     //Init:
@@ -87,7 +89,7 @@ void pdm_core1_entry(){
         temp_freq_data.freq_energy = 0;
         temp_freq_data.low_freq_energy = 0;
         temp_freq_data.high_freq_energy = 0;
-        
+
         // map the FFT magnitude values to pixel values
         for (int i = 2; i < FFT_MAG_SIZE/3; i++) {
             // get the current FFT magnitude value
@@ -132,8 +134,83 @@ void pdm_core1_entry(){
         freq_data.low_freq_energy = temp_freq_data.low_freq_energy;
         freq_data.high_freq_energy = temp_freq_data.high_freq_energy;
         //printf("CORE1 %.0f %.0f %.0f\n", freq_data.low_freq_energy, freq_data.high_freq_energy, freq_data.freq_energy);
-        
+        updateSoundProfile();
     }
+}
+
+//What would be cool is to have it arranged in a normal distribution kinda way...
+void updateSoundProfile() {
+    //Only doing LOWS for now...
+    //Update min
+    double coef = 10.0;
+    if(freq_data.low_freq_energy < sound_profile.low_min){
+        //The frequency is lower!
+        sound_profile.low_min = freq_data.low_freq_energy;//(sound_profile.low_min*coef + freq_data.low_freq_energy)/(coef+1);
+    }else{
+        sound_profile.low_min = (sound_profile.low_min*1000.0 + freq_data.low_freq_energy)/(1001.0);
+    }
+
+    //Update max
+    if(freq_data.low_freq_energy > sound_profile.low_max){
+        //The frequency is higher!
+        sound_profile.low_max = freq_data.low_freq_energy;//(sound_profile.low_max*coef + freq_data.low_freq_energy)/(coef+1);
+    }else{
+        sound_profile.low_max *= 0.999;
+    }
+
+    //Update avg
+    sound_profile.low_avg = (sound_profile.low_avg*coef + freq_data.low_freq_energy)/(coef+1);
+
+    //Calculate normalized value
+    sound_profile.low_normal = (freq_data.low_freq_energy - sound_profile.low_min)/(sound_profile.low_min+sound_profile.low_max);
+    if(sound_profile.low_normal < 0){
+        sound_profile.low_normal = 0;
+    }
+    // printf("%1.3f:  %4.2f <- %4.2f -> %4.2f\t", sound_profile.low_normal, sound_profile.low_min, sound_profile.low_avg, sound_profile.low_max);
+    // for(int i = 0; i < sound_profile.low_normal/0.1; i++){
+    //     printf("+");
+    // }
+    // printf("\n");
+
+    // Calculated normal's min
+    coef = 10.0;
+    if(sound_profile.low_normal < sound_profile.low_normal_min){
+        //The frequency is lower!
+        sound_profile.low_normal_min = sound_profile.low_normal;//(sound_profile.low_min*coef + freq_data.low_freq_energy)/(coef+1);
+    }else{
+        sound_profile.low_normal_min = (sound_profile.low_normal_min*400.0 + sound_profile.low_normal)/(401.0);
+    }
+
+    //Calculate normal's max
+    if(sound_profile.low_normal > sound_profile.low_normal_max){
+        //The frequency is higher!
+        sound_profile.low_normal_max = sound_profile.low_normal;//(sound_profile.low_max*coef + freq_data.low_freq_energy)/(coef+1);
+    }else{
+        sound_profile.low_normal_max *= 0.999;
+    }
+
+    // Calculate normal's place in that -> normal_normal
+    sound_profile.low_normal_normal = (sound_profile.low_normal - sound_profile.low_normal_min)/(sound_profile.low_normal_min+sound_profile.low_normal_max);
+    if(sound_profile.low_normal_normal < 0){
+        sound_profile.low_normal_normal = 0;
+    }
+
+    //Print it
+
+    // printf("%1.3f:\t%4.2f\t<-\t%4.2f\t->\t%4.2f\t", sound_profile.low_normal_normal, sound_profile.low_normal_min, sound_profile.low_normal, sound_profile.low_normal_max);
+    // printf("|");
+    // int count = 10;
+    // for(int i = 0; i < sound_profile.low_normal_normal/0.1; i++){
+    //     printf("+");
+    //     count--;
+    // }
+    // for(int i = 0; i < count; i++){
+    //     printf(" ");
+    // }
+    // printf("|");
+    // printf("\n");
+
+
 }
 
 
@@ -186,4 +263,8 @@ float bin_to_freq(int bin){
 
 freq_data_t *get_freq_data(){
     return &freq_data;
+}
+
+sound_profile_t *get_sound_profile(){
+    return &sound_profile;
 }
