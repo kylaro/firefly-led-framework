@@ -58,7 +58,7 @@ void pdm_core1_entry(){
     }
 
     
-    float low_bins = 13;
+    float low_bins = 14;
     float high_bins = 200;
     float total_bins = low_bins + high_bins;
     

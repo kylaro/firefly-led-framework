@@ -5,7 +5,7 @@
 
 void Shakeel::init(){
     myTiming = new Timing();
-    double symmetryPoint = LEDs->num()/2;
+    double symmetryPoint = LEDs->num()/2-5;
     for(int i = 0; i < LEDs->num(); i++){
         SoundPixel * eff = new SoundPixel(LEDs);
         eff->i = i;
