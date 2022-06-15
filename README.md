@@ -181,6 +181,22 @@
         -instead of calling the leds apply and output from main, can be done in engine
         -patterns would make their own led interface object with specified # leds
         -controller need a way to change # leds, and save between power cycles
+    Take out the "Single Time"'s timing profile and put it in the Timer utility
+        -> This is so it can be used for both brightness and saturation
+        -> Maybe also add a way to do color by time :) 
+            -> Something like +0.001 / loop -> 0.0x / ms
+            -> I guess this can already be done with the timer->everyMs(1) { hue+=0.01 } - but this could still be missed...
+            -> need something that is like hue = timer->time()*0.01; // where Time() returns time in ms (double)
+    Make scaling for color change knob. Turning faster changes hue more, turning slow changes hue less
+        -> use this algo in the next note for strip lengths..
+    Make ability to change strip lengths via encoder (hold down button for 3 seconds, then turn knob)
+        -> note the note before this one, knob turn speed should make strip length adjust better
+        -> the pico can detect "level_low" for detecting button held down.
+    Make sleep mode when potentiometer is turned down below <0.02, see if pico has a wake up interrupt for this
+    Make a way for LEDInterface to accept saturation changes?
+        -> So if I want to only change the saturation of a pixel, regardless of what is there
+        -> Hard part is that LEDChanges store RGB, because it is easier to combine
+        -> But HSV is only way to mix Saturation. Maybe there is a native HSV mix function, and we convert to RGB only for output
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)
             Or have a poll time, so when it is moving it is more polled more

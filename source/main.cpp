@@ -16,7 +16,7 @@ int main(){
     Controller *ledController = new FireFlyController();
     EffectEngine *effectEngine = new EffectEngine();
     LEDInterface *LEDs = new LEDInterface();
-    LEDs->setNum(86);
+    LEDs->setNum(120);
     Timing::giveControllerForTiming(ledController);
     Effect::giveEngine(effectEngine);
     

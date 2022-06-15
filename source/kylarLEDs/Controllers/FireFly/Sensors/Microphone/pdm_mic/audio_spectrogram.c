@@ -57,13 +57,14 @@ void pdm_core1_entry(){
         while (pdm_microphone_start() < 0) { tight_loop_contents(); }
     }
 
-    
+    int starting_bin = 2;
     float low_bins = 14;
-    float high_bins = 200;
+    float high_bins = 240;
     float total_bins = low_bins + high_bins;
     
     
     while(1) {
+        // Waiting for new samples
         while (new_samples_captured == 0) {
             tight_loop_contents();
         }
@@ -82,6 +83,7 @@ void pdm_core1_entry(){
 
         
         
+
         // Audio processing:
         if(print){
             printf("|");
@@ -91,10 +93,10 @@ void pdm_core1_entry(){
         temp_freq_data.high_freq_energy = 0;
 
         // map the FFT magnitude values to pixel values
-        for (int i = 2; i < FFT_MAG_SIZE/3; i++) {
+        for (int i = starting_bin; i < FFT_MAG_SIZE/3; i++) {
             // get the current FFT magnitude value
             q15_t magnitude = fft_mag_q15[i];
-            int bin = i;
+            int bin = i-starting_bin;
 
             
             if(bin <= low_bins){
@@ -166,7 +168,7 @@ void updateSoundProfile() {
     if(sound_profile.low_normal < 0){
         sound_profile.low_normal = 0;
     }
-    // printf("%1.3f:  %4.2f <- %4.2f -> %4.2f\t", sound_profile.low_normal, sound_profile.low_min, sound_profile.low_avg, sound_profile.low_max);
+    // printf("%1.3f: \t%4.2f\t<-\t%4.2f\t->\t%4.2f\t", sound_profile.low_normal, sound_profile.low_min, sound_profile.low_avg, sound_profile.low_max);
     // for(int i = 0; i < sound_profile.low_normal/0.1; i++){
     //     printf("+");
     // }

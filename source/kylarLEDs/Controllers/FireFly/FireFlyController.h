@@ -24,7 +24,7 @@ class FireFlyController : public Controller{
         void initOutput();
         void initMicrophone();
     private:
-        uint8_t PX_pin = 16; // 16 for 1, 17 for 2
+        uint8_t PX_pin = 17; // 16 for 1, 17 for 2
         uint8_t PX_sm = 0;
         PIO PX_pio = pio0;
 
