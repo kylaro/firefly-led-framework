@@ -40,6 +40,9 @@ void FireFlies::run(){
     if(initialized == 0){
         init();
     }
+
+
+    
 }
 
 void FireFlies::release(){

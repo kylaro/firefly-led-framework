@@ -38,8 +38,8 @@ def upload():
 		time.sleep(0.1)
 		count += 1
 		if count > 10:
-			os.popen('sudo mkdir /mnt/d', stdout=None)
-			os.popen('sudo mount -t drvfs D: /mnt/d', stdout=None)
+			os.popen('sudo mkdir /mnt/d')
+			os.popen('sudo mount -t drvfs D: /mnt/d')
 			print(".", end="", flush=True)
 			count = 0
 

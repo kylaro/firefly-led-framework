@@ -1,8 +1,8 @@
 #include "SingleTime.h"
 #include "stdio.h"
 
-
-void SingleTime::init(){
+void SingleTime::init()
+{
     profile.brightness = 1;
     profile.hue = 0;
     profile.Toffset = 0;
@@ -12,7 +12,8 @@ void SingleTime::init(){
     initialized = 1;
 }
 
-SingleTime* SingleTime::init(single_time_t blueprint){
+SingleTime *SingleTime::init(single_time_t blueprint)
+{
     profile.index = blueprint.index;
     profile.brightness = blueprint.brightness;
     profile.hue = blueprint.hue;
@@ -25,39 +26,54 @@ SingleTime* SingleTime::init(single_time_t blueprint){
     return this;
 }
 
-void SingleTime::run(){
-    if(initialized == 0){
+void SingleTime::run()
+{
+    if (initialized == 0)
+    {
         init();
     }
-    if(timer == NULL){
+    if (timer == NULL)
+    {
         timer = new Timing();
     }
     uint32_t time = timer->timerMs();
 
     hsv_t color = {profile.hue, 1, profile.brightness};
-    if(time < profile.Toffset){
-        //We are within offset phase
+    if (time < profile.Toffset)
+    {
+        // We are within offset phase
         return; // Do not write to LEDs
-    }else if(time-profile.Toffset < profile.Trise){
-        //We are in rise phase
-        double brightness = (time - profile.Toffset)/(double)profile.Trise;
+    }
+    else if (time - profile.Toffset < profile.Trise)
+    {
+        // We are in rise phase
+        double brightness = (time - profile.Toffset) / (double)profile.Trise;
+        brightness *= brightness;
         color.v *= brightness;
-    }else if(time-profile.Toffset-profile.Trise < profile.Thold){
+    }
+    else if (time - profile.Toffset - profile.Trise < profile.Thold)
+    {
         // We are in hold phase
         // Color is initialized to the correct value;
-    }else if(time-profile.Toffset-profile.Trise-profile.Thold < profile.Tfall){
+    }
+    else if (time - profile.Toffset - profile.Trise - profile.Thold < profile.Tfall)
+    {
         // We are in falling phase
-        double brightness = 1.0 - (time - profile.Toffset-profile.Trise - profile.Thold)/(double)profile.Tfall;
+        double brightness = 1.0 - (time - profile.Toffset - profile.Trise - profile.Thold) / (double)profile.Tfall;
+        brightness *= brightness;
         color.v *= brightness;
-    }else{
+    }
+    else
+    {
         done = 1;
         color.v = 0;
     }
-    
+
     LEDs->setHSV(profile.index, color);
 }
 
-void SingleTime::release(){
+void SingleTime::release()
+{
     done = 1;
     free(timer);
 }

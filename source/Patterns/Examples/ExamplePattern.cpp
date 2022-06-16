@@ -4,7 +4,7 @@
 #include "../../Effects/Effect.h"
 #include "../../kylarLEDs/Controllers/FireFly/Sensors/Microphone/Microphone.h"
 
-void ExamplePattern::init(){
+void ExamplePattern::init() {
     myTiming = new Timing();
 
     for(int i = 0; i < LEDs->num(); i++){
