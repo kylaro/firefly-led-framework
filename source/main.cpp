@@ -24,8 +24,9 @@ int main(){
     //Push back all the patterns you want!
     //ADD YOUR PATTERNS HERE!
     //ex. patterns->push_back(new ExamplePattern(LEDs));
-    patterns->push_back(new Shakeel(LEDs));
     patterns->push_back(new FireFlies(LEDs));
+    patterns->push_back(new Shakeel(LEDs));
+    
     //patterns->push_back(new FireFliesSame(LEDs));
     
 
