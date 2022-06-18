@@ -199,6 +199,7 @@
         -> But HSV is only way to mix Saturation. Maybe there is a native HSV mix function, and we convert to RGB only for output
     Make brightness change smooth.
     Detect brightness flickering (especially for low brightness when pot rests between two levels and the noise changes the level)
+    Timer Utils like Triangle, Sin, Exp, square, to make easy waveforms
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)
             Or have a poll time, so when it is moving it is more polled more
