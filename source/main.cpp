@@ -55,6 +55,7 @@ int main(){
             //We are remaining on the same pattern
             currentPattern->run();  //Allow pattern to create effects
             effectEngine->run();    //Run each effect to generate LED Changes
+            LEDs->clear();          // Clear LEDs between runs
             LEDs->apply();          //Apply changes by collapsing LED Changes
             LEDs->output();         //Output to strip via controller
         }else{
