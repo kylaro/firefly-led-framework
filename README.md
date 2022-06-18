@@ -197,6 +197,8 @@
         -> So if I want to only change the saturation of a pixel, regardless of what is there
         -> Hard part is that LEDChanges store RGB, because it is easier to combine
         -> But HSV is only way to mix Saturation. Maybe there is a native HSV mix function, and we convert to RGB only for output
+    Make brightness change smooth.
+    Detect brightness flickering (especially for low brightness when pot rests between two levels and the noise changes the level)
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)
             Or have a poll time, so when it is moving it is more polled more
