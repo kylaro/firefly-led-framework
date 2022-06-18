@@ -44,7 +44,7 @@ void FireFlyController::initCommunication(){
 
     printf("Communication established\n");
 
-    // How to overclock (or underclock!)
+    // // How to overclock (or underclock!)
     // if (!set_sys_clock_khz(250000, false)){
     //   printf("system clock 250MHz failed\n");
     // }else{
@@ -52,6 +52,11 @@ void FireFlyController::initCommunication(){
     // }
 }
 
+uint64_t FireFlyController::getCurrentTimeMicros(){
+    absolute_time_t new_time = get_absolute_time(); //Microseconds
+    uint64_t micros = new_time;
+    return micros;
+}
 
 uint64_t FireFlyController::getCurrentTimeMillis(){
     absolute_time_t new_time = get_absolute_time(); //Microseconds
@@ -66,7 +71,7 @@ void FireFlyController::outputLEDs(uint8_t *leds, uint32_t N){
         // Bits for transmission must be shifted to top 8 bits
         pio_sm_put_blocking(PX_pio, PX_sm, ((uint32_t)*pixels++)<< 24);
     }
-    sleep_ms(1);
+    //sleep_ms(1);
 }
 
 double FireFlyController::getBrightness(){

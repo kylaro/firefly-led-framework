@@ -1,6 +1,7 @@
 
 #include "stdio.h"
 #include <vector>
+#include <string>
 #include "Effects/Effect.h"
 #include "kylarLEDs/LEDInterface/LEDInterface.h"
 #include "kylarLEDs/EffectEngine/EffectEngine.h"
@@ -9,6 +10,7 @@
 #include "Patterns/Examples/FireFlies.h"
 #include "Patterns/Examples/FireFliesSame.h"
 #include "Patterns/SoundReactive/Shakeel.h"
+#include "kylarLEDs/Utility/ExecTimer.h"
 
 using namespace std;
 int main(){
@@ -16,7 +18,7 @@ int main(){
     Controller *ledController = new FireFlyController();
     EffectEngine *effectEngine = new EffectEngine();
     LEDInterface *LEDs = new LEDInterface();
-    LEDs->setNum(120);
+    LEDs->setNum(240);
     Timing::giveControllerForTiming(ledController);
     Effect::giveEngine(effectEngine);
     
@@ -49,15 +51,23 @@ int main(){
     //Initialize first pattern
     currentPattern->init();
 
+    ExecTimer *timer = new ExecTimer();
     //Main loop
     while(1){
         if(currentPatternIndex == nextPatternIndex){
             //We are remaining on the same pattern
+            timer->start("mainloop");
             currentPattern->run();  //Allow pattern to create effects
+            timer->add("currentPattern->run()");
             effectEngine->run();    //Run each effect to generate LED Changes
+            timer->add("effectEngine->run()");
             LEDs->clear();          // Clear LEDs between runs
+            timer->add("LEDs->clear()");
             LEDs->apply();          //Apply changes by collapsing LED Changes
+            timer->add("LEDs->apply()");
             LEDs->output();         //Output to strip via controller
+            timer->add("LEDs->output()");
+            //timer->print();
         }else{
             //We are changing pattern
             currentPattern->release();                      //Finish the current pattern

@@ -9,6 +9,7 @@ class Controller {
         virtual double getHue();
         virtual double getBrightness();
         virtual uint64_t getCurrentTimeMillis() = 0;
+        virtual uint64_t getCurrentTimeMicros() = 0;
     protected:
         uint32_t *patternIndex = 0;
         double hue = 0;

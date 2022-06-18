@@ -7,6 +7,7 @@ Timing::Timing(){
 
 }
 
+// Static
 void Timing::giveControllerForTiming(Controller *theController){
     controller = theController;
 }
@@ -31,10 +32,26 @@ int Timing::everyMs(uint32_t ms){
 uint64_t Timing::timerMs(){
     if(timerStart == 0){
         //First call, initialize timer:
-        timerStart = controller->getCurrentTimeMillis();
+        timerStart = controller->getCurrentTimeMicros();
         return 0;
     }else{
-        return controller->getCurrentTimeMillis() - timerStart;
+        return (controller->getCurrentTimeMicros() - timerStart)/1000;
     }
 
 }
+
+uint64_t Timing::timerUs(){
+    if(timerStart == 0){
+        //First call, initialize timer:
+        timerStart = controller->getCurrentTimeMicros();
+        return 0;
+    }else{
+        return controller->getCurrentTimeMicros() - timerStart;
+    }
+}
+
+
+void Timing::reset(){
+    timerStart = controller->getCurrentTimeMicros();
+}
+

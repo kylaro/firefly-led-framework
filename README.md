@@ -158,9 +158,6 @@
 ### List of things still need to add:
     Support for multiple strips / multiple LED interfaces
     FireFlys example pattern
-    Dynamic strip lengths - no predefined length
-    Controller Hue control
-    Controller Pattern button
     Make a CMakeFile for the targeted controller to keep CMake hw agnostic
     Add execution timing utility
     Make the Controller have a static variable for the current controller in use
@@ -200,8 +197,14 @@
     Make brightness change smooth.
     Detect brightness flickering (especially for low brightness when pot rests between two levels and the noise changes the level)
     Timer Utils like Triangle, Sin, Exp, square, to make easy waveforms
+    Make sound reactivity for highs
+    Make some form of persistence, and can use for saving color/current pattern
+    Try to improve the speed of the PIO LED output using DMA
+
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)
             Or have a poll time, so when it is moving it is more polled more
          Controller Brightness control
-
+         Dynamic strip lengths - no predefined length
+        Controller Hue control
+        Controller Pattern button

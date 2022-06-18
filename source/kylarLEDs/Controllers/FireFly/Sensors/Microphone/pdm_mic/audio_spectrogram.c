@@ -1,5 +1,5 @@
 #include "audio_spectrogram.h"
-
+#include "pico/time.h"
 
 // microphone configuration
 const struct pdm_microphone_config pdm_config = {
@@ -34,6 +34,10 @@ freq_data_t temp_freq_data;
 sound_profile_t sound_profile;
 
 const int print = 0;
+const int exec_timing = 0;
+absolute_time_t new_time; //Microseconds
+absolute_time_t cur_time;
+absolute_time_t start_time;
 void pdm_core1_entry(){
     //Init:
     // initialize the hanning window and RFFT instance
@@ -64,9 +68,19 @@ void pdm_core1_entry(){
     
     
     while(1) {
+        if(exec_timing){
+            new_time = get_absolute_time(); //Microseconds
+            start_time = new_time;
+        }
+        
         // Waiting for new samples
         while (new_samples_captured == 0) {
             tight_loop_contents();
+        }
+        if(exec_timing){
+            cur_time = get_absolute_time();
+            printf("wait = %.1f us\n", (double)(cur_time-start_time));
+            start_time = get_absolute_time();
         }
         new_samples_captured = 0;
 
@@ -81,7 +95,11 @@ void pdm_core1_entry(){
         arm_rfft_q15(&S_q15, windowed_input_q15, fft_q15);
         arm_cmplx_mag_q15(fft_q15, fft_mag_q15, FFT_MAG_SIZE);
 
-        
+        if(exec_timing){
+            cur_time = get_absolute_time();
+            printf("arm stuff = %.1f us\n", (double)(cur_time-start_time));
+            start_time = get_absolute_time();
+        }
         
 
         // Audio processing:
@@ -132,11 +150,26 @@ void pdm_core1_entry(){
             printf("|\n");
         }
 
+        if(exec_timing){
+            //cur_time = get_absolute_time();
+            printf("sum bins = %.1f us\n", (double)(get_absolute_time()-start_time));
+            start_time = get_absolute_time();
+        }
+
         freq_data.freq_energy = temp_freq_data.freq_energy;
         freq_data.low_freq_energy = temp_freq_data.low_freq_energy;
         freq_data.high_freq_energy = temp_freq_data.high_freq_energy;
         //printf("CORE1 %.0f %.0f %.0f\n", freq_data.low_freq_energy, freq_data.high_freq_energy, freq_data.freq_energy);
         updateSoundProfile();
+        if(exec_timing){
+            //cur_time = get_absolute_time();
+            printf("profile = %.1f us\n", (double)(get_absolute_time()-start_time));
+            start_time = get_absolute_time();
+        }
+
+        if(exec_timing){
+            printf("sound FPS = %.1f / sec\n\n", 1000000.0/(double)(get_absolute_time() - new_time));
+        }
     }
 }
 
