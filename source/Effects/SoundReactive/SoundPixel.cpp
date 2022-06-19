@@ -9,8 +9,6 @@ void SoundPixel::init(){
 void SoundPixel::run(){
     hue += hueAdd; // 0.01- 0.001
     
-    
-
     // Output
     hsv_t color = {hue, 1, brightness};
     LEDs::setHSV(i, color);

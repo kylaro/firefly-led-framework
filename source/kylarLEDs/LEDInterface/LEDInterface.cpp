@@ -74,13 +74,14 @@ void LEDInterface::setRGBUnprotected(int index, rgb_t rgb){
 void LEDInterface::apply(){
     uint8_t r, g, b;
     rgb_t rgb;
+    double brightness = 255.0*ledController->getBrightness();
     for (int i = 0; i < numLEDs; i++) {
         LEDChange* change = changesArray[i];
         if (change->count != 0) {
             rgb = change->getRGB();
-            r = (uint8_t) (rgb.r*255.0*ledController->getBrightness());
-            g = (uint8_t) (rgb.g*255.0*ledController->getBrightness());
-            b = (uint8_t) (rgb.b*255.0*ledController->getBrightness());
+            r = (uint8_t) (rgb.r*brightness);
+            g = (uint8_t) (rgb.g*brightness);
+            b = (uint8_t) (rgb.b*brightness);
             ledsArray[3*i] = g;
             ledsArray[3*i+1] = r;
             ledsArray[3*i+2] = b;

@@ -7,7 +7,7 @@
 void Shakeel::init(){
     pixels = new std::vector<SoundPixel*>();
     int stripLen = LEDs::strip(0)->num();
-    double symmetryPoint = stripLen/2 ;
+    double symmetryPoint = stripLen/2;
     for(int i = 0; i < stripLen; i++){
         SoundPixel * eff = new SoundPixel();
         eff->i = i;
@@ -46,11 +46,11 @@ void Shakeel::run(){
 
 
     // Brightness
-    double proposedBrightness = 0.5+(micVal/2);
+    double proposedBrightness = 0.3+(0.7*micVal);
     //printf("valTimer = %d ... %d\n", valTimer->timerMs(), valTimer->takeMsEvery(100));
     avgLoops = valTimer->takeMsEvery(1);
     for(int i = 0; i < avgLoops; i++){
-        brightness = (brightness*300.0 + proposedBrightness)/301.0;
+        brightness = (brightness*200.0 + proposedBrightness)/201.0;
     }
     
     if(proposedBrightness > brightness){

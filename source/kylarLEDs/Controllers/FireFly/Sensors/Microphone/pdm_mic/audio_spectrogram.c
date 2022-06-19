@@ -41,6 +41,7 @@ absolute_time_t start_time;
 void pdm_core1_entry(){
     //Init:
     // initialize the hanning window and RFFT instance
+    sleep_ms(10); //delay here so that the dma channel doesn't get claimed..
     hanning_window_init_q15(window_q15, FFT_SIZE);
     arm_rfft_init_q15(&S_q15, FFT_SIZE, 0, 1);
 

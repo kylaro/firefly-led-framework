@@ -1,9 +1,11 @@
 #include "FireFlyController.h"
 #include "pico/stdlib.h"
 #include "hardware/dma.h"
+#include "hardware/irq.h"
 #include <stdio.h>
 #include "pico/time.h"
-
+uint64_t FireFlyController::channel_end_times[4];
+strip_t FireFlyController::strips[4];
 FireFlyController::FireFlyController()
 {
     initCommunication();
@@ -20,19 +22,37 @@ void FireFlyController::initDMA(PIO pio, uint sm)
 {
 }
 
+
+void FireFlyController::handleDMA()
+{
+    //Loops through the strips and checks if the channel is done. If it is, it sets the channel_end_times to the current time.
+    uint8_t dma_chan;
+    for(int i = 0; i < 4; i++){
+        dma_chan = strips[i].dma_chan;
+        if(dma_channel_get_irq1_status(dma_chan)){
+            dma_channel_acknowledge_irq1(dma_chan);
+            channel_end_times[i] = get_absolute_time();
+        }
+
+    }
+
+}
+
 void FireFlyController::initOutput()
 {
 
     // initDMA();
 
     uint offset = pio_add_program(pio, &ws2812_program);
+    irq_set_exclusive_handler(DMA_IRQ_1, &FireFlyController::handleDMA);
+    irq_set_enabled(DMA_IRQ_1, true);
     // Init 4 strips
     for (uint8_t i = 0; i < PX_PINS; i++)
     {
         strips[i].pin = PX_pins[i];
         strips[i].sm = PX_sms[i];
         strips[i].dma_chan = dma_claim_unused_channel(true);
-
+        dma_channel_set_irq1_enabled(strips[i].dma_chan, true);
         uint8_t PX_pin = PX_pins[i];
         gpio_init(PX_pin);
         gpio_set_dir(PX_pin, GPIO_OUT);
@@ -85,18 +105,30 @@ uint64_t FireFlyController::getCurrentTimeMillis()
     return millis;
 }
 
-void FireFlyController::outputLEDs(uint8_t strip, uint8_t *leds, uint32_t N)
+void FireFlyController::outputLEDs(uint8_t strip_i, uint8_t *leds, uint32_t N)
 {
     uint32_t numBytes = N * 3;
     uint8_t *pixels = leds;
+    strip_t *strip = &(strips[strip_i]);
+
+    int sm = strip->sm;
+    int dma_chan = strip->dma_chan;
+    dma_channel_wait_for_finish_blocking(dma_chan);
+    // add a 200 us wait here, because the led strip needs a reset after each write
+    // This will be skipped if the strip had already been finished for long enough
+    // Therefore the performance will not be affected
+    int64_t diff = 0;
+    while((diff = absolute_time_diff_us(channel_end_times[strip_i], get_absolute_time())) < 200){
+        // The condition is checking the difference between the current time and the last time the channel was finished.
+    }
+
     // uint32_t bytes[numBytes];
     //  This is only necessary to format data, but later can change to this being how it is inputted
     for (int i = 0; i < numBytes; i++)
     {
-        strips[strip].outPointer[i] = ((uint32_t)pixels[i]) << 24;
+        strip->outPointer[i] = ((uint32_t)pixels[i]) << 24;
     }
-    int sm = strips[strip].sm;
-    int dma_chan = strips[strip].dma_chan;
+    
 
     dma_channel_config c = dma_channel_get_default_config(dma_chan);
     channel_config_set_read_increment(&c, true);
@@ -105,7 +137,7 @@ void FireFlyController::outputLEDs(uint8_t strip, uint8_t *leds, uint32_t N)
     channel_config_set_transfer_data_size(&c, DMA_SIZE_32);
     dma_channel_configure(dma_chan, &c,
                           &pio->txf[sm],            // Destination pointer
-                          strips[strip].outPointer, // Source pointer
+                          strip->outPointer, // Source pointer
                           numBytes,                 // Number of transfers
                           true                      // Start immediately
     );
