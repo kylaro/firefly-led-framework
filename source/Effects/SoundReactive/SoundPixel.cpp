@@ -21,7 +21,7 @@ void SoundPixel::run(){
 
     // Output
     hsv_t color = {hue, 1, brightness};
-    LEDs->setHSV(i, color);
+    LEDs::setHSV(i, color);
 }
 
 void SoundPixel::release(){

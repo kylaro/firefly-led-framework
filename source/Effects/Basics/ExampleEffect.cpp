@@ -8,7 +8,7 @@ void ExampleEffect::init(){
 void ExampleEffect::run(){
     hue += 0.0015;
     hsv_t color = {hue, 1, 1};
-    LEDs->setHSV(i, color);
+    LEDs::setHSV(i, color);
 }
 
 void ExampleEffect::release(){

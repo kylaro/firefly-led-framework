@@ -23,7 +23,7 @@ void FireFly::run(){
     if(timer->everyMs(200)){
         // "We have moved!"
         blueprint.index += direction;
-        Effect::engine->queueApply((new SingleTime(LEDs))->init(blueprint));
+        Effect::engine->queueApply((new SingleTime())->init(blueprint));
     }
     if(speed < 0.1){
         done = 1;

@@ -1,8 +1,9 @@
 #include "LEDInterface.h"
 #include "stdio.h"
 #include "stdlib.h"
-LEDInterface::LEDInterface(){
+LEDInterface::LEDInterface(uint8_t strip){
     rgb_t off = {0, 0, 0};
+    this->strip = strip;
     for(int i = 0; i < MAX_NUM_LEDS; i++){
         changesArray[i] = new LEDChange(i, off);
         ledsArray[i*3] = 0;
@@ -42,7 +43,7 @@ double LEDInterface::remapHue(double hue){
     return hue;
 }
 
-void LEDInterface::setHSV(int index, hsv_t hsv){
+irgb_t LEDInterface::setHSV(int index, hsv_t hsv){
     if(index >= numLEDs){
         index %= numLEDs;
     }
@@ -57,6 +58,16 @@ void LEDInterface::setHSV(int index, hsv_t hsv){
     hsv.s = ColorUtil::sanitizeSV(hsv.s);
     hsv.v = ColorUtil::sanitizeSV(hsv.v);
     rgb_t rgb = ColorUtil::hsv2rgb(hsv); 
+    changesArray[index]->combine(rgb);
+
+    // Create the return value, for re-use
+    irgb_t irgb;
+    irgb.rgb = rgb;
+    irgb.i = index;
+    return irgb;
+}
+
+void LEDInterface::setRGBUnprotected(int index, rgb_t rgb){
     changesArray[index]->combine(rgb);
 }
 
@@ -80,7 +91,7 @@ void LEDInterface::apply(){
 
 
 void LEDInterface::output(){
-    ledController->outputLEDs(ledsArray, numLEDs);
+    ledController->outputLEDs(strip, ledsArray, numLEDs);
 }
 
 void LEDInterface::clear(){

@@ -3,7 +3,8 @@
 #include "ColorUtil.h"
 #include "LEDChange.h"
 
-#define MAX_NUM_LEDS 600
+// Currently using way too much memory here...
+#define MAX_NUM_LEDS 300 // working up to 3000 (when 1 strip)
 
 class LEDInterface{
     /*
@@ -17,12 +18,13 @@ class LEDInterface{
     */
 
     public:
-        LEDInterface();
+        LEDInterface(uint8_t strip);
         void apply();   // Apply the changes 
         void output();  // and output
         void clear();   // clear
         void setRGB(int index, rgb_t rgb);
-        void setHSV(int index, hsv_t hsv);
+        void setRGBUnprotected(int index, rgb_t rgb); // can use if getting the rgb from setHSV
+        irgb_t setHSV(int index, hsv_t hsv);
         void giveController(Controller *);
         double num(); //Get number of LEDs
         void setNum(uint16_t num); //set number of LEDs
@@ -30,6 +32,7 @@ class LEDInterface{
         Controller * ledController;
         LEDChange* changesArray[MAX_NUM_LEDS]; // Need to update this length or make it dynamic!!
         uint8_t ledsArray[MAX_NUM_LEDS*3];
-        uint16_t numLEDs;
+        uint16_t numLEDs = 1;
         double remapHue(double hue);
+        uint8_t strip = 0;
 };

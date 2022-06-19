@@ -7,11 +7,13 @@
 #include "Sensors/Microphone/Microphone.h"
 #include "../../Utility/Timing.h"
 
+#define PX_PINS 4
+
 class FireFlyController : public Controller{
     public:
         FireFlyController();
         //using Controller::Controller;
-        void outputLEDs(uint8_t *leds, uint32_t N); // leds is an array, N is the length
+        void outputLEDs(uint8_t strip, uint8_t *leds, uint32_t N); // leds is an array, N is the length
         uint64_t getCurrentTimeMillis();
         uint64_t getCurrentTimeMicros();
         double getHue();
@@ -25,8 +27,10 @@ class FireFlyController : public Controller{
         void initOutput();
         void initMicrophone();
     private:
-        uint8_t PX_pin = 17; // 16 for 1, 17 for 2
-        uint8_t PX_sm = 0;
+        uint8_t PX_pins[PX_PINS] = {16, 17, 0, 0};
+        uint8_t PX_sms[PX_PINS] = {0, 1, 2, 3};
+        //uint8_t PX_pin = 17; // 16 for 1, 17 for 2
+        //uint8_t PX_sm = 0;
         PIO PX_pio = pio0;
 
         Potentiometer *analogPot;

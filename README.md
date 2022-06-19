@@ -200,6 +200,8 @@
     Make sound reactivity for highs
     Make some form of persistence, and can use for saving color/current pattern
     Try to improve the speed of the PIO LED output using DMA
+    Should we really clear the led rgb every time? or leave it up to the pattern programmer to manage when things should be off
+    Make memory allocation dynamic for LED outputs, instead of doing all 4 / or otherwise make memory usage less in LEDInterface
 
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)

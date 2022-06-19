@@ -6,11 +6,11 @@
 
 void ExamplePattern::init(){
     myTiming = new Timing();
-
-    for(int i = 0; i < LEDs->num(); i++){
-        ExampleEffect * eff = new ExampleEffect(LEDs);
+    int stripLen = LEDs::strip(0)->num();
+    for(int i = 0; i < stripLen; i++){
+        ExampleEffect * eff = new ExampleEffect();
         eff->i = i;
-        eff->hue = i/LEDs->num();
+        eff->hue = i/stripLen;
         Effect::engine->apply(eff);
     }
 

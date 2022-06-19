@@ -1,6 +1,5 @@
 #pragma once
 #include "../kylarLEDs/EffectEngine/EffectEngine.h"
-#include "../kylarLEDs/LEDInterface/LEDInterface.h"
 
 
 class Pattern {
@@ -12,12 +11,11 @@ class Pattern {
         • Patterns do not directly write LEDs
     */
     public:
-        Pattern(LEDInterface *);
+        Pattern();
         virtual void run() = 0;
         virtual void init() = 0;
         virtual void release() = 0;
 
     protected:
-        LEDInterface *LEDs;
         int initialized = 0;
 };

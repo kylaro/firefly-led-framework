@@ -4,26 +4,26 @@
 
 void FireFlies::init(){
     myTiming = new Timing();
-    
-    FireFly *cyanFly = new FireFly(LEDs);
+    int len = LEDs::strip(0)->num();
+    FireFly *cyanFly = new FireFly();
     cyanFly->init();
     cyanFly->blueprint.hue = 0;
     cyanFly->direction = 1;
     cyanFly->blueprint.index = 0;
 
-    FireFly *yellowFly = new FireFly(LEDs);
+    FireFly *yellowFly = new FireFly();
     yellowFly->init();
     yellowFly->blueprint.hue = 0.25;
     yellowFly->direction = 1;
-    yellowFly->blueprint.index = (int)LEDs->num()/2;
+    yellowFly->blueprint.index = (int)len/2;
 
-    FireFly *magentaFly = new FireFly(LEDs);
+    FireFly *magentaFly = new FireFly();
     magentaFly->init();
     magentaFly->blueprint.hue = 0.5;
     magentaFly->direction = -1;
-    magentaFly->blueprint.index = (int)LEDs->num()/2;
+    magentaFly->blueprint.index = (int)len/2;
 
-    FireFly *lastFly = new FireFly(LEDs);
+    FireFly *lastFly = new FireFly();
     lastFly->init();
     lastFly->blueprint.hue = 0.75;
     lastFly->direction = -1;

@@ -1,8 +1,8 @@
 #include "Effect.h"
 
 EffectEngine* Effect::engine;
-Effect::Effect(LEDInterface *LEDs){
-    this->LEDs = LEDs;
+Effect::Effect(){
+    
 }
 
 int Effect::isDone(){

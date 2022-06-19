@@ -4,8 +4,8 @@
 
 void FireFliesSame::init(){
     myTiming = new Timing();
-    Effect::engine->apply(new FireFly(LEDs));
-    FireFly *greenFireFly = new FireFly(LEDs);
+    Effect::engine->apply(new FireFly());
+    FireFly *greenFireFly = new FireFly();
     greenFireFly->init();
     greenFireFly->blueprint.hue = 0;
     greenFireFly->direction = 1;

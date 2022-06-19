@@ -12,6 +12,11 @@ typedef struct{
     double b;        // Blue 0 to 1.0
 } rgb_t;
 
+typedef struct{
+    int i;
+    rgb_t rgb;
+} irgb_t;
+
 class ColorUtil{
     public:
         static double sanitizeH(double x);

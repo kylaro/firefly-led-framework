@@ -17,14 +17,23 @@ FireFlyController::FireFlyController(){
 void FireFlyController::initOutput(){
     
 
-    uint offset = pio_add_program(PX_pio, &ws2812_program);
+    
 
-    gpio_init(PX_pin);
-    gpio_set_dir(PX_pin, GPIO_OUT);
-    gpio_put(PX_pin, 0);
+    for(int i = 0; i < PX_PINS; i++){
+        uint offset = pio_add_program(PX_pio, &ws2812_program);
 
-    // 800kHz, 8 bit transfers
-    ws2812_program_init(PX_pio, PX_sm, offset, PX_pin, 800000, 8);
+        uint8_t PX_pin = PX_pins[i];
+        gpio_init(PX_pin);
+        gpio_set_dir(PX_pin, GPIO_OUT);
+        gpio_put(PX_pin, 0);
+
+        uint8_t PX_sm = PX_sms[i];
+        // 800kHz, 8 bit transfers
+        ws2812_program_init(PX_pio, PX_sm, offset, PX_pin, 800000, 8);
+    }
+    
+
+    
 }
 
 void FireFlyController::initCommunication(){
@@ -34,13 +43,13 @@ void FireFlyController::initCommunication(){
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 20; i++){
         gpio_put(LED_PIN, 1);
-        sleep_ms(30);
+        sleep_ms(20);
         gpio_put(LED_PIN, 0);
-        sleep_ms(30);
+        sleep_ms(20);
     }
-    gpio_put(LED_PIN, 0);
+    
 
     printf("Communication established\n");
 
@@ -64,12 +73,12 @@ uint64_t FireFlyController::getCurrentTimeMillis(){
     return millis;
 }
 
-void FireFlyController::outputLEDs(uint8_t *leds, uint32_t N){
+void FireFlyController::outputLEDs(uint8_t strip, uint8_t *leds, uint32_t N){
     uint32_t numBytes = N*3;
     uint8_t *pixels = leds;
     while(numBytes--){
         // Bits for transmission must be shifted to top 8 bits
-        pio_sm_put_blocking(PX_pio, PX_sm, ((uint32_t)*pixels++)<< 24);
+        pio_sm_put_blocking(PX_pio, strip, ((uint32_t)*pixels++)<< 24);
     }
     //sleep_ms(1);
 }

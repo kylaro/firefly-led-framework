@@ -44,6 +44,7 @@ void EffectEngine::run() {
             it++;
         }
         
+        
     }
     for (Effect* eff : effectsQueue) {
         effects.push_back(eff);
