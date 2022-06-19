@@ -14,7 +14,9 @@ class Shakeel : public Pattern{
     private:
         Timing *myTiming;
         int initted = 0;
-
+        Timing *avgTimer;
+        Timing *secTimer;
+        Timing *valTimer;
         std::vector<SoundPixel*> *pixels;
         
 

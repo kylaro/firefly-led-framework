@@ -20,8 +20,8 @@ int main(){
     // Initialize framework infrastructure
     Controller *ledController = new FireFlyController();
     EffectEngine *effectEngine = new EffectEngine();
-    LEDs::init(2); // Initializing 4 outputs
-    LEDs::setNum(120); // Setting all 4 strips to 120 LEDs
+    LEDs::init(2); // Initializing # of outputs
+    LEDs::setNum(120); // Setting all strips to 120 LEDs
     
     Effect::giveEngine(effectEngine);
     
