@@ -1,6 +1,6 @@
 #pragma once
 #include "../Timing.h"
-
+#include <stdlib.h>
 class Waveform {
     public:
         Waveform();

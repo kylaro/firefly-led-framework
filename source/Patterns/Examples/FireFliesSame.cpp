@@ -21,5 +21,5 @@ void FireFliesSame::run(){
 }
 
 void FireFliesSame::release(){
-    free(myTiming);
+    delete(myTiming);
 }

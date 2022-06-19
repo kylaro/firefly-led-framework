@@ -8,11 +8,11 @@ EffectEngine::EffectEngine(){
 void EffectEngine::clear() {
     for (Effect* eff : effects) {
         eff->release();
-        free(eff);
+        delete(eff);
     }
     for (Effect* eff : effectsQueue){
         eff->release();
-        free(eff);
+        delete(eff);
     }
     effects.clear();
     effectsQueue.clear();
@@ -37,7 +37,7 @@ void EffectEngine::run() {
             // erase() invalidates the iterator, use returned iterator
             effect->release();
             it = effects.erase(it);
-            free(effect);
+            delete(effect);
             continue;
         } else {
             effect->run();

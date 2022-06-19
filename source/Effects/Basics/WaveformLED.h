@@ -5,6 +5,7 @@ class WaveformLED : public Effect{
 
     public:
         WaveformLED(Waveform *waveform);
+        ~WaveformLED();
         void run();
         void init();
         void release();

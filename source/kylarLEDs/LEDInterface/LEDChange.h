@@ -9,7 +9,6 @@ class LEDChange {
         int count = 0;
         rgb_t getRGB();
     private:
-        int index;
         rgb_t rgb;
         
 };

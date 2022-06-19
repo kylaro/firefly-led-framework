@@ -3,7 +3,6 @@
 
 LEDChange::LEDChange(int i, rgb_t rgb){
     this->rgb = rgb;
-    index = i;
 }
 
 void LEDChange::combine(rgb_t newrgb){

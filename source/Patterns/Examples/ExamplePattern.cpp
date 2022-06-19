@@ -21,5 +21,5 @@ void ExamplePattern::run(){
 }
 
 void ExamplePattern::release(){
-    free(myTiming);
+    delete(myTiming);
 }

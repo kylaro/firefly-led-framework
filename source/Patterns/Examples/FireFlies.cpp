@@ -43,5 +43,5 @@ void FireFlies::run(){
 }
 
 void FireFlies::release(){
-    free(myTiming);
+    delete(myTiming);
 }

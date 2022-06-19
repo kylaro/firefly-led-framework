@@ -27,15 +27,14 @@ void FireFly::run(){
         blueprint.index += direction;
         //Effect::engine->queueApply((new SingleTime())->init(blueprint));
         Effect::engine->queueApply(((new WaveformLED(new Triangle(4000)))->setI(blueprint.index)->setHue(blueprint.hue)->setCount(1)));
+        
     }
-    if(speed < 0.1){
-        done = 1;
-    }
+    
     
     
 }
 
 void FireFly::release(){
     done = 1;
-    free(timer);
+    delete(timer);
 }

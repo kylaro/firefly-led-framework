@@ -12,3 +12,8 @@ double Triangle::sample(double index){
         return 1.0-index;
     }
 }
+
+
+// Triangle::~Triangle(){
+//     delete(timer);
+// }

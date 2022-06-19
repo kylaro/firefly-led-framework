@@ -10,7 +10,7 @@ Waveform::Waveform(uint32_t periodMs){
 }
 
 Waveform::~Waveform(){
-
+    delete(timer);
 }
 
 void Waveform::initTimer(){

@@ -202,7 +202,8 @@
     Try to improve the speed of the PIO LED output using DMA
     Should we really clear the led rgb every time? or leave it up to the pattern programmer to manage when things should be off
     Make memory allocation dynamic for LED outputs, instead of doing all 4 / or otherwise make memory usage less in LEDInterface
-
+    Make memory better, by having LEDChanges outsource their memory references?
+    Get rid of "release()" and just make everyone have a ~Destructor() which frees stuff instead, remove release support from engine
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)
             Or have a poll time, so when it is moving it is more polled more

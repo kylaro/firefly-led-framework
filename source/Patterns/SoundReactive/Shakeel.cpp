@@ -69,7 +69,7 @@ void Shakeel::run(){
 
 void Shakeel::release(){
 
-    free(secTimer);
-    free(avgTimer);
-    free(pixels);
+    delete(secTimer);
+    delete(avgTimer);
+    delete(pixels);
 }

@@ -42,5 +42,6 @@ double ExecTimer::fps(){
 }
 
 ExecTimer::~ExecTimer(){
-    free(timer);
+    free(name);
+    delete(timer);
 }

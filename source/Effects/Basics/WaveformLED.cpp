@@ -1,5 +1,5 @@
 #include "WaveformLED.h"
-
+#include "stdio.h"
 
 WaveformLED::WaveformLED(Waveform * waveform){
     wave = waveform;
@@ -11,7 +11,7 @@ void WaveformLED::init(){
 
 void WaveformLED::run(){
     hsv_t color = {hue, 1, wave->value()};
-    if(  (count != 0) &&  wave->complete() >= count){
+    if(  (count > 0) &&  wave->complete() >= count){
         // The finish condition
         done = 1;
         LEDs::setHSV(i, {0,0,0});
@@ -21,7 +21,11 @@ void WaveformLED::run(){
 }
 
 void WaveformLED::release(){
-    free(wave);
+    //delete(wave);
+}
+
+WaveformLED::~WaveformLED(){
+    delete(wave);
 }
 
 
