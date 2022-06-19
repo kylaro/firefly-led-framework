@@ -16,9 +16,9 @@
 #define ws2812_wrap_target 0
 #define ws2812_wrap 3
 
-#define ws2812_T1 2 // 2
-#define ws2812_T2 5 // 5
-#define ws2812_T3 3 // 3
+#define ws2812_T1 2
+#define ws2812_T2 5
+#define ws2812_T3 3
 
 static const uint16_t ws2812_program_instructions[] = {
     //     .wrap_target

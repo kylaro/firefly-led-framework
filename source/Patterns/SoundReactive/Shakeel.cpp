@@ -50,7 +50,7 @@ void Shakeel::run(){
     //printf("valTimer = %d ... %d\n", valTimer->timerMs(), valTimer->takeMsEvery(100));
     avgLoops = valTimer->takeMsEvery(1);
     for(int i = 0; i < avgLoops; i++){
-        brightness = (brightness*100.0 + proposedBrightness)/101.0;
+        brightness = (brightness*300.0 + proposedBrightness)/301.0;
     }
     
     if(proposedBrightness > brightness){

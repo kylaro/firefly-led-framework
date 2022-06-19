@@ -56,6 +56,8 @@ int pdm_microphone_init(const struct pdm_microphone_config* config) {
     }
 
     pdm_mic.dma_channel = dma_claim_unused_channel(true);
+    
+
     if (pdm_mic.dma_channel < 0) {
         pdm_microphone_deinit();
 
@@ -92,6 +94,7 @@ int pdm_microphone_init(const struct pdm_microphone_config* config) {
         pdm_mic.raw_buffer_size,
         false
     );
+    
 
     pdm_mic.filter.Fs = config->sample_rate;
     pdm_mic.filter.LP_HZ = config->sample_rate / 2;

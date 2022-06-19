@@ -9,6 +9,13 @@
 
 #define PX_PINS 4
 
+typedef struct {
+    uint8_t pin;
+    uint8_t sm;
+    uint8_t dma_chan;
+    uint32_t outPointer[450];
+} strip_t;
+
 class FireFlyController : public Controller{
     public:
         FireFlyController();
@@ -27,12 +34,16 @@ class FireFlyController : public Controller{
         void initOutput();
         void initMicrophone();
     private:
-        uint8_t PX_pins[PX_PINS] = {16, 17, 0, 0};
+        void initDMA(PIO pio, uint sm);
+        
+        strip_t strips[4];
+        uint8_t PX_pins[PX_PINS] = {17, 16, 8, 9};
         uint8_t PX_sms[PX_PINS] = {0, 1, 2, 3};
+        
         //uint8_t PX_pin = 17; // 16 for 1, 17 for 2
         //uint8_t PX_sm = 0;
-        PIO PX_pio = pio0;
-
+        PIO pio = pio0;
+        //dma_channel_config *c;
         Potentiometer *analogPot;
         Encoder *encoder;
         Timing *timing;
