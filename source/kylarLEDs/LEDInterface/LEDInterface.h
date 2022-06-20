@@ -4,7 +4,7 @@
 #include "LEDChange.h"
 
 // Currently using way too much memory here...
-#define MAX_NUM_LEDS 300 // working up to 3000 (when 1 strip)
+#define MAX_NUM_LEDS 120 // working up to 3000 (when 1 strip)
 
 class LEDInterface{
     /*

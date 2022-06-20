@@ -7,9 +7,10 @@
 void Shakeel::init(){
     pixels = new std::vector<SoundPixel*>();
     int stripLen = LEDs::strip(0)->num();
-    double symmetryPoint = stripLen/2;
+    float symmetryPoint = stripLen/2;
     for(int i = 0; i < stripLen; i++){
         SoundPixel * eff = new SoundPixel();
+        //printf("sound pixel size = %d\n", sizeof(SoundPixel));
         eff->i = i;
         if(i < symmetryPoint){
             eff->hue = i/symmetryPoint;

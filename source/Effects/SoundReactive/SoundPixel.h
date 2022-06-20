@@ -9,11 +9,11 @@ class SoundPixel : public Effect{
         void run();
         void init();
         void release();
-        int i = 0;
-        double hue = 0;
-        double micVal = 0;
-        double hueAdd = 0;
-        double brightness = 0;
+        uint16_t i = 0;
+        float hue = 0;
+        float micVal = 0;
+        float hueAdd = 0;
+        float brightness = 0;
     private:
-        int unused = 0;
+        
 };

@@ -20,6 +20,7 @@ void EffectEngine::clear() {
 
 void EffectEngine::apply(Effect *effect) {
 	effects.push_back(effect);
+    //printf("effect vector size= %d\n", sizeof(Effect *)*effects.size());
 }
 
 void EffectEngine::queueApply(Effect *effect) {

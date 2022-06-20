@@ -204,6 +204,8 @@
     Make memory allocation dynamic for LED outputs, instead of doing all 4 / or otherwise make memory usage less in LEDInterface
     Make memory better, by having LEDChanges outsource their memory references?
     Get rid of "release()" and just make everyone have a ~Destructor() which frees stuff instead, remove release support from engine
+    Make option to boot up in memory or speed centric, make 2 different LEDChange classes? One for mem, one for speed
+    
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)
             Or have a poll time, so when it is moving it is more polled more

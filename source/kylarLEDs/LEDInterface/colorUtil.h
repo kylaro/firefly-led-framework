@@ -1,16 +1,22 @@
 #pragma once
-
+#include <stdint.h>
 typedef struct{
-    double h;         // Color: 0 to 1.0 : 0 is RED, 0.33 is GREEN, 0.66 BLUE
-    double s;  // Whiteness: 0 to 1.0 : 0 is WHITE, 1 is COLOR
-    double v;       // Brightness: 0 to 1.0 : 0 is OFF, 1 is ON
+    float h;         // Color: 0 to 1.0 : 0 is RED, 0.33 is GREEN, 0.66 BLUE
+    float s;        // Whiteness: 0 to 1.0 : 0 is WHITE, 1 is COLOR
+    float v;       // Brightness: 0 to 1.0 : 0 is OFF, 1 is ON
 } hsv_t;
 
 typedef struct{
-    double r;         // Red 0 to 1.0
-    double g;       // Green 0 to 1.0
-    double b;        // Blue 0 to 1.0
+    float r;         // Red 0 to 1.0
+    float g;       // Green 0 to 1.0
+    float b;        // Blue 0 to 1.0
 } rgb_t;
+
+typedef struct{
+    uint8_t r;  // Red 0 to 255
+    uint8_t g;  // Green 0 to 255
+    uint8_t b;  // Blue 0 to 255
+} rgb8_t;
 
 typedef struct{
     int i;

@@ -15,6 +15,7 @@ LEDInterface *LEDs::strip(uint8_t strip){
 
 void LEDs::init(uint8_t num){
     strips = new std::vector<LEDInterface*>();
+    printf("size of ledinterface = %d\n", sizeof(LEDInterface));
     for(int i = 0; i < num; i++){
         LEDInterface *leds = new LEDInterface(i);
         leds->setNum(1); // Setting a default number of LEDs...
@@ -22,6 +23,7 @@ void LEDs::init(uint8_t num){
     }
 }
 
+// Sets hsv for all strips
 void LEDs::setHSV(int i, hsv_t color){
     irgb_t irgb;
     int first = 1;

@@ -13,7 +13,7 @@ typedef struct {
     uint8_t pin;
     uint8_t sm;
     uint8_t dma_chan;
-    uint32_t outPointer[900];
+    uint32_t outPointer[360];
 } strip_t;
 
 class FireFlyController : public Controller{

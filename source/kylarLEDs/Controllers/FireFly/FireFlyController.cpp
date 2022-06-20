@@ -147,7 +147,6 @@ void FireFlyController::outputLEDs(uint8_t strip_i, uint8_t *leds, uint32_t N)
     //     // Bits for transmission must be shifted to top 8 bits
     //     pio_sm_put_blocking(PX_pio, strip, ((uint32_t)*pixels++)<< 24);
     // }
-    // sleep_ms(1);
 }
 
 double FireFlyController::getBrightness()

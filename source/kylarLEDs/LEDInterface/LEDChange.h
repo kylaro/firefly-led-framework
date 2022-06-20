@@ -4,11 +4,12 @@
 class LEDChange {
 
     public:
-        LEDChange(int i, rgb_t rgb);
+        LEDChange();
         void combine(rgb_t other);
-        int count = 0;
+        uint8_t count = 0;
         rgb_t getRGB();
     private:
-        rgb_t rgb;
+        rgb8_t rgb;
+        void setRGB(rgb_t rgb);
         
 };
