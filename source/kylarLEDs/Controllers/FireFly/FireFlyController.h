@@ -13,7 +13,7 @@ typedef struct {
     uint8_t pin;
     uint8_t sm;
     uint8_t dma_chan;
-    uint32_t outPointer[360];
+    uint8_t outPointer[NUM_LEDS*3];
 } strip_t;
 
 class FireFlyController : public Controller{
@@ -37,11 +37,11 @@ class FireFlyController : public Controller{
     private:
         void initDMA(PIO pio, uint sm);
         
-        static strip_t strips[4];
+        static strip_t strips[NUM_STRIPS];
         uint8_t PX_pins[PX_PINS] = {17, 16, 8, 9};
         uint8_t PX_sms[PX_PINS] = {0, 1, 2, 3};
-        
-        static uint64_t channel_end_times[4];
+        uint8_t bitflipLUT[256];
+        static uint64_t channel_end_times[NUM_STRIPS];
         
         //uint8_t PX_pin = 17; // 16 for 1, 17 for 2
         //uint8_t PX_sm = 0;

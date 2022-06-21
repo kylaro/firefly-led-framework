@@ -205,6 +205,7 @@
     Make memory better, by having LEDChanges outsource their memory references?
     Get rid of "release()" and just make everyone have a ~Destructor() which frees stuff instead, remove release support from engine
     Make option to boot up in memory or speed centric, make 2 different LEDChange classes? One for mem, one for speed
+    Investigate difference of precision for float vs double
     
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)

@@ -38,19 +38,29 @@ static const struct pio_program ws2812_program = {
 
 static inline pio_sm_config ws2812_program_get_default_config(uint offset) {
   pio_sm_config c = pio_get_default_sm_config();
-  sm_config_set_wrap(&c, offset + ws2812_wrap_target, offset + ws2812_wrap);
+  sm_config_set_wrap(&c, offset + ws2812_wrap_target, offset + ws2812_wrap); // Set the wrap addresses in a state machine configuration.
+  
   sm_config_set_sideset(&c, 1, false, false);
+  /*
+  Set the 'sideset' options in a state machine configuration.
+
+  Parameters
+  c	Pointer to the configuration structure to modify
+  bit_count	Number of bits to steal from delay field in the instruction for use of side set (max 5)
+  optional	True if the topmost side set bit is used as a flag for whether to apply side set on that instruction
+  pindirs	True if the side set affects pin directions rather than values
+  */
   return c;
 }
 
 #include "hardware/clocks.h"
 static inline void ws2812_program_init(PIO pio, uint sm, uint offset, uint pin,
                                        float freq, uint bits) {
-  pio_gpio_init(pio, pin);
-  pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);
-  pio_sm_config c = ws2812_program_get_default_config(offset);
+  pio_gpio_init(pio, pin);                                                // Init GPIO on the pin
+  pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);                  // Set pin to output 
+  pio_sm_config c = ws2812_program_get_default_config(offset);            // Get default config
   sm_config_set_sideset_pins(&c, pin);
-  sm_config_set_out_shift(&c, false, true,
+  sm_config_set_out_shift(&c, true, true, // the first bool controles LEFT / RIGHT (left is false, right is true)
                           bits); // <----<<< Length changed to "bits"
   sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
   int cycles_per_bit = ws2812_T1 + ws2812_T2 + ws2812_T3;

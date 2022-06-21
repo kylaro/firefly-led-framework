@@ -1,6 +1,6 @@
 #pragma once
 #include <stdint.h>
-
+#include "../../config.h"
 class Controller {
     public:
         Controller();

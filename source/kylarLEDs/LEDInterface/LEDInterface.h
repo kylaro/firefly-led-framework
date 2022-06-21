@@ -2,9 +2,10 @@
 #include "../Controllers/Controller.h"
 #include "ColorUtil.h"
 #include "LEDChange.h"
+#include "../../config.h"
 
 // Currently using way too much memory here...
-#define MAX_NUM_LEDS 120 // working up to 3000 (when 1 strip)
+#define MAX_NUM_LEDS NUM_LEDS // working up to 3000 (when 1 strip)
 
 class LEDInterface{
     /*

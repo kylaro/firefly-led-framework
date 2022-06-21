@@ -1,4 +1,5 @@
 #include "LEDInterface.h"
+#include "../Utility/ExecTimer.h"
 #include "stdio.h"
 #include "stdlib.h"
 LEDInterface::LEDInterface(uint8_t strip){
@@ -55,14 +56,24 @@ irgb_t LEDInterface::setHSV(int index, hsv_t hsv){
         index %= numLEDs;
         index = numLEDs - 1 - index;
     }
+    //ExecTimer *timer = new ExecTimer();
+    //timer->start("setHSV");
+    
     hsv.h += ledController->getHue();
+    //timer->add("ledController->getHue()");
     hsv.h = ColorUtil::sanitizeH(hsv.h);
+    //timer->add("::sanitizeH(hsv.h)");
     hsv.h = remapHue(hsv.h);
+    //timer->add("remapHue(hsv.h);");
     hsv.s = ColorUtil::sanitizeSV(hsv.s);
     hsv.v = ColorUtil::sanitizeSV(hsv.v);
+    //timer->add("::sanitizeSV(hsv.v)");
     rgb_t rgb = ColorUtil::hsv2rgb(hsv); 
+    //timer->add("::hsv2rgb(hsv)");
     changesArray[index]->combine(rgb);
-
+    //timer->add("changesArray[index]->combine(rgb)");
+    //timer->print();
+    //delete(timer);
     // Create the return value, for re-use
     irgb_t irgb;
     irgb.rgb = rgb;

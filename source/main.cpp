@@ -13,6 +13,7 @@
 #include "kylarLEDs/Utility/ExecTimer.h"
 #include <malloc.h>
 #include "pico/time.h"
+#include "config.h"
 
 using namespace std;
 int main(){
@@ -20,8 +21,8 @@ int main(){
     // Initialize framework infrastructure
     Controller *ledController = new FireFlyController();
     EffectEngine *effectEngine = new EffectEngine();
-    LEDs::init(4); // Initializing # of outputs
-    LEDs::setNum(120); // Setting all strips to 120 LEDs
+    LEDs::init(NUM_STRIPS); // Initializing # of outputs
+    LEDs::setNum(NUM_LEDS); // Setting all strips to 120 LEDs
     
     Effect::giveEngine(effectEngine);
     

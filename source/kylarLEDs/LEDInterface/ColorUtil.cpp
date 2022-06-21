@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 //LOOP WHEEL
-double ColorUtil::sanitizeH(double x) {
+float ColorUtil::sanitizeH(float x) {
     //CONVERT THIS X VALUE TO BE BETWEEN 0 AND 1 PLEASE
     if (x < 0) {
         x = fabs(x);//ok now it is positive
@@ -19,7 +19,7 @@ double ColorUtil::sanitizeH(double x) {
 }
 
 //MAX / MIN
-double ColorUtil::sanitizeSV(double x) {
+float ColorUtil::sanitizeSV(float x) {
     //CONVERT THIS X VALUE TO BE BETWEEN 0 AND 1 PLEASE
     if (x < 0) {
         return 0;
@@ -30,18 +30,22 @@ double ColorUtil::sanitizeSV(double x) {
     return x;
 }
 
+// rgb_t ColorUtil::fastHSV2RGB(){
+
+// }
+
 rgb_t ColorUtil::hsv2rgb(hsv_t hsv) {
-    double H = hsv.h * 360.0;
-    double S = hsv.s * 100.0;
-    double V = hsv.v * 100.0;
+    float H = hsv.h * 360.0f;
+    float S = hsv.s * 100.0f;
+    float V = hsv.v * 100.0f;
 
-    double s = S / 100.0;
-    double v = V / 100.0;
-    double C = s * v;
-    double X = C * (1.0 - fabs(fmod(H / 60.0, 2.0) - 1.0));
-    double m = v - C;
+    float s = S / 100.0f;
+    float v = V / 100.0f;
+    float C = s * v;
+    float X = C * (1.0f - fabs(fmod(H / 60.0f, 2.0f) - 1.0f));
+    float m = v - C;
 
-    double r, g, b;
+    float r, g, b;
     if (H >= 0 && H < 60) {
         r = C, g = X, b = 0;
     }
@@ -61,25 +65,25 @@ rgb_t ColorUtil::hsv2rgb(hsv_t hsv) {
         r = C, g = 0, b = X;
     }
 
-    double R = (r + m);// *255;
-    double G = (g + m);// * 255;
-    double B = (b + m);// * 255;
+    float R = (r + m);// *255;
+    float G = (g + m);// * 255;
+    float B = (b + m);// * 255;
 
     rgb_t rgb = { R,G,B };
     return rgb;
 }
 
 
-double ColorUtil::remap(double from, double fromMin, double fromMax, double toMin,  double toMax){
-    double fromAbs  =  from - fromMin;
-    double fromMaxAbs = fromMax - fromMin;      
+float ColorUtil::remap(float from, float fromMin, float fromMax, float toMin,  float toMax){
+    float fromAbs  =  from - fromMin;
+    float fromMaxAbs = fromMax - fromMin;      
     
-    double normal = fromAbs / fromMaxAbs;
+    float normal = fromAbs / fromMaxAbs;
 
-    double toMaxAbs = toMax - toMin;
-    double toAbs = toMaxAbs * normal;
+    float toMaxAbs = toMax - toMin;
+    float toAbs = toMaxAbs * normal;
 
-    double to = toAbs + toMin;
+    float to = toAbs + toMin;
     
     return to;
 }

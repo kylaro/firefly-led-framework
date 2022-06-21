@@ -4,8 +4,8 @@
 #include "hardware/irq.h"
 #include <stdio.h>
 #include "pico/time.h"
-uint64_t FireFlyController::channel_end_times[4];
-strip_t FireFlyController::strips[4];
+uint64_t FireFlyController::channel_end_times[NUM_STRIPS];
+strip_t FireFlyController::strips[NUM_STRIPS];
 FireFlyController::FireFlyController()
 {
     initCommunication();
@@ -20,6 +20,7 @@ FireFlyController::FireFlyController()
 
 void FireFlyController::initDMA(PIO pio, uint sm)
 {
+
 }
 
 
@@ -27,7 +28,7 @@ void FireFlyController::handleDMA()
 {
     //Loops through the strips and checks if the channel is done. If it is, it sets the channel_end_times to the current time.
     uint8_t dma_chan;
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < NUM_STRIPS; i++){
         dma_chan = strips[i].dma_chan;
         if(dma_channel_get_irq1_status(dma_chan)){
             dma_channel_acknowledge_irq1(dma_chan);
@@ -40,7 +41,7 @@ void FireFlyController::handleDMA()
 
 void FireFlyController::initOutput()
 {
-
+    
     // initDMA();
 
     uint offset = pio_add_program(pio, &ws2812_program);
@@ -61,6 +62,16 @@ void FireFlyController::initOutput()
         uint8_t PX_sm = PX_sms[i];
         // 800kHz, 8 bit transfers
         ws2812_program_init(pio, strips[i].sm, offset, strips[i].pin, 800000, 8);
+    }
+
+    // Make an array to flip bits for output
+    uint8_t b;
+    for(int i = 0; i < 256; i++){
+        b = i;
+        b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+        b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+        b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+        bitflipLUT[i] = b;
     }
 
 }
@@ -124,9 +135,13 @@ void FireFlyController::outputLEDs(uint8_t strip_i, uint8_t *leds, uint32_t N)
 
     // uint32_t bytes[numBytes];
     //  This is only necessary to format data, but later can change to this being how it is inputted
+    uint8_t b;
     for (int i = 0; i < numBytes; i++)
     {
-        strip->outPointer[i] = ((uint32_t)pixels[i]) << 24;
+        // Bit reverse for 4000 LEDs = LEDs::output() = 2282 us
+        // BitflipLUT for 4000 LEDs = LEDs::output() = 1202 us
+        strip->outPointer[i] = bitflipLUT[pixels[i]];
+        //strip->outPointer[i] = ((uint32_t)pixels[i]) << 24; // Old method
     }
     
 
@@ -134,10 +149,10 @@ void FireFlyController::outputLEDs(uint8_t strip_i, uint8_t *leds, uint32_t N)
     channel_config_set_read_increment(&c, true);
     channel_config_set_write_increment(&c, false);
     channel_config_set_dreq(&c, pio_get_dreq(pio, sm, true));
-    channel_config_set_transfer_data_size(&c, DMA_SIZE_32);
+    channel_config_set_transfer_data_size(&c, DMA_SIZE_8);
     dma_channel_configure(dma_chan, &c,
                           &pio->txf[sm],            // Destination pointer
-                          strip->outPointer, // Source pointer
+                          strip->outPointer,        // Source pointer
                           numBytes,                 // Number of transfers
                           true                      // Start immediately
     );

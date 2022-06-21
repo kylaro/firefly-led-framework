@@ -25,8 +25,8 @@ typedef struct{
 
 class ColorUtil{
     public:
-        static double sanitizeH(double x);
-        static double sanitizeSV(double x);
+        static float sanitizeH(float x);
+        static float sanitizeSV(float x);
         static rgb_t hsv2rgb(hsv_t hsv);
-        static double remap(double from, double fromMin, double fromMax, double toMin,  double toMax);
+        static float remap(float from, float fromMin, float fromMax, float toMin,  float toMax);
 };
