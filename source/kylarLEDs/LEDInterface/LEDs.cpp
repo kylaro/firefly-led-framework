@@ -14,6 +14,7 @@ LEDInterface *LEDs::strip(uint8_t strip){
 }
 
 void LEDs::init(uint8_t num){
+    ColorUtil::generateRemapLUT();
     strips = new std::vector<LEDInterface*>();
     printf("size of ledinterface = %d\n", sizeof(LEDInterface));
     for(int i = 0; i < num; i++){
@@ -25,7 +26,7 @@ void LEDs::init(uint8_t num){
 
 // Sets hsv for all strips
 void LEDs::setHSV(int i, hsv_t color){
-    irgb_t irgb;
+    irgb8_t irgb;
     int first = 1;
     // The reason the stuff going on here is weird, is to make it faster
     // Using the result of the first setHSV to make the next faster

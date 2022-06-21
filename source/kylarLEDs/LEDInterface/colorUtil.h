@@ -4,8 +4,9 @@
 // #define HUE_LUT_RES 0.01f
 // #define HUE_LUT_SIZE (int)(1.0f/LUT_RES)
 
-// #define REMAP_LUT_RES 0.01f
-// #define REMAP_LUT_SIZE (int)(1.0f/LUT_RES)
+#define REMAP_LUT_RES 0.003f
+#define REMAP_LUT_SIZE (int)(1.0f/REMAP_LUT_RES)
+
 #define HSV_HUE_SEXTANT		256
 #define HSV_HUE_STEPS		(6 * HSV_HUE_SEXTANT)
 
@@ -101,6 +102,11 @@ typedef struct{
     rgb_t rgb;
 } irgb_t;
 
+typedef struct{
+    int i;
+    rgb8_t rgb;
+} irgb8_t;
+
 class ColorUtil{
     public:
         static float sanitizeH(float x);
@@ -109,7 +115,8 @@ class ColorUtil{
         static float remap(float from, float fromMin, float fromMax, float toMin,  float toMax);
         static float remapHue(float hue);
         static void fast_hsv2rgb_32bit(uint16_t h, uint8_t s, uint8_t v, uint8_t *r, uint8_t *g , uint8_t *b);
-        //static float remapHueLUT[REMAP_LUT_SIZE];
+        static float remapHueLUT[REMAP_LUT_SIZE];
+        static void generateRemapLUT();
         //static float hsv2rgbLUT[HUE_LUT_SIZE];
 };
 

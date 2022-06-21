@@ -2,6 +2,15 @@
 #include <cmath>
 #include <stdio.h>
 
+float ColorUtil::remapHueLUT[REMAP_LUT_SIZE];
+
+void ColorUtil::generateRemapLUT() {
+    for (int i = 0; i < REMAP_LUT_SIZE; i++) {
+        float hue = (float)i / (float)REMAP_LUT_SIZE;
+        remapHueLUT[i] = remapHue(hue);
+    }
+}
+
 //LOOP WHEEL
 float ColorUtil::sanitizeH(float x) {
     //CONVERT THIS X VALUE TO BE BETWEEN 0 AND 1 PLEASE

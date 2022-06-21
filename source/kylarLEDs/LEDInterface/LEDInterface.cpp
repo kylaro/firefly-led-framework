@@ -30,7 +30,7 @@ void LEDInterface::setRGB(int index, rgb_t rgb){
 
 
 
-irgb_t LEDInterface::setHSV(int index, hsv_t hsv){
+irgb8_t LEDInterface::setHSV(int index, hsv_t hsv){
     if(index >= numLEDs){
         index %= numLEDs;
     }
@@ -50,7 +50,8 @@ irgb_t LEDInterface::setHSV(int index, hsv_t hsv){
     hsv.v = ColorUtil::sanitizeSV(hsv.v);
     //timer->add("::sanitizeHSV()");
 
-    hsv.h = ColorUtil::remapHue(hsv.h);
+    hsv.h = ColorUtil::remapHueLUT[(int)(hsv.h/REMAP_LUT_RES)];//ColorUtil::remapHue(hsv.h);
+
     //timer->add("remapHue(hsv.h);");
 
     hsv16_t hsv16 = {hsv.h * HSV_HUE_MAX, hsv.s * HSV_SAT_MAX, hsv.v * HSV_VAL_MAX};
@@ -60,35 +61,41 @@ irgb_t LEDInterface::setHSV(int index, hsv_t hsv){
     
     //rgb_t rgb = ColorUtil::hsv2rgb(hsv); 
     //timer->add("::hsv2rgb(hsv)");
-    rgb_t rgb = {rgb8.r/255.0f, rgb8.g/255.0f, rgb8.b/255.0f};
-    changesArray[index]->combine(rgb);
+    //rgb_t rgb = {rgb8.r/255.0f, rgb8.g/255.0f, rgb8.b/255.0f};
+    changesArray[index]->combine(rgb8);
     //timer->add("changesArray[index]->combine(rgb)");
 
     //timer->print();
     //delete(timer);
 
     // Create the return value, for re-use
-    irgb_t irgb;
-    irgb.rgb = rgb;
+    irgb8_t irgb;
+    irgb.rgb = rgb8;
     irgb.i = index;
     return irgb;
 }
 
-void LEDInterface::setRGBUnprotected(int index, rgb_t rgb){
-    changesArray[index]->combine(rgb);
+void LEDInterface::setRGBUnprotected(int index, rgb8_t rgb8){
+    changesArray[index]->combine(rgb8);
 }
+
+
 
 void LEDInterface::apply(){
     uint8_t r, g, b;
-    rgb_t rgb;
-    double brightness = 255.0*ledController->getBrightness();
+    rgb8_t rgb;
+    float brightness = ledController->getBrightness();
+    uint8_t brightnessLUT[256];
+    for(int i = 0; i < 256; i++){
+        brightnessLUT[i] = i * brightness;
+    }
     for (int i = 0; i < numLEDs; i++) {
         LEDChange* change = changesArray[i];
         if (change->count != 0) {
             rgb = change->getRGB();
-            r = (uint8_t) (rgb.r*brightness);
-            g = (uint8_t) (rgb.g*brightness);
-            b = (uint8_t) (rgb.b*brightness);
+            r = brightnessLUT[rgb.r];//(uint8_t) (rgb.r*brightness);
+            g = brightnessLUT[rgb.g]; //(uint8_t) (rgb.g*brightness);
+            b = brightnessLUT[rgb.b];//(uint8_t) (rgb.b*brightness);
             ledsArray[3*i] = g;
             ledsArray[3*i+1] = r;
             ledsArray[3*i+2] = b;
