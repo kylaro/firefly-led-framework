@@ -28,24 +28,7 @@ void LEDInterface::setRGB(int index, rgb_t rgb){
     // changesArray[index]->combine(rgb);
 }
 
-double LEDInterface::remapHue(double hue){
-    //RED section 1
-    const double pt[] = {0.05, 0.5, 0.95};// Points where the color changes
-    if(hue < 0.166){
-        //Red section 1
-        return ColorUtil::remap(hue, 0, 0.166, 0, pt[0]);
-    }else if(hue < 0.5){
-        //Green section
-        return ColorUtil::remap(hue, 0.166, 0.5, pt[0], pt[1]);
-    }else if(hue < 0.833){
-        // Blue section
-        return ColorUtil::remap(hue, 0.5, 0.833, pt[1], pt[2]);
-    }else{
-        //Red section 2
-        return ColorUtil::remap(hue, 0.833, 1, pt[2], 1);
-    }
-    return hue;
-}
+
 
 irgb_t LEDInterface::setHSV(int index, hsv_t hsv){
     if(index >= numLEDs){
@@ -61,19 +44,29 @@ irgb_t LEDInterface::setHSV(int index, hsv_t hsv){
     
     hsv.h += ledController->getHue();
     //timer->add("ledController->getHue()");
+
     hsv.h = ColorUtil::sanitizeH(hsv.h);
-    //timer->add("::sanitizeH(hsv.h)");
-    hsv.h = remapHue(hsv.h);
-    //timer->add("remapHue(hsv.h);");
     hsv.s = ColorUtil::sanitizeSV(hsv.s);
     hsv.v = ColorUtil::sanitizeSV(hsv.v);
-    //timer->add("::sanitizeSV(hsv.v)");
-    rgb_t rgb = ColorUtil::hsv2rgb(hsv); 
+    //timer->add("::sanitizeHSV()");
+
+    hsv.h = ColorUtil::remapHue(hsv.h);
+    //timer->add("remapHue(hsv.h);");
+
+    hsv16_t hsv16 = {hsv.h * HSV_HUE_MAX, hsv.s * HSV_SAT_MAX, hsv.v * HSV_VAL_MAX};
+    rgb8_t rgb8;
+    ColorUtil::fast_hsv2rgb_32bit(hsv16.h, hsv16.s, hsv16.v, &rgb8.r, &rgb8.g, &rgb8.b);
+    
+    
+    //rgb_t rgb = ColorUtil::hsv2rgb(hsv); 
     //timer->add("::hsv2rgb(hsv)");
+    rgb_t rgb = {rgb8.r/255.0f, rgb8.g/255.0f, rgb8.b/255.0f};
     changesArray[index]->combine(rgb);
     //timer->add("changesArray[index]->combine(rgb)");
+
     //timer->print();
     //delete(timer);
+
     // Create the return value, for re-use
     irgb_t irgb;
     irgb.rgb = rgb;

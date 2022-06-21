@@ -12,7 +12,7 @@ FireFlyController::FireFlyController()
     initBrightness();
     initHue();
     initPatternButton();
-    initMicrophone();
+    //initMicrophone();
     initOutput();
 
     this->timing = new Timing();

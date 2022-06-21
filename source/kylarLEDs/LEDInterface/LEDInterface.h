@@ -34,6 +34,7 @@ class LEDInterface{
         LEDChange* changesArray[MAX_NUM_LEDS]; // Need to update this length or make it dynamic!!
         uint8_t ledsArray[MAX_NUM_LEDS*3];
         uint16_t numLEDs = 1;
-        double remapHue(double hue);
+        
+
         uint8_t strip = 0;
 };
