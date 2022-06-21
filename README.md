@@ -12,7 +12,7 @@
         4. Rotary encoder button -> for changing patterns
 
     The outputs from the board are:
-        1. 2 x WS2812B LED output pins (not yet supported)
+        1. 2 x WS2812B LED output pins
             a. Each pin has 2 output pads, one on front and one on back
             b. Each pin has a 0.1 inch header port
         2. 2 x USBC 5V power up to 3A
