@@ -51,17 +51,13 @@ irgb8_t LEDInterface::setHSV(int index, hsv_t hsv){
     //timer->add("::sanitizeHSV()");
 
     hsv.h = ColorUtil::remapHueLUT[(int)(hsv.h/REMAP_LUT_RES)];//ColorUtil::remapHue(hsv.h);
-
     //timer->add("remapHue(hsv.h);");
 
     hsv16_t hsv16 = {hsv.h * HSV_HUE_MAX, hsv.s * HSV_SAT_MAX, hsv.v * HSV_VAL_MAX};
     rgb8_t rgb8;
     ColorUtil::fast_hsv2rgb_32bit(hsv16.h, hsv16.s, hsv16.v, &rgb8.r, &rgb8.g, &rgb8.b);
-    
-    
-    //rgb_t rgb = ColorUtil::hsv2rgb(hsv); 
     //timer->add("::hsv2rgb(hsv)");
-    //rgb_t rgb = {rgb8.r/255.0f, rgb8.g/255.0f, rgb8.b/255.0f};
+    
     changesArray[index]->combine(rgb8);
     //timer->add("changesArray[index]->combine(rgb)");
 
@@ -93,9 +89,9 @@ void LEDInterface::apply(){
         LEDChange* change = changesArray[i];
         if (change->count != 0) {
             rgb = change->getRGB();
-            r = brightnessLUT[rgb.r];//(uint8_t) (rgb.r*brightness);
-            g = brightnessLUT[rgb.g]; //(uint8_t) (rgb.g*brightness);
-            b = brightnessLUT[rgb.b];//(uint8_t) (rgb.b*brightness);
+            r = brightnessLUT[rgb.r];
+            g = brightnessLUT[rgb.g];
+            b = brightnessLUT[rgb.b];
             ledsArray[3*i] = g;
             ledsArray[3*i+1] = r;
             ledsArray[3*i+2] = b;
