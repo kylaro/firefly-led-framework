@@ -28,26 +28,9 @@ void LEDInterface::setRGB(int index, rgb_t rgb){
     // changesArray[index]->combine(rgb);
 }
 
-double LEDInterface::remapHue(double hue){
-    //RED section 1
-    const double pt[] = {0.05, 0.5, 0.95};// Points where the color changes
-    if(hue < 0.166){
-        //Red section 1
-        return ColorUtil::remap(hue, 0, 0.166, 0, pt[0]);
-    }else if(hue < 0.5){
-        //Green section
-        return ColorUtil::remap(hue, 0.166, 0.5, pt[0], pt[1]);
-    }else if(hue < 0.833){
-        // Blue section
-        return ColorUtil::remap(hue, 0.5, 0.833, pt[1], pt[2]);
-    }else{
-        //Red section 2
-        return ColorUtil::remap(hue, 0.833, 1, pt[2], 1);
-    }
-    return hue;
-}
 
-irgb_t LEDInterface::setHSV(int index, hsv_t hsv){
+
+irgb8_t LEDInterface::setHSV(int index, hsv_t hsv){
     if(index >= numLEDs){
         index %= numLEDs;
     }
@@ -61,41 +44,54 @@ irgb_t LEDInterface::setHSV(int index, hsv_t hsv){
     
     hsv.h += ledController->getHue();
     //timer->add("ledController->getHue()");
+
     hsv.h = ColorUtil::sanitizeH(hsv.h);
-    //timer->add("::sanitizeH(hsv.h)");
-    hsv.h = remapHue(hsv.h);
-    //timer->add("remapHue(hsv.h);");
     hsv.s = ColorUtil::sanitizeSV(hsv.s);
     hsv.v = ColorUtil::sanitizeSV(hsv.v);
-    //timer->add("::sanitizeSV(hsv.v)");
-    rgb_t rgb = ColorUtil::hsv2rgb(hsv); 
+    //timer->add("::sanitizeHSV()");
+
+    hsv.h = ColorUtil::remapHueLUT[(int)(hsv.h/REMAP_LUT_RES)];//ColorUtil::remapHue(hsv.h);
+    //timer->add("remapHue(hsv.h);");
+
+    hsv16_t hsv16 = {hsv.h * HSV_HUE_MAX, hsv.s * HSV_SAT_MAX, hsv.v * HSV_VAL_MAX};
+    rgb8_t rgb8;
+    ColorUtil::fast_hsv2rgb_32bit(hsv16.h, hsv16.s, hsv16.v, &rgb8.r, &rgb8.g, &rgb8.b);
     //timer->add("::hsv2rgb(hsv)");
-    changesArray[index]->combine(rgb);
+    
+    changesArray[index]->combine(rgb8);
     //timer->add("changesArray[index]->combine(rgb)");
+
     //timer->print();
     //delete(timer);
+
     // Create the return value, for re-use
-    irgb_t irgb;
-    irgb.rgb = rgb;
+    irgb8_t irgb;
+    irgb.rgb = rgb8;
     irgb.i = index;
     return irgb;
 }
 
-void LEDInterface::setRGBUnprotected(int index, rgb_t rgb){
-    changesArray[index]->combine(rgb);
+void LEDInterface::setRGBUnprotected(int index, rgb8_t rgb8){
+    changesArray[index]->combine(rgb8);
 }
+
+
 
 void LEDInterface::apply(){
     uint8_t r, g, b;
-    rgb_t rgb;
-    double brightness = 255.0*ledController->getBrightness();
+    rgb8_t rgb;
+    float brightness = ledController->getBrightness();
+    uint8_t brightnessLUT[256];
+    for(int i = 0; i < 256; i++){
+        brightnessLUT[i] = i * brightness;
+    }
     for (int i = 0; i < numLEDs; i++) {
         LEDChange* change = changesArray[i];
         if (change->count != 0) {
             rgb = change->getRGB();
-            r = (uint8_t) (rgb.r*brightness);
-            g = (uint8_t) (rgb.g*brightness);
-            b = (uint8_t) (rgb.b*brightness);
+            r = brightnessLUT[rgb.r];
+            g = brightnessLUT[rgb.g];
+            b = brightnessLUT[rgb.b];
             ledsArray[3*i] = g;
             ledsArray[3*i+1] = r;
             ledsArray[3*i+2] = b;

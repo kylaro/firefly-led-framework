@@ -24,8 +24,8 @@ class LEDInterface{
         void output();  // and output
         void clear();   // clear
         void setRGB(int index, rgb_t rgb);
-        void setRGBUnprotected(int index, rgb_t rgb); // can use if getting the rgb from setHSV
-        irgb_t setHSV(int index, hsv_t hsv);
+        void setRGBUnprotected(int index, rgb8_t rgb); // can use if getting the rgb from setHSV
+        irgb8_t setHSV(int index, hsv_t hsv);
         void giveController(Controller *);
         double num(); //Get number of LEDs
         void setNum(uint16_t num); //set number of LEDs
@@ -34,6 +34,7 @@ class LEDInterface{
         LEDChange* changesArray[MAX_NUM_LEDS]; // Need to update this length or make it dynamic!!
         uint8_t ledsArray[MAX_NUM_LEDS*3];
         uint16_t numLEDs = 1;
-        double remapHue(double hue);
+        
+
         uint8_t strip = 0;
 };

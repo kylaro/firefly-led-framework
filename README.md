@@ -6,10 +6,10 @@
     Eventually the project will be hardware agnostic, so it should work for anything!
 
     The sensors on the board are:
-        1. Microphone (not yet supported) -> for sound reactive LEDs
-        2. Potentiometer (not yet supported) -> for brightness control
-        3. Rotary encoder (not yet supported) -> for color/hue control
-        4. Rotary encoder button (not yet supported) -> for changing patterns
+        1. Microphone -> for sound reactive LEDs
+        2. Potentiometer -> for brightness control
+        3. Rotary encoder -> for color/hue control
+        4. Rotary encoder button -> for changing patterns
 
     The outputs from the board are:
         1. 2 x WS2812B LED output pins (not yet supported)
@@ -206,7 +206,7 @@
     Get rid of "release()" and just make everyone have a ~Destructor() which frees stuff instead, remove release support from engine
     Make option to boot up in memory or speed centric, make 2 different LEDChange classes? One for mem, one for speed
     Investigate difference of precision for float vs double
-    
+
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)
             Or have a poll time, so when it is moving it is more polled more
