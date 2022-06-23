@@ -56,7 +56,6 @@
         Download Pico SDK: https://github.com/raspberrypi/pico-sdk
         Set Pico SDK Path: setx PICO_SDK_PATH "..\..\pico-sdk" 
 		- "..\..\" is just wherever you installed it, mine is "C:\pico\pico-sdk"
-	Use visual studio code, get CMake Tools extension and configure project
 
     Building Cmake projects for Pico:
         1. Clone the whole git repo
