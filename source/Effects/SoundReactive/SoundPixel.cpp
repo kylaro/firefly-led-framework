@@ -7,7 +7,7 @@ void SoundPixel::init(){
 }
 
 void SoundPixel::run(){
-    hue += hueAdd; // 0.01- 0.001
+    //hue += added in shakeel pattern...
     
     // Output
     hsv_t color = {hue, 1, brightness};

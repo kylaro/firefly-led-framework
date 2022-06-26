@@ -41,7 +41,6 @@ absolute_time_t start_time;
 void pdm_core1_entry(){
     //Init:
     // initialize the hanning window and RFFT instance
-    sleep_ms(10); //delay here so that the dma channel doesn't get claimed..
     hanning_window_init_q15(window_q15, FFT_SIZE);
     arm_rfft_init_q15(&S_q15, FFT_SIZE, 0, 1);
 
@@ -63,7 +62,7 @@ void pdm_core1_entry(){
     }
 
     int starting_bin = 2;
-    float low_bins = 14;
+    float low_bins = 15;
     float high_bins = 240;
     float total_bins = low_bins + high_bins;
     
