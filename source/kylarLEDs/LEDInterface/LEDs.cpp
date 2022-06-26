@@ -31,13 +31,16 @@ void LEDs::setHSV(int i, hsv_t color){
     // The reason the stuff going on here is weird, is to make it faster
     // Using the result of the first setHSV to make the next faster
     for(LEDInterface *strip : *strips){
-        if(first){
+#if RGBW
+        strip->setHSV(i, color);
+#else
+        if(first) {
             irgb = strip->setHSV(i, color);
             first = 0;
-        }else{
-            //irgb = strip->setHSV(i, color);
+        } else {
             strip->setRGBUnprotected(irgb.i, irgb.rgb);  // This skips the HSV conversion, which saves time
         }
+#endif
         
     }
 }

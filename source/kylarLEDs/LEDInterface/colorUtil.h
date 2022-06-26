@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include "../../config.h"
 
 // #define HUE_LUT_RES 0.01f
 // #define HUE_LUT_SIZE (int)(1.0f/LUT_RES)
@@ -106,6 +107,13 @@ typedef struct{
     int i;
     rgb8_t rgb;
 } irgb8_t;
+
+typedef struct{
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t w;
+} rgbw8_t;
 
 class ColorUtil{
     public:

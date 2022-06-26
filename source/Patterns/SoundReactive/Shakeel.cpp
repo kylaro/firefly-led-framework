@@ -63,8 +63,7 @@ void Shakeel::run(){
 
     for(SoundPixel *pixel : *pixels){
         pixel->brightness = brightness;
-        pixel->micVal = micVal;
-        pixel->hueAdd = hueAdd * seconds*100.0;
+        pixel->hue += hueAdd * seconds*100.0;
     }
 }
 
