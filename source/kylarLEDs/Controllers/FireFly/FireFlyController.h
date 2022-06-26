@@ -13,7 +13,7 @@ typedef struct {
     uint8_t pin;
     uint8_t sm;
     uint8_t dma_chan;
-    uint8_t outPointer[NUM_LEDS*3];
+    uint8_t outPointer[NUM_LEDS*(3+RGBW)]; // 3 FOR RGB, 1 for W if RGBW is defined
 } strip_t;
 
 class FireFlyController : public Controller{

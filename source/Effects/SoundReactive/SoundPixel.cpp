@@ -8,9 +8,10 @@ void SoundPixel::init(){
 
 void SoundPixel::run(){
     //hue += added in shakeel pattern...
-    
+    sat = ((float)i/(float)NUM_LEDS);
     // Output
-    hsv_t color = {hue, 1, brightness};
+    hsv_t color = {hue, sat, brightness};
+    //hsv_t color = {0, 1, 1};
     LEDs::setHSV(i, color);
 }
 

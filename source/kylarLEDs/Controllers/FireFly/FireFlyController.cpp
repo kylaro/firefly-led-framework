@@ -118,7 +118,7 @@ uint64_t FireFlyController::getCurrentTimeMillis()
 
 void FireFlyController::outputLEDs(uint8_t strip_i, uint8_t *leds, uint32_t N)
 {
-    uint32_t numBytes = N * 3;
+    uint32_t numBytes = N * (3 + RGBW);
     uint8_t *pixels = leds;
     strip_t *strip = &(strips[strip_i]);
 

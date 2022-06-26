@@ -4,8 +4,6 @@
 #include "LEDChange.h"
 #include "../../config.h"
 
-// Currently using way too much memory here...
-#define MAX_NUM_LEDS NUM_LEDS // working up to 3000 (when 1 strip)
 
 class LEDInterface{
     /*
@@ -31,9 +29,10 @@ class LEDInterface{
         void setNum(uint16_t num); //set number of LEDs
     private:
         Controller * ledController;
-        LEDChange* changesArray[MAX_NUM_LEDS]; // Need to update this length or make it dynamic!!
-        uint8_t ledsArray[MAX_NUM_LEDS*3];
-        uint16_t numLEDs = 1;
+        LEDChange* changesArray[NUM_LEDS]; // Need to update this length or make it dynamic!!
+        
+        uint8_t ledsArray[NUM_LEDS*(3+RGBW)]; // 3 bytes per LED, plus 1 byte if RGBW
+        uint16_t numLEDs = NUM_LEDS;
         
 
         uint8_t strip = 0;
