@@ -14,10 +14,6 @@ void SoundPixel::run(){
     LEDs::setHSV(i, color);
 }
 
-void SoundPixel::release(){
-    done = 1;
-}
-
 SoundPixel::~SoundPixel(){
-
+    done = 1;
 }

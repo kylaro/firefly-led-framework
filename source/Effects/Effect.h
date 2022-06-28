@@ -15,9 +15,9 @@ class Effect {
     */
     public:
         Effect();
+        virtual ~Effect();
         virtual void run() = 0; // Rules for run: When done, just set done = 1, do not call release()! It will cause memory to be freed twice!
         virtual void init() = 0;
-        virtual void release() = 0; // Rules for release: Free memory of all objects created, but do not "free(this)"
         static void giveEngine(EffectEngine * effectEngine);
         static EffectEngine *engine;
         int isDone();

@@ -20,10 +20,6 @@ void WaveformLED::run(){
     }
 }
 
-void WaveformLED::release(){
-    //delete(wave);
-}
-
 WaveformLED::~WaveformLED(){
     delete(wave);
 }

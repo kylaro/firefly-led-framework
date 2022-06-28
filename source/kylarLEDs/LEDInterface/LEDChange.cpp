@@ -18,12 +18,9 @@ void LEDChange::combine(rgb8_t newrgb){
 		count++;
         return;
 	} else {
-		rgb.r = (uint8_t)((uint32_t)rgb.r * (uint32_t)count + (uint32_t)newrgb.r) / ((uint32_t)count + 1);
-		rgb.g = (uint8_t)((uint32_t)rgb.g * (uint32_t)count + (uint32_t)newrgb.g) / ((uint32_t)count + 1);
-		rgb.b = (uint8_t)((uint32_t)rgb.b * (uint32_t)count + (uint32_t)newrgb.b) / ((uint32_t)count + 1);
-		// rgb.r = (uint8_t)(((uint32_t)rgb.r * (uint32_t)count + newrgb.r*255.0f) / (float)(count + 1));
-		// rgb.g = (uint8_t)(((uint32_t)rgb.g * (uint32_t)count + newrgb.g*255.0f) / (float)(count + 1));
-		// rgb.b = (uint8_t)(((uint32_t)rgb.b * (uint32_t)count + newrgb.b*255.0f) / (float)(count + 1));
+		rgb.r = (uint8_t)(((uint32_t)rgb.r * (uint32_t)count + (uint32_t)newrgb.r) / ((uint32_t)count + 1));
+		rgb.g = (uint8_t)(((uint32_t)rgb.g * (uint32_t)count + (uint32_t)newrgb.g) / ((uint32_t)count + 1));
+		rgb.b = (uint8_t)(((uint32_t)rgb.b * (uint32_t)count + (uint32_t)newrgb.b) / ((uint32_t)count + 1));
         count++;
 	}
 }

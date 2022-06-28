@@ -17,10 +17,10 @@ class SingleTime : public Effect{
 
     public:
         using Effect::Effect;
+        ~SingleTime();
         void run();
         void init();
         SingleTime* init(single_time_t blueprint);
-        void release();
     private:
         single_time_t profile;
         Timing *timer = NULL;

@@ -7,11 +7,9 @@ EffectEngine::EffectEngine(){
 
 void EffectEngine::clear() {
     for (Effect* eff : effects) {
-        eff->release();
         delete(eff);
     }
     for (Effect* eff : effectsQueue){
-        eff->release();
         delete(eff);
     }
     effects.clear();
@@ -36,9 +34,10 @@ void EffectEngine::run() {
         Effect* effect = *it;
         if (effect->isDone()) {
             // erase() invalidates the iterator, use returned iterator
-            effect->release();
+            printf("Effect is done\n");
+            delete effect;
+            //delete(effect);
             it = effects.erase(it);
-            delete(effect);
             continue;
         } else {
             effect->run();

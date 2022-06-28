@@ -11,6 +11,6 @@ void ExampleEffect::run(){
     LEDs::setHSV(i, color);
 }
 
-void ExampleEffect::release(){
-    done = 1;
+ExampleEffect::~ExampleEffect(){
+    
 }

@@ -8,7 +8,6 @@ class WaveformLED : public Effect{
         ~WaveformLED();
         void run();
         void init();
-        void release();
         WaveformLED *setI(int i);
         WaveformLED *setCount(int count);
         WaveformLED *setHue(double hue);

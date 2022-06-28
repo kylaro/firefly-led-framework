@@ -6,9 +6,9 @@ class FireFly : public Effect{
 
     public:
         using Effect::Effect;
+        ~FireFly();
         void run();
         void init();
-        void release();
         int direction = 1;
         double hue = 0;
         single_time_t blueprint;

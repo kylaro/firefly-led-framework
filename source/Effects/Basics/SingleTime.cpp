@@ -57,7 +57,6 @@ void SingleTime::run(){
     LEDs::setHSV(profile.index, color);
 }
 
-void SingleTime::release(){
-    done = 1;
+SingleTime::~SingleTime(){
     delete(timer);
 }

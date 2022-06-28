@@ -7,7 +7,7 @@ class ExampleEffect : public Effect{
         using Effect::Effect;
         void run();
         void init();
-        void release();
+        ~ExampleEffect();
         int i = 0;
         double hue = 0;
     private:

@@ -8,7 +8,6 @@ class SoundPixel : public Effect{
         ~SoundPixel();
         void run();
         void init();
-        void release();
         uint16_t i = 0;
         float hue = 0;
         float micVal = 0;

@@ -26,15 +26,18 @@ void FireFly::run(){
         // "We have moved!"
         blueprint.index += direction;
         //Effect::engine->queueApply((new SingleTime())->init(blueprint));
-        Effect::engine->queueApply(((new WaveformLED(new Triangle(4000)))->setI(blueprint.index)->setHue(blueprint.hue)->setCount(1)));
-        
+        Triangle* triangle = new Triangle(4000);
+        WaveformLED* wvfrm = new WaveformLED(triangle);
+        wvfrm->setI(blueprint.index)->setHue(blueprint.hue)->setCount(1);
+        Effect::engine->queueApply(wvfrm);
     }
     
     
     
 }
 
-void FireFly::release(){
+FireFly::~FireFly(){
+    printf("firefly destructor");
     done = 1;
     delete(timer);
 }

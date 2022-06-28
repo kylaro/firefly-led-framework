@@ -1,7 +1,12 @@
 #include "Effect.h"
+#include "stdio.h"
 
 EffectEngine* Effect::engine;
 Effect::Effect(){
+    
+}
+
+Effect::~Effect(){
     
 }
 
