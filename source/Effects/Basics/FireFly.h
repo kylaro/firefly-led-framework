@@ -10,6 +10,7 @@ class FireFly : public Effect{
         void run();
         void init();
         int direction = 1;
+        float micVal = 0;
         double hue = 0;
         single_time_t blueprint;
     private:

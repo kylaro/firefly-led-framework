@@ -37,7 +37,6 @@ void FireFly::run(){
 }
 
 FireFly::~FireFly(){
-    printf("firefly destructor");
     done = 1;
     delete(timer);
 }

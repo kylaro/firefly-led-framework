@@ -10,6 +10,7 @@
 #include "Patterns/Examples/FireFlies.h"
 #include "Patterns/Examples/FireFliesSame.h"
 #include "Patterns/SoundReactive/Shakeel.h"
+#include "Patterns/SoundReactive/Ben.h"
 #include "kylarLEDs/Utility/ExecTimer.h"
 #include <malloc.h>
 #include "pico/time.h"
@@ -30,6 +31,7 @@ int main(){
     //Push back all the patterns you want!
     //ADD YOUR PATTERNS HERE!
     //ex. patterns->push_back(new ExamplePattern());
+    //patterns->push_back(new Ben());
     patterns->push_back(new Shakeel());
     patterns->push_back(new FireFlies());
     //patterns->push_back(new FireFliesSame());

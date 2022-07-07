@@ -34,7 +34,6 @@ void EffectEngine::run() {
         Effect* effect = *it;
         if (effect->isDone()) {
             // erase() invalidates the iterator, use returned iterator
-            printf("Effect is done\n");
             delete effect;
             //delete(effect);
             it = effects.erase(it);
