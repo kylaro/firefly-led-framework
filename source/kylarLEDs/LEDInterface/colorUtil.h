@@ -118,6 +118,7 @@ class ColorUtil{
         static float remapHueLUT[REMAP_LUT_SIZE];
         static void generateRemapLUT();
         //static float hsv2rgbLUT[HUE_LUT_SIZE];
+        //static uint8_t brightnessLUT[100][256];
 };
 
 

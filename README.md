@@ -155,15 +155,15 @@
     Is the generator class going to exist on its own, or will it have children? In that case, do the children have access to the static member "controller"?
 
 ### List of things still need to add:
-    Support for multiple strips / multiple LED interfaces
+    (Done) Support for multiple strips / multiple LED interfaces
     FireFlys example pattern
     Make a CMakeFile for the targeted controller to keep CMake hw agnostic
-    Add execution timing utility
-    Make the Controller have a static variable for the current controller in use
+    (Done) Add execution timing utility
+    Make the Controller have a static variable for the current controller in use / singleton pattern
     Rename "Examples" for effects to "Basic" and have like single led fades and use them for fireflys
     Have Basics be various Single LED stuff, and also various "streamers"
-    Make sure memory is being removed when doing done=1
-    Check EffectEngine clear() / rework what release() does
+    (Done) Make sure memory is being removed when doing done=1
+    (Done) Check EffectEngine clear() / rework what release() does
     Add simple way to do gradients / time based HSV
     Also a time based brightness to replace doing it manually in SingleTime.cpp
     Make Encoder class not static - need to do the interrupts TODO
@@ -188,23 +188,27 @@
     Make ability to change strip lengths via encoder (hold down button for 3 seconds, then turn knob)
         -> note the note before this one, knob turn speed should make strip length adjust better
         -> the pico can detect "level_low" for detecting button held down.
+        -> in level_low, set an interrupt for level_high that resets the timer and removes itself
     Make sleep mode when potentiometer is turned down below <0.02, see if pico has a wake up interrupt for this
     Make a way for LEDInterface to accept saturation changes?
         -> So if I want to only change the saturation of a pixel, regardless of what is there
         -> Hard part is that LEDChanges store RGB, because it is easier to combine
         -> But HSV is only way to mix Saturation. Maybe there is a native HSV mix function, and we convert to RGB only for output
-    Make brightness change smooth.
+    (Done) Make brightness change smooth.
     Detect brightness flickering (especially for low brightness when pot rests between two levels and the noise changes the level)
     Timer Utils like Triangle, Sin, Exp, square, to make easy waveforms
     Make sound reactivity for highs
     Make some form of persistence, and can use for saving color/current pattern
-    Try to improve the speed of the PIO LED output using DMA
+    (Done) Try to improve the speed of the PIO LED output using DMA
     Should we really clear the led rgb every time? or leave it up to the pattern programmer to manage when things should be off
     Make memory allocation dynamic for LED outputs, instead of doing all 4 / or otherwise make memory usage less in LEDInterface
     Make memory better, by having LEDChanges outsource their memory references?
+        - problem is that the brightness calculation is done at the end. so would need to move brightness calc to within ledchange
+        - but if calc is done in ledchange, then it would need to be done multiple times. It is fast though... I gotta check apply times...
     Get rid of "release()" and just make everyone have a ~Destructor() which frees stuff instead, remove release support from engine
     Make option to boot up in memory or speed centric, make 2 different LEDChange classes? One for mem, one for speed
     Investigate difference of precision for float vs double
+    Expand capabilities of the config.h file!
 
     Done:
         Have ADC sample for pots be time/interrupt based (60hz or something)

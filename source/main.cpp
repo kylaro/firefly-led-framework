@@ -34,8 +34,9 @@ int main(){
     //ex. patterns->push_back(new ExamplePattern());
     //patterns->push_back(new Ben());
     patterns->push_back(new ShakeelFlash());
-    patterns->push_back(new Shakeel());
     patterns->push_back(new FireFlies());
+    patterns->push_back(new Shakeel());
+    
     //patterns->push_back(new FireFliesSame());
     
 

@@ -51,7 +51,7 @@ def nmake():
 def upload():
 	print("Python waiting for Pico available")
 	count = 0
-	windows_dir = 'F:\\'
+	windows_dir = 'D:\\'
 	linux_dir = '/mnt/d'
 	linux_mount1 = 'sudo mkdir /mnt/d'
 	linux_mount2 = 'sudo mount -t drvfs D: /mnt/d'
@@ -66,7 +66,7 @@ def upload():
 
 	print("Uploading!")
 	build_name = 'firefly.uf2'
-	windows_copy_dir = 'F:\\'
+	windows_copy_dir = 'D:\\'
 	linux_copy_dir = '/mnt/d/'
 	copy_to = windows_copy_dir if is_windows else linux_copy_dir
 	copy_to = copy_to + build_name

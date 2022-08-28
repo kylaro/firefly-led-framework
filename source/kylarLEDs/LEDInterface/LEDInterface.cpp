@@ -81,10 +81,14 @@ void LEDInterface::apply(){
     uint8_t r, g, b;
     rgb8_t rgb;
     float brightness = ledController->getBrightness();
+    
     uint8_t brightnessLUT[256];
+    ExecTimer *timer = new ExecTimer();
+    timer->start("WithinApply");
     for(int i = 0; i < 256; i++){
         brightnessLUT[i] = i * brightness;
     }
+    timer->add("brightnessLUT[i] = i * brightness;");
     for (int i = 0; i < numLEDs; i++) {
         LEDChange* change = changesArray[i];
         if (change->count != 0) {
@@ -98,6 +102,9 @@ void LEDInterface::apply(){
             change->count = 0;
         }
     }
+    timer->add("LEDChange* change = changesArray[i];");
+    timer->print();
+    delete(timer);
 }
 
 
