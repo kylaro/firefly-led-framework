@@ -83,11 +83,23 @@ void LEDInterface::apply(){
     float brightness = ledController->getBrightness();
     
     uint8_t brightnessLUT[256];
+    uint32_t brightnessInt = (uint32_t)(brightness * 1000.0);
     ExecTimer *timer = new ExecTimer();
     timer->start("WithinApply");
+
+    // for(int i = 0; i < 256; i++){
+    //     brightnessLUT[i] = i * brightness;
+    // }
+
     for(int i = 0; i < 256; i++){
-        brightnessLUT[i] = i * brightness;
+        brightnessLUT[i] = (i*brightnessInt)/1000;
     }
+
+    // brightnessLUT[0] = brightnessInt/1000;
+    // for(int i = 1; i < 256; i++){
+    //     brightnessLUT[i] = (brightnessLUT[i-1]*1000 + brightnessInt)/1000;
+    // }
+
     timer->add("brightnessLUT[i] = i * brightness;");
     for (int i = 0; i < numLEDs; i++) {
         LEDChange* change = changesArray[i];
