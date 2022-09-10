@@ -115,7 +115,7 @@ void LEDInterface::apply(){
         }
     }
     timer->add("LEDChange* change = changesArray[i];");
-    timer->print();
+    //timer->print();
     delete(timer);
 }
 

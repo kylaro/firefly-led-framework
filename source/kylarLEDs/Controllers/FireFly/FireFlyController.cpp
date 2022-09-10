@@ -4,6 +4,8 @@
 #include "hardware/irq.h"
 #include <stdio.h>
 #include "pico/time.h"
+#include "../../../config.h"
+
 uint64_t FireFlyController::channel_end_times[NUM_STRIPS];
 strip_t FireFlyController::strips[NUM_STRIPS];
 FireFlyController::FireFlyController()
@@ -12,7 +14,9 @@ FireFlyController::FireFlyController()
     initBrightness();
     initHue();
     initPatternButton();
-    initMicrophone();
+    if(MICROPHONE_ENABLE){
+        initMicrophone();
+    }
     initOutput();
 
     this->timing = new Timing();

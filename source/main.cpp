@@ -80,7 +80,7 @@ int main(){
             timer->add("LEDs::apply()");
             LEDs::output();         // Output to strip via controller
             timer->add("LEDs::output()");
-            timer->print();
+            if(DEBUG_PRINT) timer->print();
         }else{
             //We are changing pattern
             currentPattern->release();                      //Finish the current pattern
