@@ -13,11 +13,11 @@ LEDInterface *LEDs::strip(uint8_t strip){
     return strips->at(strip);
 }
 
-void LEDs::init(uint8_t num){
+void LEDs::init(uint8_t numInterfaces){
     ColorUtil::generateRemapLUT();
     strips = new std::vector<LEDInterface*>();
     printf("size of ledinterface = %d\n", sizeof(LEDInterface));
-    for(int i = 0; i < num; i++){
+    for(int i = 0; i < numInterfaces; i++){
         LEDInterface *leds = new LEDInterface(i);
         leds->setNum(1); // Setting a default number of LEDs...
         LEDs::strips->push_back(leds);
