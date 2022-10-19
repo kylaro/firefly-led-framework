@@ -37,43 +37,43 @@ void CirclesPattern::init(){
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(72)->led(73)->led(71)->led(58)->led(57);
+    eff->led(76)->led(77)->led(75)->led(52)->led(51);
     Effect::engine->apply(eff);
     outer_circles->push_back(eff);
     
     eff = new CircleEffect();
     eff->init();
-    eff->led(86)->led(95)->led(87)->led(84)->led(85);
+    eff->led(90)->led(99)->led(91)->led(88)->led(89);
     Effect::engine->apply(eff);
     outer_circles->push_back(eff);
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(101)->led(97)->led(93)->led(94)->led(96);
+    eff->led(105)->led(101)->led(97)->led(98)->led(100);
     Effect::engine->apply(eff);
     outer_circles->push_back(eff);
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(100)->led(99)->led(91)->led(92)->led(98);
+    eff->led(104)->led(103)->led(95)->led(96)->led(102);
     Effect::engine->apply(eff);
     outer_circles->push_back(eff);
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(89)->led(77)->led(78)->led(79)->led(90);
+    eff->led(93)->led(81)->led(82)->led(83)->led(94);
     Effect::engine->apply(eff);
     outer_circles->push_back(eff);
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(63)->led(50)->led(62)->led(64)->led(76);
+    eff->led(67)->led(62)->led(66)->led(68)->led(80);
     Effect::engine->apply(eff);
     outer_circles->push_back(eff);
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(36)->led(35)->led(34)->led(48)->led(49);
+    eff->led(36)->led(35)->led(34)->led(60)->led(61);
     Effect::engine->apply(eff);
     outer_circles->push_back(eff);
 
@@ -83,57 +83,63 @@ void CirclesPattern::init(){
     Effect::engine->apply(eff);
     outer_circles->push_back(eff);
 
-    eff = new CircleEffect();
-    eff->init();
-    eff->led(45)->led(44)->led(54)->led(60)->led(53)->led(46);
-    Effect::engine->apply(eff);
-    outer_circles->push_back(eff);
+    //Center Circle....
+    // eff = new CircleEffect();
+    // eff->init();
+    // eff->led(58)->led(57)->led(56)->led(55)->led(54);
+    // Effect::engine->apply(eff);
+    // outer_circles->push_back(eff);
+
+    // eff = new CircleEffect();
+    // eff->init();
+    // eff->led(44)->led(45)->led(46)->led(47)->led(48);
+    // Effect::engine->apply(eff);
+    // outer_circles->push_back(eff);
 
     //INNER CIRCLES
     eff = new CircleEffect();
     eff->init();
-    eff->led(16)->led(29)->led(39)->led(30)->led(23);
+    eff->led(17)->led(23)->led(30)->led(31)->led(22);
     Effect::engine->apply(eff);
     inner_circles->push_back(eff);
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(56)->led(59)->led(55)->led(43)->led(42);
+    eff->led(28)->led(42)->led(43)->led(39)->led(29);
     Effect::engine->apply(eff);
     inner_circles->push_back(eff);
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(83)->led(82)->led(68)->led(69)->led(74);
+    eff->led(74)->led(78)->led(73)->led(49)->led(53);
     Effect::engine->apply(eff);
     inner_circles->push_back(eff);
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(80)->led(75)->led(66)->led(67)->led(81);
+    eff->led(92)->led(85)->led(71)->led(72)->led(86);
     Effect::engine->apply(eff);
     inner_circles->push_back(eff);
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(51)->led(37)->led(47)->led(52)->led(61);
+    eff->led(69)->led(65)->led(64)->led(70)->led(79);
     Effect::engine->apply(eff);
     inner_circles->push_back(eff);
 
     eff = new CircleEffect();
     eff->init();
-    eff->led(18)->led(22)->led(31)->led(38)->led(32);
+    eff->led(33)->led(32)->led(38)->led(59)->led(37);
     Effect::engine->apply(eff);
     inner_circles->push_back(eff);
 
-    // last LEDs:
-    // 17, 28, 33, 65, 70, 88,
+    // last leds
+    // 18, 16, 63, 87, 84, 50, 18, 16, 63, 87, 84, 50
 
-    eff = new CircleEffect();
-    eff->init();
-    eff->led(17)->led(28)->led(33)->led(65)->led(70)->led(88);
-    Effect::engine->apply(eff);
-    inner_circles->push_back(eff);
+    highLEDs = new CircleEffect();
+    highLEDs->init();
+    highLEDs->led(18)->led(16)->led(50)->led(87)->led(84)->led(63)->led(57)->led(55)->led(47)->led(45)->led(56)->led(46)->led(44)->led(58)->led(54)->led(48);//after 63 are imposters (63 is good), up to 45 is good tho lol
+    Effect::engine->apply(highLEDs);
 
     secTimer = new Timing();
     avgTimer = new Timing();
@@ -143,6 +149,7 @@ void CirclesPattern::init(){
 void CirclesPattern::run(){
     double micVal = pow(Microphone::getLowNormal(),2) ;
     static double brightness = 0;
+    static double highVal = 0;
     double seconds = secTimer->takeSeconds();
     int avgLoops = 0;
     // Color movement
@@ -157,7 +164,25 @@ void CirclesPattern::run(){
     //printf("valTimer = %d ... %d\n", valTimer->timerMs(), valTimer->takeMsEvery(100));
     avgLoops = valTimer->takeMsEvery(1);
     for(int i = 0; i < avgLoops; i++){
-        brightness = (brightness*120.0 + proposedBrightness)/121.0;
+        //brightness = (brightness*120.0 + proposedBrightness)/121.0;
+        if(proposedBrightness > brightness){
+            //increasing
+            brightness = (brightness*50.0 + proposedBrightness) / 51.0;
+        }else{
+            //decreasing
+            brightness = (brightness*120.0 + proposedBrightness) / 121.0;
+        }
+
+        if(Microphone::getHighNormal() > highVal){
+            highVal = (highVal*3.0 + Microphone::getHighNormal()) / 4.0;
+        }else{
+            highVal = (highVal*25.0 + Microphone::getHighNormal()) / 26.0;
+        }
+        
+        
+    }
+    if(highVal > 1){
+        highVal = 1;
     }
     
     if(proposedBrightness > brightness){
@@ -176,6 +201,9 @@ void CirclesPattern::run(){
         eff->volume = micVal;
         eff->calculate(brightness);
     }
+    
+    //printf("high val = %f\n", highVal);
+    highLEDs->white(highVal);
     
 }
 

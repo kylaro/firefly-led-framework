@@ -64,7 +64,7 @@ void pdm_core1_entry(){
 
     int starting_bin = 2;
     float low_bins = 14;
-    float high_bins = 240;
+    float high_bins = 6; // 240
     float total_bins = low_bins + high_bins;
     
     
@@ -124,10 +124,12 @@ void pdm_core1_entry(){
                 temp_freq_data.low_freq_energy += magnitude / low_bins;
             }else if(bin - low_bins <= high_bins){
                 //HIGHS
-                temp_freq_data.freq_energy += magnitude / total_bins;
-                temp_freq_data.high_freq_energy += magnitude / high_bins;
+                //(skip)
             }else{
                 // Out of range
+                //(high after skip)
+                temp_freq_data.freq_energy += magnitude / total_bins;
+                temp_freq_data.high_freq_energy += magnitude / 10.0; //high_bins;
             }
                 
             
@@ -161,7 +163,8 @@ void pdm_core1_entry(){
         freq_data.low_freq_energy = temp_freq_data.low_freq_energy;
         freq_data.high_freq_energy = temp_freq_data.high_freq_energy;
         //printf("CORE1 %.0f %.0f %.0f\n", freq_data.low_freq_energy, freq_data.high_freq_energy, freq_data.freq_energy);
-        updateSoundProfile();
+        updateSoundProfileLow();
+        updateSoundProfileHigh();
         if(exec_timing){
             //cur_time = get_absolute_time();
             printf("profile = %.1f us\n", (double)(get_absolute_time()-start_time));
@@ -175,10 +178,11 @@ void pdm_core1_entry(){
 }
 
 //What would be cool is to have it arranged in a normal distribution kinda way...
-void updateSoundProfile() {
+void updateSoundProfileLow() {
     //Only doing LOWS for now...
     //Update min
     double coef = 10.0;
+    
     if(freq_data.low_freq_energy < sound_profile.low_min){
         //The frequency is lower!
         sound_profile.low_min = freq_data.low_freq_energy;//(sound_profile.low_min*coef + freq_data.low_freq_energy)/(coef+1);
@@ -237,6 +241,94 @@ void updateSoundProfile() {
     // printf("|");
     // int count = 10;
     // for(int i = 0; i < sound_profile.low_normal_normal/0.1; i++){
+    //     printf("+");
+    //     count--;
+    // }
+    // for(int i = 0; i < count; i++){
+    //     printf(" ");
+    // }
+    // printf("|");
+    // printf("\n");
+
+
+}
+
+void updateSoundProfileHigh() {
+    //HIGHS HIGHS HIGHS
+
+    // print high energy
+    //printf("--------\n");
+    //printf("high energy: %f\n", freq_data.high_freq_energy);
+
+    //Update min
+    double coef = 10.0;
+    if(freq_data.high_freq_energy < sound_profile.high_min){
+        //The frequency is lower!
+        sound_profile.high_min = freq_data.high_freq_energy;//(sound_profile.low_min*coef + freq_data.low_freq_energy)/(coef+1);
+    }else{
+        sound_profile.high_min = (sound_profile.high_min*1000.0 + freq_data.high_freq_energy)/(1001.0);
+    }
+
+    //printf("high min: %f\n", sound_profile.high_min);
+
+    //Update max
+    if(freq_data.high_freq_energy > sound_profile.high_max){
+        //The frequency is higher!
+        sound_profile.high_max = freq_data.high_freq_energy;//(sound_profile.low_max*coef + freq_data.low_freq_energy)/(coef+1);
+    }else{
+        sound_profile.high_max *= 0.999;
+    }
+
+    //printf("high max: %f\n", sound_profile.high_max);
+
+    //Update avg
+    sound_profile.high_avg = (sound_profile.high_avg*coef + freq_data.high_freq_energy)/(coef+1);
+    //printf("high avg: %f\n", sound_profile.high_avg);
+    //Calculate normalized value
+    sound_profile.high_normal = (freq_data.high_freq_energy - sound_profile.high_min)/(sound_profile.high_min+sound_profile.high_max);
+    if(sound_profile.high_normal < 0){
+        sound_profile.high_normal = 0;
+    }
+
+    //printf("high normal: %f\n", sound_profile.high_normal);
+
+    // Calculated normal's min
+    coef = 10.0;
+    if(sound_profile.high_normal < sound_profile.high_normal_min){
+        //The frequency is lower!
+        sound_profile.high_normal_min = sound_profile.high_normal;//(sound_profile.low_min*coef + freq_data.low_freq_energy)/(coef+1);
+    }else{
+        sound_profile.high_normal_min = (sound_profile.high_normal_min*400.0 + sound_profile.high_normal)/(401.0);
+    }
+
+    //printf("high normal min: %f\n", sound_profile.high_normal_min);
+
+    //Calculate normal's max
+    if(sound_profile.high_normal > sound_profile.high_normal_max){
+        //The frequency is higher!
+        sound_profile.high_normal_max = sound_profile.high_normal;//(sound_profile.low_max*coef + freq_data.low_freq_energy)/(coef+1);
+    }else{
+        sound_profile.high_normal_max *= 0.999;
+    }
+    if(sound_profile.high_normal_max > 9999999){
+        sound_profile.high_normal_max = sound_profile.high_normal;
+    }
+
+    //printf("high normal max: %f\n", sound_profile.high_normal_max);
+
+    // Calculate normal's place in that -> normal_normal
+    sound_profile.high_normal_normal = (sound_profile.high_normal - sound_profile.high_normal_min)/(sound_profile.high_normal_min+sound_profile.high_normal_max);
+    if(sound_profile.high_normal_normal < 0){
+        sound_profile.high_normal_normal = 0;
+    }
+
+    //printf("high normal normal: %f\n", sound_profile.high_normal_normal);
+
+
+    // printf("%1.3f:\t%4.2f\t<-\t%4.2f\t->\t%4.2f\t", sound_profile.high_normal_normal, sound_profile.high_normal_min, sound_profile.high_normal, sound_profile.high_normal_max);
+    // printf("|");
+    // int count = 10;
+    // for(int i = 0; i < sound_profile.high_normal_normal/0.1; i++){
     //     printf("+");
     //     count--;
     // }

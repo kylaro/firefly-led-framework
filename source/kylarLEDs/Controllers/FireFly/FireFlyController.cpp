@@ -172,6 +172,9 @@ double FireFlyController::getBrightness()
 {
     static double brightness = 0;
     static double lastPot = 0;
+    if(!ADC_BRIGHTNESS){
+        return MAX_BRIGHTNESS;
+    }
     if (timing->takeMsEvery(10))
     {
         double newPot = analogPot->getValue();
@@ -182,7 +185,7 @@ double FireFlyController::getBrightness()
     {
         return brightness;
     }
-    brightness = brightness * brightness * brightness;
+    brightness = brightness * brightness * brightness * MAX_BRIGHTNESS;
     return brightness;
 }
 
@@ -200,7 +203,10 @@ void FireFlyController::initHue()
 
 void FireFlyController::initBrightness()
 {
-    this->analogPot = new Potentiometer(27, 1);
+    if(ADC_BRIGHTNESS){
+        this->analogPot = new Potentiometer(27, 1);
+    }
+    
 }
 
 void FireFlyController::initPatternButton()

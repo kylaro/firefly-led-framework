@@ -19,14 +19,21 @@ void CircleEffect::calculate(double phase){
     hue += phase/12.0;
     for(int i = 0; i < pixels->size(); i++){
         // sample sin wave to get v
-        color.v = (sin(hue + (i*2*3.1415)/pixels->size())+1)/2;
-        color.h = hue/10.0 + i/(double)pixels->size()/2.0;
+        color.v = ((sin(hue + (i*2*3.1415)/pixels->size())+1)/2)*.5 + phase*.5;
+        color.h = hue/15.0 + i/(double)pixels->size()*(0.33+phase*.33);
+        LEDs::setHSV(pixels->at(i), color);
+    }
+}
+
+void CircleEffect::white(double val){
+    hsv_t color = {0, 0, val};
+    for(int i = 0; i < pixels->size(); i++){
         LEDs::setHSV(pixels->at(i), color);
     }
 }
 
 void CircleEffect::run(){
-    hue += 0.0015;
+    //hue += 0.0015;
     
     
     

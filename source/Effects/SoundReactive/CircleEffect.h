@@ -15,4 +15,5 @@ class CircleEffect : public Effect{
         std::vector<uint8_t> * pixels;
         CircleEffect* led(uint8_t i);
         void calculate(double phase);
+        void white(double val);
 };

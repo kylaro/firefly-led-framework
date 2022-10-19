@@ -28,18 +28,25 @@ void LEDs::init(uint8_t numInterfaces){
 void LEDs::setHSV(int i, hsv_t color){
     irgb8_t irgb;
     int first = 1;
+
+    int strip = i/25;
+    if(strip >= strips->size()){
+        strip = 3;
+    }
+    int index = i < 75 ? i%25 : i - 75;
+    strips->at(strip)->setHSV(index, color);
     // The reason the stuff going on here is weird, is to make it faster
     // Using the result of the first setHSV to make the next faster
-    for(LEDInterface *strip : *strips){
-        if(first){
-            irgb = strip->setHSV(i, color);
-            first = 0;
-        }else{
-            //irgb = strip->setHSV(i, color);
-            strip->setRGBUnprotected(irgb.i, irgb.rgb);  // This skips the HSV conversion, which saves time
-        }
+    // for(LEDInterface *strip : *strips){
+    //     if(first){
+    //         irgb = strip->setHSV(i, color);
+    //         first = 0;
+    //     }else{
+    //         //irgb = strip->setHSV(i, color);
+    //         strip->setRGBUnprotected(irgb.i, irgb.rgb);  // This skips the HSV conversion, which saves time
+    //     }
         
-    }
+    // }
 }
 
 void LEDs::setNum(uint16_t num){

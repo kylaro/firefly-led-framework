@@ -68,3 +68,14 @@ double Microphone::getLowNormal(){
     }
     
 }
+
+
+double Microphone::getHighNormal(){
+    if(initialized){
+        return get_sound_profile()->high_normal_normal;
+    } else {
+        return 0;
+    }
+    
+}
+
