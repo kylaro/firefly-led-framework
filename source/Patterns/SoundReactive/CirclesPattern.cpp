@@ -176,7 +176,7 @@ void CirclesPattern::run(){
         if(Microphone::getHighNormal() > highVal){
             highVal = (highVal*3.0 + Microphone::getHighNormal()) / 4.0;
         }else{
-            highVal = (highVal*50.0 + Microphone::getHighNormal()) / 51.0;//25
+            highVal = (highVal*30.0 + Microphone::getHighNormal()) / 31.0;//25
         }
         
         
@@ -203,7 +203,7 @@ void CirclesPattern::run(){
     }
     
     //printf("high val = %f\n", highVal);
-    highLEDs->white(highVal*.9);
+    highLEDs->white(highVal);
     
 }
 

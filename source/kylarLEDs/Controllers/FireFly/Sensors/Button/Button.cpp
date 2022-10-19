@@ -8,6 +8,10 @@
 uint8_t Button::pin;
 uint32_t* Button::patternIndex;
 
+bool Button::getBootselectButton(){
+    return get_bootsel_button();
+}
+
 void Button::interrupt(uint gpio, uint32_t event){
     if(gpio != pin){
         Encoder::interrupt(gpio, event);
@@ -45,9 +49,21 @@ Button::Button(int A){
     gpio_init(A);
     gpio_set_dir(A, GPIO_IN);
     gpio_pull_up(A);//Set PULL UP
+
     //INTT//INTERRUPTS NOTE: "Currently GPIO parameter is ignored, callback will be called for any enabled GPIO IRQ on any pin"
     //This is spaghetti code, to fix this I am thinking to make a static "Interrupts" class that all interrupts can be handled by 1
     //The objects would be added to the Interrupts class static list so that all of their interrupt functions get called or basedon their gpio
     gpio_irq_callback_t callback = &Button::interrupt;
     gpio_set_irq_enabled_with_callback(A, GPIO_IRQ_EDGE_FALL, true, callback);
 }
+
+
+/**
+ * Copyright (c) 2020 Raspberry Pi (Trading) Ltd.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+
+
+

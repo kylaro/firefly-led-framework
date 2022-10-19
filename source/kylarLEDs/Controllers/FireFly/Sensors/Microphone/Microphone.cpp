@@ -12,6 +12,14 @@ void Microphone::start(){
     initialized = 1;
 }
 
+void Microphone::pause(){
+    pause_pdm_mic();
+}
+
+void Microphone::resume(){
+    resume_pdm_mic();
+}
+
 double Microphone::getFreqCenter(){
     if(initialized){
         return get_freq_data()->freq_center;

@@ -45,6 +45,8 @@ void pdm_core1_entry(){
     hanning_window_init_q15(window_q15, FFT_SIZE);
     arm_rfft_init_q15(&S_q15, FFT_SIZE, 0, 1);
 
+    multicore_lockout_victim_init();// NEEDED FOR MULTICORE LOCKOUT
+
     //Loop:
     // initialize the PDM microphone
     if (pdm_microphone_init(&pdm_config) < 0) {
@@ -360,6 +362,14 @@ void on_pdm_samples_ready()
 
 void start_pdm_mic(){
     multicore_launch_core1(pdm_core1_entry);
+}
+
+void pause_pdm_mic(){
+    multicore_lockout_start_blocking();
+}
+
+void resume_pdm_mic(){
+    multicore_lockout_end_blocking();
 }
 
 

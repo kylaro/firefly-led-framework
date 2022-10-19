@@ -52,6 +52,8 @@ void hanning_window_init_q15(q15_t* window, size_t size);
 void on_pdm_samples_ready();
 void pdm_core1_entry();
 void start_pdm_mic();
+void pause_pdm_mic();
+void resume_pdm_mic();
 void updateSoundProfileLow();
 void updateSoundProfileHigh();
 

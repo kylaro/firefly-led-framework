@@ -170,9 +170,12 @@ void FireFlyController::outputLEDs(uint8_t strip_i, uint8_t *leds, uint32_t N)
 
 double FireFlyController::getBrightness()
 {
-    static double brightness = 0;
+    static double brightness = 0.8;
     static double lastPot = 0;
-    if(!ADC_BRIGHTNESS){
+    static uint32_t count = 0;
+    static uint32_t index = 2;
+    static float brightnesses[] = {0.2, 0.5, 0.8};
+    /*if(!ADC_BRIGHTNESS){
         return MAX_BRIGHTNESS;
     }
     if (timing->takeMsEvery(10))
@@ -185,7 +188,28 @@ double FireFlyController::getBrightness()
     {
         return brightness;
     }
-    brightness = brightness * brightness * brightness * MAX_BRIGHTNESS;
+    brightness = brightness * brightness * brightness * MAX_BRIGHTNESS;*/
+    count += 1;
+    if(count > 1000){
+
+        for(int i = 0; i < 4; i++){
+            uint32_t dma_chan = strips[i].dma_chan;
+            dma_channel_wait_for_finish_blocking(dma_chan);
+        }
+
+        Microphone::pause();
+    
+        if(Button::getBootselectButton()){
+            index++;
+            index %= 3;
+            brightness = brightnesses[index];
+            
+        }
+
+        Microphone::resume();
+        count = 0;
+    }
+    
     return brightness;
 }
 

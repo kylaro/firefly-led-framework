@@ -31,6 +31,8 @@ class Microphone{
         static double getHighEnergy();
         static double getLowNormal();
         static double getHighNormal();
+        static void pause();
+        static void resume();
     private:
         static int initialized;
 
