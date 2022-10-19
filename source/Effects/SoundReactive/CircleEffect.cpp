@@ -19,8 +19,9 @@ void CircleEffect::calculate(double phase){
     hue += phase/12.0;
     for(int i = 0; i < pixels->size(); i++){
         // sample sin wave to get v
-        color.v = ((sin(hue + (i*2*3.1415)/pixels->size())+1)/2)*.5 + phase*.5;
-        color.h = hue/15.0 + i/(double)pixels->size()*(0.33+phase*.33);
+        color.v = ((sin(hue + (i*2*3.1415)/pixels->size())+1)/2)*.45 + phase*.55;
+        color.v *= color.v;
+        color.h = hue/15.0 + i/(double)pixels->size()*(0.15+phase*.45);
         LEDs::setHSV(pixels->at(i), color);
     }
 }
