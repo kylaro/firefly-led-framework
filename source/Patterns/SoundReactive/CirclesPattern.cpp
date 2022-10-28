@@ -176,7 +176,7 @@ void CirclesPattern::run(){
         if(Microphone::getHighNormal() > highVal){
             highVal = (highVal*3.0 + Microphone::getHighNormal()) / 4.0;
         }else{
-            highVal = (highVal*30.0 + Microphone::getHighNormal()) / 31.0;//25
+            highVal = (highVal*24.0 + Microphone::getHighNormal()) / 25.0;//25
         }
         
         
