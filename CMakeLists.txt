@@ -47,7 +47,7 @@ add_executable(firefly
 
 
 
-target_link_libraries(firefly pico_stdlib pico_multicore hardware_pio hardware_adc hardware_dma hardware_irq CMSISDSPTransform CMSISDSPSupport CMSISDSPCommon CMSISDSPComplexMath CMSISDSPFastMath CMSISDSPBasicMath)
+target_link_libraries(firefly pico_stdlib pico_multicore hardware_i2c hardware_pio hardware_adc hardware_dma hardware_irq CMSISDSPTransform CMSISDSPSupport CMSISDSPCommon CMSISDSPComplexMath CMSISDSPFastMath CMSISDSPBasicMath)
 
 # enable usb output, disable uart output
 pico_enable_stdio_usb(firefly 1)

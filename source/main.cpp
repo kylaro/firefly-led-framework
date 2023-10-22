@@ -13,6 +13,7 @@
 #include "Patterns/SoundReactive/ShakeelFlash.h"
 #include "Patterns/SoundReactive/Ben.h"
 #include "Patterns/SoundReactive/CirclesPattern.h"
+#include "Patterns/Examples/Nederland.h"
 #include "kylarLEDs/Utility/ExecTimer.h"
 #include <malloc.h>
 #include "pico/time.h"
@@ -34,10 +35,12 @@ int main(){
     //ADD YOUR PATTERNS HERE!
     //ex. patterns->push_back(new ExamplePattern());
     //patterns->push_back(new Ben());
+    patterns->push_back(new Nederland());
+    patterns->push_back(new FireFlies());
     patterns->push_back(new CirclesPattern());
     patterns->push_back(new Shakeel());
     patterns->push_back(new ShakeelFlash());
-    patterns->push_back(new FireFlies());
+    
     
     
     //patterns->push_back(new FireFliesSame());
@@ -69,7 +72,7 @@ int main(){
     while(1){
         // mem usage:
         struct mallinfo mi = mallinfo();
-        printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )
+        //printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )
         if(currentPatternIndex == nextPatternIndex){
             //We are remaining on the same pattern
             timer->start("mainloop");

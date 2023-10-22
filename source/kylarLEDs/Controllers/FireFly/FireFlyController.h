@@ -5,6 +5,7 @@
 #include "Sensors/Encoder/Encoder.h"
 #include "Sensors/Button/Button.h"
 #include "Sensors/Microphone/Microphone.h"
+#include "Sensors/CO2/CO2.h"
 #include "../../Utility/Timing.h"
 
 #define PX_PINS 4
@@ -34,11 +35,12 @@ class FireFlyController : public Controller{
         void initPatternButton(); // Change the patternIndex via button press
         void initOutput();
         void initMicrophone();
+        void initCO2();
     private:
         void initDMA(PIO pio, uint sm);
         
         static strip_t strips[NUM_STRIPS];
-        uint8_t PX_pins[PX_PINS] = {17, 16, 8, 9};
+        uint8_t PX_pins[PX_PINS] = {22, 16, 8, 9};
         uint8_t PX_sms[PX_PINS] = {0, 1, 2, 3};
         uint8_t bitflipLUT[256];
         static uint64_t channel_end_times[NUM_STRIPS];

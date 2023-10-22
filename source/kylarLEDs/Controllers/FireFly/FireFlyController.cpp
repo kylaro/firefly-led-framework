@@ -18,6 +18,8 @@ FireFlyController::FireFlyController()
         initMicrophone();
     }
     initOutput();
+    initCO2();
+    
 
     this->timing = new Timing();
 }
@@ -41,6 +43,12 @@ void FireFlyController::handleDMA()
 
     }
 
+}
+
+void FireFlyController::initCO2()
+{
+    // CO2 sensor
+    CO2::start();
 }
 
 void FireFlyController::initOutput()
@@ -172,6 +180,7 @@ double FireFlyController::getBrightness()
 {
     static double brightness = 0;
     static double lastPot = 0;
+    return 1.0;
     if (timing->takeMsEvery(10))
     {
         double newPot = analogPot->getValue();

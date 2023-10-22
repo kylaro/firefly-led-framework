@@ -119,19 +119,19 @@ rgb_t ColorUtil::hsv2rgb(hsv_t hsv) {
 
 float ColorUtil::remapHue(float hue){
     //RED section 1
-    const float pt[] = {0.05, 0.5, 0.95};// Points where the color changes
-    if(hue < 0.166){
+    const float pt[] = {0.10, 0.50, 0.90};// Points where the color changes
+    if(hue < 0.1666){
         //Red section 1
-        return remap(hue, 0, 0.166, 0, pt[0]);
+        return remap(hue, 0, 0.1666, 0, pt[0]);
     }else if(hue < 0.5){
         //Green section
-        return remap(hue, 0.166, 0.5, pt[0], pt[1]);
-    }else if(hue < 0.833){
+        return remap(hue, 0.1666, 0.5, pt[0], pt[1]);
+    }else if(hue < 0.8333){
         // Blue section
-        return remap(hue, 0.5, 0.833, pt[1], pt[2]);
+        return remap(hue, 0.5, 0.8333, pt[1], pt[2]);
     }else{
         //Red section 2
-        return remap(hue, 0.833, 1, pt[2], 1);
+        return remap(hue, 0.8333, 1, pt[2], 1);
     }
     return hue;
 }
