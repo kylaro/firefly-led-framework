@@ -11,7 +11,7 @@
 #include "Patterns/Examples/FireFliesSame.h"
 #include "Patterns/SoundReactive/Shakeel.h"
 #include "Patterns/SoundReactive/ShakeelFlash.h"
-#include "Patterns/SoundReactive/Ben.h"
+#include "Patterns/SoundReactive/SpaceX.h"
 #include "Patterns/SoundReactive/CirclesPattern.h"
 #include "kylarLEDs/Utility/ExecTimer.h"
 #include <malloc.h>
@@ -33,7 +33,7 @@ int main(){
     //Push back all the patterns you want!
     //ADD YOUR PATTERNS HERE!
     //ex. patterns->push_back(new ExamplePattern());
-    //patterns->push_back(new Ben());
+    patterns->push_back(new SpaceX());
     patterns->push_back(new CirclesPattern());
     patterns->push_back(new Shakeel());
     patterns->push_back(new ShakeelFlash());
