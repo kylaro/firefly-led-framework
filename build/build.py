@@ -40,39 +40,47 @@ def cmake():
 def nmake():
 	print("Python style NMake Build...")
 	windows_command = 'nmake'
-	linux_command = 'make'
+	linux_command = 'make firefly'
 	command = windows_command if is_windows else linux_command
 	stream = os.popen(command)
 	output = stream.read()
 	nmake_success_string = "[100%] Built target firefly"
 	if nmake_success_string not in output:
 		error("nmake FAILED")
+	elf_command = './elf2uf2/elf2uf2 firefly.elf firefly.uf2'
+	stream = os.popen(elf_command)
+	output = stream.read()
+	print("elf2uf2: ", output)
+	
 
 def upload():
 	print("Python waiting for Pico available")
 	count = 0
 	windows_dir = 'D:\\'
 	linux_dir = '/mnt/d'
+	mac_dir = "/Volumes/RPI-RP2/"
 	linux_mount1 = 'sudo mkdir /mnt/d'
 	linux_mount2 = 'sudo mount -t drvfs D: /mnt/d'
-	pico_dir = windows_dir if is_windows else linux_dir
+	#pico_dir = windows_dir if is_windows else linux_dir
+	pico_dir = mac_dir # Sorry this is done so unmaintainably, just quick hack
 	while not os.path.isdir(pico_dir):
 		time.sleep(0.1)
 		print(".", end="", flush=True)
-		if is_linux:
-			os.popen(linux_mount1)
-			os.popen(linux_mount2)
+		# if is_linux:
+		# 	os.popen(linux_mount1)
+		# 	os.popen(linux_mount2)
 
 
 	print("Uploading!")
 	build_name = 'firefly.uf2'
 	windows_copy_dir = 'D:\\'
 	linux_copy_dir = '/mnt/d/'
-	copy_to = windows_copy_dir if is_windows else linux_copy_dir
+	#copy_to = windows_copy_dir if is_windows else linux_copy_dir
+	copy_to = mac_dir
 	copy_to = copy_to + build_name
 	
-	shutil.copy(build_name, copy_to)
-
+	shutil.copyfile(build_name, copy_to)
+	print("Copying ", build_name, " to ", copy_to)
 	print("Done!")
 
 
