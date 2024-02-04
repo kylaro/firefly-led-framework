@@ -69,7 +69,9 @@ int main(){
     while(1){
         // mem usage:
         struct mallinfo mi = mallinfo();
-        printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )
+        if(DEBUG_PRINT){
+            printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )
+        }
         if(currentPatternIndex == nextPatternIndex){
             //We are remaining on the same pattern
             timer->start("mainloop");

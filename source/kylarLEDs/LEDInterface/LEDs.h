@@ -12,6 +12,7 @@ class LEDs {
         static void apply(); // Applies all of the changes from the effects for all strips
         static void setNum(uint16_t num); // Sets all LED strip lengths
         static void setHSV(int i, hsv_t color);// Sets HSV for an LED on all strips
+        static void setRGB(int i, rgb8_t color);// Sets HSV for an LED on all strips
         static void giveController(Controller * controller); // give the strips the controller reference
     private:
         static std::vector<LEDInterface*> *strips;

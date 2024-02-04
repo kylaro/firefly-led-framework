@@ -42,6 +42,13 @@ void LEDs::setHSV(int i, hsv_t color){
     }
 }
 
+// Sets rgb for all strips
+void LEDs::setRGB(int i, rgb8_t color){
+    for(LEDInterface *strip : *strips){
+        strip->setRGBUnprotected(i, color);  // This skips the HSV conversion, which saves time
+    }
+}
+
 void LEDs::setNum(uint16_t num){
     for(LEDInterface *strip : *strips){
         strip->setNum(num);

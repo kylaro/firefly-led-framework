@@ -1,6 +1,7 @@
 #pragma once
 #include "../Pattern.h"
 #include "../../kylarLEDs/Utility/Timing.h"
+#include "../../Effects/Images/SpaceXLogo.h"
 
 class SpaceX : public Pattern{
 
@@ -14,6 +15,9 @@ class SpaceX : public Pattern{
     private:
         Timing *myTiming;
         int initted = 0;
+        SpaceX *spacex_logo;
+
+        
         
 
 };

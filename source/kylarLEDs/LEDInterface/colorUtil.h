@@ -80,6 +80,11 @@ typedef struct{
 } hsv_t;
 
 typedef struct{
+    int i;
+    hsv_t hsv;
+} ihsv_t; // Combine index with hsv
+
+typedef struct{
     float r;         // Red 0 to 1.0
     float g;       // Green 0 to 1.0
     float b;        // Blue 0 to 1.0
