@@ -63,8 +63,8 @@ void pdm_core1_entry(){
     }
 
     int starting_bin = 2;
-    float low_bins = 14;
-    float high_bins = 240;
+    float low_bins = 14+14; // original (non-spacex) is 14
+    float high_bins = 240-14; // original (non-spacex) is 240
     float total_bins = low_bins + high_bins;
     
     

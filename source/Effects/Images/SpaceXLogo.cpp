@@ -45,10 +45,47 @@ void pixel_to_array(int i, int* row, int* col) {
 }
 
 void SpaceXLogo::init(){
-
     
     
 }
+void SpaceXLogo::setBrightness(float b){
+    //color_fifo[0] = {0, 1, b};
+    printf("b = %f\n", b);
+    brightness = b; // using the brightness variable will break this.
+
+    ihsv_t led = {0 , {0.0, 0.0, 0}};
+    for(int layer = 0; layer < num_layers; layer++){
+        for(int i = 0; i < image_lengths[layer]; i++){
+            led = image_pointers[layer][i];
+            //led.hsv.h = layer/(float)num_layers;
+            //led.hsv.s = 1;
+            led.hsv.v = 0;
+            switch(layer){
+                case 0:
+                    led.hsv.v = 0.5;
+                    break;
+                case 1:
+                    led.hsv.v = 0.2;
+                    break;
+                case 2:
+                    led.hsv.v = 0.05;
+                    break;
+            }
+
+            //printf("1. hsv.v = %f\n", led.hsv.v);
+            //printf("1.5 adding brightness = %f\n", b);
+            led.hsv.v += b;
+            //printf("2. hsv.v = %f\n", led.hsv.v);
+            
+            //printf("3. hsv.v = %f\n", led.hsv.v);
+            //printf("set %d to %f\n", led.i, led.hsv.v);
+            LEDs::setHSV(led.i, led.hsv);
+
+        }
+        
+    }
+}
+
 
 void SpaceXLogo::run(){
     //hue += 0.0015;
@@ -69,18 +106,7 @@ void SpaceXLogo::run(){
     //     LEDs::setHSV(i, image_hsv[r][c]);
     // }
 
-    ihsv_t led = {0 , {0.0, 0.0, 0.5}};
-    for(int layer = 0; layer < num_layers; layer++){
-        for(int i = 0; i < image_lengths[layer]; i++){
-            led = image_pointers[layer][i];
-            led.hsv.h = layer/(float)num_layers;
-            led.hsv.s = 1;
-            
-            LEDs::setHSV(led.i, led.hsv);
-
-        }
-        
-    }
+    
 
 
     

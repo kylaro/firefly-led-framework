@@ -8,9 +8,8 @@ class SpaceXLogo : public Effect{
         void run();
         void init();
         ~SpaceXLogo();
-        int i = 0;
-        double hue = 0;
-        int x, y = 0;
+        void setBrightness(float b);
     private:
-        int unused = 0;
+        hsv_t color_fifo[3];
+        float brightness = 0;
 };

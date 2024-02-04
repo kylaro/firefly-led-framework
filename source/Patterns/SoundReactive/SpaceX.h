@@ -11,11 +11,14 @@ class SpaceX : public Pattern{
         void init();
         void release();
         virtual ~SpaceX();
+        
     
     private:
-        Timing *myTiming;
         int initted = 0;
-        SpaceX *spacex_logo;
+        SpaceXLogo *spacex_logo;
+        Timing *avgTimer;
+        Timing *secTimer;
+        Timing *valTimer;
 
         
         
