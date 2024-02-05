@@ -42,6 +42,9 @@ typedef struct{
     double high_max;
     double high_avg;
     double high_normal; //Current value of low - normalized 0 - 1 with min and max
+    double high_normal_min;
+    double high_normal_max;
+    double high_normal_normal;   // This is the best to use 0 - 1
 } sound_profile_t;
 
 void input_init_q15();
@@ -49,7 +52,10 @@ void hanning_window_init_q15(q15_t* window, size_t size);
 void on_pdm_samples_ready();
 void pdm_core1_entry();
 void start_pdm_mic();
-void updateSoundProfile();
+void pause_pdm_mic();
+void resume_pdm_mic();
+void updateSoundProfileLow();
+void updateSoundProfileHigh();
 
 
 
@@ -58,5 +64,4 @@ float bin_to_freq(int bin);
 
 freq_data_t *get_freq_data();
 sound_profile_t *get_sound_profile();
-
 

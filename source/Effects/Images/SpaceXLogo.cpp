@@ -28,9 +28,14 @@ uint8_t image_12_hsv_efficient[43] =
 uint8_t image_13_hsv_efficient[28] = 
 { 0, 31, 32, 63, 64, 95, 96, 127, 128, 159, 160, 191, 192, 223, 224, 255, 250, 248, 246, 244, 15, 16, 79, 112, 175, 207, 239, 240,};
  
+uint8_t image_outline[50] = 
+{ 226, 253, 3, 28, 35, 60, 195, 220, 68, 91, 164, 187, 101, 133, 154, 250, 6, 25, 121, 217, 230, 39, 184, 199, 55, 72, 168, 41, 182, 21, 117, 202, 213, 11, 107, 139, 235, 83, 147, 243, 13, 18, 45, 50, 77, 173, 178, 205, 210, 237,};
+ 
+
 const int num_layers = 13;
 uint8_t* image_pointers[] = { image_1_hsv_efficient, image_2_hsv_efficient, image_3_hsv_efficient, image_4_hsv_efficient, image_5_hsv_efficient, image_6_hsv_efficient, image_7_hsv_efficient, image_8_hsv_efficient, image_9_hsv_efficient, image_10_hsv_efficient, image_11_hsv_efficient, image_12_hsv_efficient, image_13_hsv_efficient };
 uint8_t image_lengths[] = { 21, 29, 31, 4, 10, 16, 23, 30, 43, 54, 53, 43, 28 };
+float color_fifo[13]; // This is the number of images in the animation
 
 // Input is the row and column of the array
 // Output is the LED index in the "strip"
@@ -65,59 +70,72 @@ void pixel_to_array(int i, int* row, int* col) {
 }
 
 void SpaceXLogo::init(){
+    hueTimer = new Timing();
+    fifoTimer = new Timing();
     
     
 }
-void SpaceXLogo::setBrightness(float b){
-    //color_fifo[0] = {0, 1, b};
-    printf("b = %f\n", b);
-    brightness = b; // using the brightness variable will break this.
 
-    int led = 0;
-    hsv_t hsv = {0, 0, 0};
-    for(int layer = 0; layer < num_layers; layer++){
-        for(int i = 0; i < image_lengths[layer]; i++){
-            led = image_pointers[layer][i];
-            //led.hsv.h = layer/(float)num_layers;
-            //led.hsv.s = 1;
+void SpaceXLogo::clamp(float *x, float min, float max){
+    if( *x < min){
+        *x = min;
+    }else if(*x > max){
+        *x = max;
+    }
+}
 
-            hsv.s = 0;
-            switch(layer){
-                case 0:
-                    hsv.v = 0.5;
-                    break;
-                case 1:
-                    hsv.v = 0.2;
-                    break;
-                case 2:
-                    hsv.v = 0.05;
-                    break;
-                default:
-                    hsv.v = 0;
-                    hsv.s = 1;
-            }
-            hsv.h = layer/(float)num_layers;
-
-            //printf("1. hsv.v = %f\n", led.hsv.v);
-            //printf("1.5 adding brightness = %f\n", b);
-            hsv.v += b;
-            
-            
-            
-            //printf("2. hsv.v = %f\n", led.hsv.v);
-            
-            //printf("3. hsv.v = %f\n", led.hsv.v);
-            //printf("set %d to %f\n", led.i, led.hsv.v);
-            LEDs::setHSV(led, hsv);
-
-        }
+void SpaceXLogo::shiftFifo(){
+    
+    float exchange_rate = 0.4*fifoTimer->takeMsEvery(1); // 0.08
+    // At the end the color falls into the void
+    //printf("color fifo 0 = %f\n", color_fifo[0]);
+    color_fifo[num_layers-1] -= 2*exchange_rate*color_fifo[num_layers-1];
+    
+    
+    for(int i = num_layers - 1; i >= 1; i--){
+        
+        float receiver = color_fifo[i];
+        float donor = color_fifo[i-1];
+        float exchange = donor * exchange_rate;
+        color_fifo[i] = (color_fifo[i] * 4.0 + receiver + exchange)/5.0;
+        color_fifo[i-1] = (color_fifo[i-1] * 4.0 + donor - exchange)/5.0;
+        //printf(" %d:%f ", i,color_fifo[i]);
+        clamp(&color_fifo[i], 0.0, 1.0);
         
     }
+    //printf("\n");
+
+}
+
+
+void SpaceXLogo::setBrightness(float b){
+    //color_fifo[0] = {0, 1, b};
+    // if(color_fifo[1] > b){
+    //     b *= 0.5;
+    // }
+    //color_fifo[0] = 1.5*b*b;
+    b = b*b;
+    color_fifo[0] = b;
+    // double fifo_avg = 0;
+    // for(int i = 0; i < num_layers; i++){
+    //     fifo_avg += color_fifo[i];
+    // }
+    // fifo_avg /= (double)num_layers;
+
+    // if(b > fifo_avg*0.6){
+    //     color_fifo[0] = b;
+    // }else{
+    //     color_fifo[0] = b*0.9;
+    // }
+    //color_fifo[0] = b > color_fifo[0] && b > color_fifo[1] ? b : color_fifo[0]*color_fifo[0]*color_fifo[0];
+    //clamp(&color_fifo[0], 0, 1);
+    //printf("b = %f\n", b);
+    
 }
 
 
 void SpaceXLogo::run(){
-    //hue += 0.0015;
+    
     // static int initted = 0;
     // if(!initted){
     //     init();
@@ -134,6 +152,63 @@ void SpaceXLogo::run(){
     //     // LEDs::setRGB(i, color);
     //     LEDs::setHSV(i, image_hsv[r][c]);
     // }
+
+    shiftFifo();
+    
+    
+
+    //brightness = b; // using the brightness variable will break this.
+    
+    hue -= 0.001*hueTimer->takeMsEvery(4);//0.006;
+    //printf("hue = %f\n", hue);
+    int led = 0;
+    hsv_t hsv = {0, 0, 0};
+    for(int layer = 0; layer < num_layers; layer++){
+        for(int i = 0; i < image_lengths[layer]; i++){
+            led = image_pointers[layer][i];
+            //led.hsv.h = layer/(float)num_layers;
+            //led.hsv.s = 1;
+
+            hsv.s = 0;
+            if(layer < 3){
+                hsv.v =  0.3+(color_fifo[0]+color_fifo[1]+color_fifo[2])*3.0;
+                //hsv.v = 0.6 + color_fifo[0] * 0.6;
+            }else{
+                hsv.v = color_fifo[layer];
+                
+                // if(hsv.v > 0.3){
+                //     hsv.v *= 1.5;
+                // }else{
+                //     hsv.v *= 0.75;
+                // }
+                clamp(&hsv.v, 0.0, 0.8);//(color_fifo[0]+color_fifo[1]+color_fifo[2])*3.0 + 0.6);
+                hsv.s = 1;
+            }
+            // switch statement 84531 us
+            hsv.h = hue + 0.33*(layer/(float)num_layers);
+            
+
+            //printf("1. hsv.v = %f\n", led.hsv.v);
+            //printf("1.5 adding brightness = %f\n", b);
+            //hsv.v += b;
+            
+            
+            
+            //printf("2. hsv.v = %f\n", led.hsv.v);
+            
+            //printf("3. hsv.v = %f\n", led.hsv.v);
+            //printf("set %d to %f\n", led.i, led.hsv.v);
+            LEDs::setHSV(led, hsv);
+
+        }
+        
+    }
+
+    // Dim the outline by setting to dark
+    for(int i = 0; i < 50; i++){
+        LEDs::setHSV(image_outline[i], {0,0,0});
+        LEDs::setHSV(image_outline[i], {0,0,0});
+    }
 
     
 

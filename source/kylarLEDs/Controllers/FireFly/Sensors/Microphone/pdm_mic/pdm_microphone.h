@@ -32,4 +32,3 @@ void pdm_microphone_set_filter_gain(uint8_t gain);
 void pdm_microphone_set_filter_volume(uint16_t volume);
 
 int pdm_microphone_read(int16_t* buffer, size_t samples);
-

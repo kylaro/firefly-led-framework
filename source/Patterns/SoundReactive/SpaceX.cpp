@@ -10,6 +10,7 @@ SpaceX::~SpaceX() {}
 
 void SpaceX::init(){
     SpaceXLogo *spacex_logo = new SpaceXLogo();
+    spacex_logo->init();
     Effect::engine->apply(spacex_logo);
 
     secTimer = new Timing();
@@ -18,9 +19,10 @@ void SpaceX::init(){
 }
 
 void SpaceX::run(){
-
     double micVal = pow(Microphone::getLowNormal(),2) ;
     static double brightness = 0;
+    static double highVal = 0;
+    double result = 0;
     double seconds = secTimer->takeSeconds();
     int avgLoops = 0;
     // Color movement
@@ -35,14 +37,38 @@ void SpaceX::run(){
     //printf("valTimer = %d ... %d\n", valTimer->timerMs(), valTimer->takeMsEvery(100));
     avgLoops = valTimer->takeMsEvery(1);
     for(int i = 0; i < avgLoops; i++){
-        brightness = (brightness*120.0 + proposedBrightness)/121.0;
+        //brightness = (brightness*120.0 + proposedBrightness)/121.0;
+        if(proposedBrightness > brightness){
+            //increasing
+            brightness = (brightness*50.0 + proposedBrightness) / 51.0;
+        }else{
+            //decreasing
+            brightness = (brightness*120.0 + proposedBrightness) / 121.0;
+        }
+
+        if(Microphone::getHighNormal() > highVal){
+            highVal = (highVal*3.0 + Microphone::getHighNormal()) / 4.0;
+        }else{
+            highVal = (highVal*24.0 + Microphone::getHighNormal()) / 25.0;//25
+        }
+        
+        
+    }
+    if(highVal > 1){
+        highVal = 1;
     }
     
     if(proposedBrightness > brightness){
         brightness = proposedBrightness;
     }
+
+    if(brightness > highVal){
+        result = brightness + highVal * 0.1;
+    }else{
+        result = highVal + brightness * 0.1;
+    }
     
-    spacex_logo->setBrightness((float)brightness);
+    spacex_logo->setBrightness((float)result);
 }
 
 void SpaceX::release(){

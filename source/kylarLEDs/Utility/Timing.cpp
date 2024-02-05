@@ -55,8 +55,8 @@ void Timing::reset(){
     timerStart = controller->getCurrentTimeMicros();
 }
 
+// gets seconds since last call, resets timer
 double Timing::takeSeconds(){ 
-    // gets seconds since last, resets timer
     double seconds = ((double)timerMs())/1000.0;
     reset();
     return seconds;
