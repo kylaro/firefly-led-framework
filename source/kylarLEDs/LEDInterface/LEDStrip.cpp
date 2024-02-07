@@ -1,8 +1,8 @@
-#include "LEDInterface.h"
+#include "LEDStrip.h"
 #include "../Utility/ExecTimer.h"
 #include "stdio.h"
 #include "stdlib.h"
-LEDInterface::LEDInterface(uint8_t strip){
+LEDStrip::LEDStrip(uint8_t strip){
     rgb_t off = {0, 0, 0};
     this->strip = strip;
     for(int i = 0; i < MAX_NUM_LEDS; i++){
@@ -17,7 +17,7 @@ LEDInterface::LEDInterface(uint8_t strip){
 }
 
 
-void LEDInterface::setRGB(int index, rgb_t rgb){
+void LEDStrip::setRGB(int index, rgb_t rgb){
     // set RGB is discontinued, HSV is superior
     // if(index >= NUM_LEDS){
     //     return;
@@ -30,7 +30,7 @@ void LEDInterface::setRGB(int index, rgb_t rgb){
 
 
 
-irgb8_t LEDInterface::setHSV(int index, hsv_t hsv){
+irgb8_t LEDStrip::setHSV(int index, hsv_t hsv){
     if(index >= numLEDs){
         index %= numLEDs;
     }
@@ -71,13 +71,13 @@ irgb8_t LEDInterface::setHSV(int index, hsv_t hsv){
     return irgb;
 }
 
-void LEDInterface::setRGBUnprotected(int index, rgb8_t rgb8){
+void LEDStrip::setRGBUnprotected(int index, rgb8_t rgb8){
     changesArray[index]->combine(rgb8);
 }
 
 
 
-void LEDInterface::apply(){
+void LEDStrip::apply(){
     uint8_t r, g, b;
     rgb8_t rgb;
     float brightness = ledController->getBrightness();
@@ -120,11 +120,11 @@ void LEDInterface::apply(){
 }
 
 
-void LEDInterface::output(){
+void LEDStrip::output(){
     ledController->outputLEDs(strip, ledsArray, numLEDs);
 }
 
-void LEDInterface::clear(){
+void LEDStrip::clear(){
     for(int i = 0; i < numLEDs; i++){
         ledsArray[i*3] = 0;
         ledsArray[i*3+1] = 0;
@@ -132,14 +132,14 @@ void LEDInterface::clear(){
     }
 }
 
-void LEDInterface::giveController(Controller * ledController){
+void LEDStrip::giveController(Controller * ledController){
     this->ledController = ledController;
 }
 
-double LEDInterface::num(){ //Get num LEDs
+double LEDStrip::num(){ //Get num LEDs
     return (double)numLEDs;
 } 
-void LEDInterface::setNum(uint16_t num){ //set number of LEDs
+void LEDStrip::setNum(uint16_t num){ //set number of LEDs
     numLEDs = num;
     clear();
 } 
