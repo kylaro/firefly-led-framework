@@ -27,7 +27,7 @@ void SpaceX::run(){
     int avgLoops = 0;
     // Color movement
     //printf("micTimer = %d ... %f\n", micTimer->timerMs(), micTimer->takeSeconds());
-    double micAdd = micVal / 50; // trying to even out timing
+
     // printf("avgTimer = %d ... %d\n", avgTimer->timerMs());//, avgTimer->takeMsEvery(25));
     avgLoops = avgTimer->takeMsEvery(1);
 
@@ -40,16 +40,16 @@ void SpaceX::run(){
         //brightness = (brightness*120.0 + proposedBrightness)/121.0;
         if(proposedBrightness > brightness){
             //increasing
-            brightness = (brightness*50.0 + proposedBrightness) / 51.0;
+            brightness = (brightness*120.0 + proposedBrightness) / 121.0;
         }else{
             //decreasing
-            brightness = (brightness*120.0 + proposedBrightness) / 121.0;
+            brightness = (brightness*120.0 + proposedBrightness) / 121.0; // 120
         }
 
         if(Microphone::getHighNormal() > highVal){
-            highVal = (highVal*3.0 + Microphone::getHighNormal()) / 4.0;
+            highVal = (highVal*50.0 + Microphone::getHighNormal()) / 51.0;
         }else{
-            highVal = (highVal*24.0 + Microphone::getHighNormal()) / 25.0;//25
+            highVal = (highVal*50.0 + Microphone::getHighNormal()) / 51.0;//25
         }
         
         

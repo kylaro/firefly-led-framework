@@ -86,10 +86,10 @@ void SpaceXLogo::clamp(float *x, float min, float max){
 
 void SpaceXLogo::shiftFifo(){
     
-    float exchange_rate = 0.4*fifoTimer->takeMsEvery(1); // 0.08
+    float exchange_rate = 0.9*fifoTimer->takeMsEvery(1); // 0.08
     // At the end the color falls into the void
     //printf("color fifo 0 = %f\n", color_fifo[0]);
-    color_fifo[num_layers-1] -= 2*exchange_rate*color_fifo[num_layers-1];
+    color_fifo[num_layers-1] = (color_fifo[num_layers-1] * 10.0 - exchange_rate*color_fifo[num_layers-1])/11.0;
     
     
     for(int i = num_layers - 1; i >= 1; i--){
@@ -97,9 +97,9 @@ void SpaceXLogo::shiftFifo(){
         float receiver = color_fifo[i];
         float donor = color_fifo[i-1];
         float exchange = donor * exchange_rate;
-        color_fifo[i] = (color_fifo[i] * 4.0 + receiver + exchange)/5.0;
-        color_fifo[i-1] = (color_fifo[i-1] * 4.0 + donor - exchange)/5.0;
-        //printf(" %d:%f ", i,color_fifo[i]);
+        color_fifo[i] = (color_fifo[i] * 10.0 + receiver + exchange)/11.0;
+        color_fifo[i-1] = (color_fifo[i-1] * 10.0 + donor - exchange)/11.0;
+
         clamp(&color_fifo[i], 0.0, 1.0);
         
     }

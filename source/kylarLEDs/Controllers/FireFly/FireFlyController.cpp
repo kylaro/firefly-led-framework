@@ -27,7 +27,7 @@ void FireFlyController::initDMA(PIO pio, uint sm)
 
 }
 
-
+// Used in interrupt
 void FireFlyController::handleDMA()
 {
     //Loops through the strips and checks if the channel is done. If it is, it sets the channel_end_times to the current time.
