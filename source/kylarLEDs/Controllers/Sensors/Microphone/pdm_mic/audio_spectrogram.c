@@ -47,8 +47,11 @@ void pdm_core1_entry(){
 
     // Unfortunately, this is where I will initialize wifi
     // I want it to be on core1
-    if(PICOW_USE_WIFI){
+    if(WIFI_ENABLE){
         wifi_init();
+    }
+    if(!MICROPHONE_ENABLE){
+        while(1){}
     }
     
 

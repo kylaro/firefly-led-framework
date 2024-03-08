@@ -14,9 +14,9 @@ FireFlyWController::FireFlyWController()
     initBrightness();
     initHue();
     initPatternButton();
-    if(MICROPHONE_ENABLE){
+    //if(MICROPHONE_ENABLE){
         initMicrophone();
-    }
+    //}
     initOutput();
 
     this->timing = new Timing();
