@@ -65,8 +65,8 @@ void pdm_core1_entry(){
     }
 
     int starting_bin = 2;
-    float low_bins = 14;  // 14
-    float high_bins = 6; // 240
+    float low_bins = 20;  // 14
+    float high_bins = 0; // 240 // currently used as "skip" bins
     float total_bins = low_bins + high_bins;
     
     
