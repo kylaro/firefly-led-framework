@@ -138,7 +138,7 @@
 
 
 ## KylarLEDs idea pad:
-### I want to benchmark different ways of doing the LEDInterface
+### I want to benchmark different ways of doing the LEDStrip
     Is it better to have an static array, dynamically allocated array, or a vector for keeping track of LEDChange objects. Maybe a map?
         - I'd be interested in timing the different implementations
         - Maybe I should add some sort of timing interface to easily do this :)
@@ -172,7 +172,7 @@
         - see "Button.cpp" initialization for more detail
     Detect high frequency output so that light doesn't flicker between brightness levels
     Make sensor classes Static?
-    LEDInterface rework:
+    LEDStrip rework:
         -remove led interface from main, have it be created by patterns
         -instead of calling the leds apply and output from main, can be done in engine
         -patterns would make their own led interface object with specified # leds
@@ -190,7 +190,7 @@
         -> the pico can detect "level_low" for detecting button held down.
         -> in level_low, set an interrupt for level_high that resets the timer and removes itself
     Make sleep mode when potentiometer is turned down below <0.02, see if pico has a wake up interrupt for this
-    Make a way for LEDInterface to accept saturation changes?
+    Make a way for LEDStrip to accept saturation changes?
         -> So if I want to only change the saturation of a pixel, regardless of what is there
         -> Hard part is that LEDChanges store RGB, because it is easier to combine
         -> But HSV is only way to mix Saturation. Maybe there is a native HSV mix function, and we convert to RGB only for output
@@ -201,7 +201,7 @@
     Make some form of persistence, and can use for saving color/current pattern
     (Done) Try to improve the speed of the PIO LED output using DMA
     Should we really clear the led rgb every time? or leave it up to the pattern programmer to manage when things should be off
-    Make memory allocation dynamic for LED outputs, instead of doing all 4 / or otherwise make memory usage less in LEDInterface
+    Make memory allocation dynamic for LED outputs, instead of doing all 4 / or otherwise make memory usage less in LEDStrip
     Make memory better, by having LEDChanges outsource their memory references?
         - problem is that the brightness calculation is done at the end. so would need to move brightness calc to within ledchange
         - but if calc is done in ledchange, then it would need to be done multiple times. It is fast though... I gotta check apply times...

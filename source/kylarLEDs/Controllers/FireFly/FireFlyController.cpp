@@ -27,7 +27,7 @@ void FireFlyController::initDMA(PIO pio, uint sm)
 
 }
 
-
+// Used in interrupt
 void FireFlyController::handleDMA()
 {
     //Loops through the strips and checks if the channel is done. If it is, it sets the channel_end_times to the current time.
@@ -122,7 +122,7 @@ uint64_t FireFlyController::getCurrentTimeMillis()
 
 void FireFlyController::outputLEDs(uint8_t strip_i, uint8_t *leds, uint32_t N)
 {
-    uint32_t numBytes = N * 3;
+    uint32_t numBytes = N * 3; // N is numLEDs, which each require 3 bytes
     uint8_t *pixels = leds;
     strip_t *strip = &(strips[strip_i]);
 

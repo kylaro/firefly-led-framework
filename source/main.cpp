@@ -11,7 +11,8 @@
 #include "Patterns/Examples/FireFliesSame.h"
 #include "Patterns/SoundReactive/Shakeel.h"
 #include "Patterns/SoundReactive/ShakeelFlash.h"
-#include "Patterns/SoundReactive/Ben.h"
+#include "Patterns/SoundReactive/SpaceX.h"
+#include "Patterns/SoundReactive/HeartPattern.h"
 #include "Patterns/SoundReactive/CirclesPattern.h"
 #include "kylarLEDs/Utility/ExecTimer.h"
 #include <malloc.h>
@@ -33,7 +34,8 @@ int main(){
     //Push back all the patterns you want!
     //ADD YOUR PATTERNS HERE!
     //ex. patterns->push_back(new ExamplePattern());
-    //patterns->push_back(new Ben());
+    patterns->push_back(new HeartPattern());
+    patterns->push_back(new SpaceX());
     patterns->push_back(new CirclesPattern());
     patterns->push_back(new Shakeel());
     patterns->push_back(new ShakeelFlash());
@@ -54,9 +56,9 @@ int main(){
     //Thus it can write to it when its button is pressed and change the pattern
     ledController->givePatternIndex(&nextPatternIndex);
 
-    //Give the LEDInterfaces the controller
-    //This way the LEDInterface can call the output function to the controller
-    //The LEDInterface can also ask the controller for hue/brightness info
+    //Give the LEDStrips the controller
+    //This way the LEDStrip can call the output function to the controller
+    //The LEDStrip can also ask the controller for hue/brightness info
     //Which is based on the sensors the controller accesses
     LEDs::giveController(ledController);
     Timing::giveControllerForTiming(ledController);
@@ -69,7 +71,9 @@ int main(){
     while(1){
         // mem usage:
         struct mallinfo mi = mallinfo();
-        printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )
+        if(DEBUG_PRINT){
+            printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )
+        }
         if(currentPatternIndex == nextPatternIndex){
             //We are remaining on the same pattern
             timer->start("mainloop");

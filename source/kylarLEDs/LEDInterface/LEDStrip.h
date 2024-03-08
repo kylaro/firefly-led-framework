@@ -7,7 +7,7 @@
 // Currently using way too much memory here...
 #define MAX_NUM_LEDS NUM_LEDS // working up to 3000 (when 1 strip)
 
-class LEDInterface{
+class LEDStrip{
     /*
 	• HW independent
 	• Manages LEDs, count, current values, conversions
@@ -19,7 +19,7 @@ class LEDInterface{
     */
 
     public:
-        LEDInterface(uint8_t strip);
+        LEDStrip(uint8_t strip);
         void apply();   // Apply the changes 
         void output();  // and output
         void clear();   // clear
