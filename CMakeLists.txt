@@ -13,8 +13,16 @@ project(firefly-led-controller)
 # initialize the Pico SDK
 pico_sdk_init()
 
+# This is only for pico w
+message("Running makefsdata python script")
+execute_process(COMMAND
+    python3 makefsdata.py
+    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+)
+
 # Define ARM_CPU, CMSIS ROOT and DSP to use CMSIS-DSP
 set(ARM_CPU "cortex-m0plus")
+set(PICO_BOARD pico_w) # Remove for just normal pico
 set(ROOT ${CMAKE_CURRENT_LIST_DIR}/source/kylarLEDs/Controllers/FireFly/Sensors/Microphone/pdm_mic/CMSIS_5)
 set(DSP ${ROOT}/CMSIS/DSP)
 
@@ -31,7 +39,7 @@ file(GLOB_RECURSE HDRS source/*.h)
 
 list(APPEND ALL_SOURCES ${SRCSCPP} ${SRCSC} ${HDRS})
 list(FILTER ALL_SOURCES EXCLUDE REGEX /CMSIS_5/) # Exclude CMSIS files, they have their own CMAKE stuff above
-# message(STATUS "foo include dir: ${ALL_SOURCES}")
+#message(STATUS "Include dir: ${ALL_SOURCES}")
 
 add_executable(firefly
     ${ALL_SOURCES}
@@ -40,14 +48,25 @@ add_executable(firefly
     # ${HDRS}
 )
 
-# add_executable(firefly
-#     ${CMAKE_CURRENT_LIST_DIR}/source/main.cpp
-# )
 
 
 
-
-target_link_libraries(firefly pico_stdlib pico_multicore hardware_pio hardware_adc hardware_dma hardware_irq CMSISDSPTransform CMSISDSPSupport CMSISDSPCommon CMSISDSPComplexMath CMSISDSPFastMath CMSISDSPBasicMath)
+target_link_libraries(  firefly 
+                        pico_stdlib 
+                        pico_multicore 
+                        hardware_pio 
+                        hardware_adc 
+                        hardware_dma 
+                        hardware_irq 
+                        CMSISDSPTransform 
+                        CMSISDSPSupport 
+                        CMSISDSPCommon 
+                        CMSISDSPComplexMath 
+                        CMSISDSPFastMath 
+                        CMSISDSPBasicMath
+                        ico_cyw43_arch_lwip_threadsafe_background # pico w only
+                        pico_lwip_http # pico w only
+)
 
 # enable usb output, disable uart output
 pico_enable_stdio_usb(firefly 1)

@@ -5,7 +5,7 @@
 #include "Effects/Effect.h"
 #include "kylarLEDs/LEDInterface/LEDs.h"
 #include "kylarLEDs/EffectEngine/EffectEngine.h"
-#include "kylarLEDs/Controllers/FireFly/FireFlyController.h"
+#include "kylarLEDs/Controllers/FireFlyW/FireFlyWController.h"
 #include "Patterns/Examples/ExamplePattern.h"
 #include "Patterns/Examples/FireFlies.h"
 #include "Patterns/Examples/FireFliesSame.h"
@@ -23,7 +23,7 @@ using namespace std;
 int main(){
 
     // Initialize framework infrastructure
-    Controller *ledController = new FireFlyController();
+    Controller *ledController = new FireFlyWController();
     EffectEngine *effectEngine = new EffectEngine();
     LEDs::init(NUM_STRIPS); // Initializing # of outputs
     LEDs::setNum(NUM_LEDS); // Setting all strips to 120 LEDs
