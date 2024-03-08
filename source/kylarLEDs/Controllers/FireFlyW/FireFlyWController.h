@@ -1,10 +1,10 @@
 #pragma once
 #include "../Controller.h"
 #include "rp2040_pio.h"
-#include "Sensors/Potentiometer/Potentiometer.h"
-#include "Sensors/Encoder/Encoder.h"
-#include "Sensors/Button/Button.h"
-#include "Sensors/Microphone/Microphone.h"
+#include "../Sensors/Potentiometer/Potentiometer.h"
+#include "../Sensors/Encoder/Encoder.h"
+#include "../Sensors/Button/Button.h"
+#include "../Sensors/Microphone/Microphone.h"
 #include "../../Utility/Timing.h"
 
 #define PX_PINS 4

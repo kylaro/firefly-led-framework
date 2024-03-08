@@ -8,7 +8,7 @@ import os
 import binascii
 
 #Create file to write output into
-output = open('htmldata.c', 'w') 
+output = open('include/htmldata.c', 'w') 
 
 #Traverse directory, generate list of files
 files = list()

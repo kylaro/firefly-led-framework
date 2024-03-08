@@ -88,13 +88,7 @@ void FireFlyWController::initCommunication()
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
-    for (int i = 0; i < 10; i++)
-    {
-        gpio_put(LED_PIN, 1);
-        sleep_ms(20);
-        gpio_put(LED_PIN, 0);
-        sleep_ms(20);
-    }
+
 
     printf("Communication established\n");
 
