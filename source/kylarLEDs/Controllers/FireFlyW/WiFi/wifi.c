@@ -5,19 +5,27 @@ const char WIFI_SSID[] = "Kylar's iPhone";
 const char WIFI_PASSWORD[] = "$$$$$$$$";
 
 int wifi_init() {
-    int LED_PIN = 25; // Built-in LED pin
-    gpio_put(LED_PIN, 1);
-
     cyw43_arch_init();
+
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 
     cyw43_arch_enable_sta_mode();
 
     // Connect to the WiFI network - loop until connected
-    while(cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 3000) != 0){
+    while(cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 20000) != 0){
         printf("Attempting to connect...\n");
+        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+        sleep_ms(350);
+        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
     }
     // Print a success message once connected
     printf("Connected! \n");
+    for(int i = 0; i < 10; i++){
+        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+        sleep_ms(20);
+        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+        sleep_ms(20);
+    }
     
     // Initialise web server
     httpd_init();
@@ -29,7 +37,8 @@ int wifi_init() {
     cgi_init();
     printf("CGI Handler initialised\n");
 
-    gpio_put(LED_PIN, 0);
+    //cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
     return 1;
 }
 
