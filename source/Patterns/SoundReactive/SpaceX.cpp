@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "../../Effects/Basics/ExampleEffect.h"
 #include "../../Effects/Effect.h"
-#include "../../kylarLEDs/Controllers/FireFly/Sensors/Microphone/Microphone.h"
+#include "../../kylarLEDs/Controllers/Sensors/Microphone/Microphone.h"
 
 
 
