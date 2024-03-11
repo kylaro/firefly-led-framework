@@ -210,5 +210,25 @@ void FireFlyWController::givePatternIndex(uint32_t *patternIndex)
 
 void FireFlyWController::initMicrophone()
 {
+    // This will go to the multicore init which also enables WiFi
     Microphone::start();
 }
+
+// What do I need to do:
+// I need to get the wifi interrupt to effect the Effects and pattern ?
+// I could ignore the pattern index for now... 
+// It's more important for the wifi to be able to trigger effects
+// The pattern set by the user is a little less important?
+// I need just a "listening" pattern, that has an array of effects that are all options 
+
+// Another thing I can work on is separating microphone from wifi
+// But maybe I like spaghetti when it is working
+// 
+
+// I could just be polling a uint32_t, and look for changes in bits
+
+// I could have an array where I set elements to uint8_ts
+// Kind of like a FiFo
+
+// Maybe the FiFo can be in the FireFlyWController
+// 

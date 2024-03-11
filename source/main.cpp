@@ -9,6 +9,7 @@
 #include "Patterns/Examples/ExamplePattern.h"
 #include "Patterns/Examples/FireFlies.h"
 #include "Patterns/Examples/FireFliesSame.h"
+#include "Patterns/Wireless/WirelessPattern.h"
 #include "Patterns/SoundReactive/Shakeel.h"
 #include "Patterns/SoundReactive/ShakeelFlash.h"
 #include "Patterns/SoundReactive/SpaceX.h"
@@ -34,6 +35,7 @@ int main(){
     //Push back all the patterns you want!
     //ADD YOUR PATTERNS HERE!
     //ex. patterns->push_back(new ExamplePattern());
+    patterns->push_back(new WirelessPattern());
     patterns->push_back(new HeartPattern());
     patterns->push_back(new SpaceX());
     patterns->push_back(new CirclesPattern());

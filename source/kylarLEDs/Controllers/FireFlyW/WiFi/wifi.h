@@ -32,16 +32,3 @@ u16_t ssi_handler(int iIndex, char *pcInsert, int iInsertLen);
 void ssi_init();
 
 #endif // WIFI_H
-
-
-// #pragma once
-// #include "../../../../../include/lwipopts.h"
-// #include "lwip/apps/httpd.h"
-// #include "pico/stdlib.h"
-// #include "pico/cyw43_arch.h"
-// // #include "ssi.h"
-// // #include "cgi.h"
-
-
-
-// int wifi_init();
