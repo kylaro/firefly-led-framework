@@ -1,8 +1,8 @@
 #include "wifi.h"
 
 // WIFI Credentials - take care if pushing to github!
-const char WIFI_SSID[] = "Kylar's iPhone";
-const char WIFI_PASSWORD[] = "$$$$$$$$";
+const char WIFI_SSID[] = "Starlink";
+const char WIFI_PASSWORD[] = "spacelasers42069";
 
 int wifi_init() {
     cyw43_arch_init();
@@ -26,6 +26,8 @@ int wifi_init() {
         cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
         sleep_ms(20);
     }
+
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
     
     // Initialise web server
     httpd_init();
@@ -46,6 +48,8 @@ int wifi_init() {
 // CGI handler which is run when a request for /led.cgi is detected
 const char * cgi_led_handler(int iIndex, int iNumParams, char *pcParam[], char *pcValue[])
 {
+  // TODO CHATGPT, this function must affect the current running Pattern
+  // I need to be able to talk to the currently running Pattern from here.
     // Check if an request for LED has been made (/led.cgi?led=x)
     if (strcmp(pcParam[0] , "led") == 0){
         // Look at the argument to check if LED is to be turned on (x=1) or off (x=0)
