@@ -92,12 +92,12 @@ void FireFlyWController::initCommunication()
 
     printf("Communication established\n");
 
-    // // How to overclock (or underclock!)
-    // if (!set_sys_clock_khz(250000, false)){
-    //   printf("system clock 250MHz failed\n");
-    // }else{
-    //   printf("system clock now 250MHz\n");
-    // }
+    // How to overclock (or underclock!)
+    if (!set_sys_clock_khz(250000, false)){
+      printf("system clock 250MHz failed\n");
+    }else{
+      printf("system clock now 250MHz\n");
+    }
 }
 
 uint64_t FireFlyWController::getCurrentTimeMicros()

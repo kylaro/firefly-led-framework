@@ -81,7 +81,7 @@ target_link_libraries(  firefly
                         CMSISDSPComplexMath 
                         CMSISDSPFastMath 
                         CMSISDSPBasicMath
-                        pico_cyw43_arch_lwip_threadsafe_background # pico w only
+                        pico_cyw43_arch_lwip_poll # pico w only
                         pico_lwip_http # pico w only
 )
 
