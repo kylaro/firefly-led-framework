@@ -36,7 +36,7 @@ freq_data_t temp_freq_data;
 sound_profile_t sound_profile;
 
 const int print = 0;
-const int exec_timing = 0;
+const int exec_timing = 1;
 absolute_time_t new_time; //Microseconds
 absolute_time_t cur_time;
 absolute_time_t start_time;
@@ -51,7 +51,9 @@ void pdm_core1_entry(){
         wifi_init();
     }
     if(!MICROPHONE_ENABLE){
-        while(1){}
+        while(1){
+            cyw43_arch_poll();
+        }
     }
     
 
@@ -82,16 +84,27 @@ void pdm_core1_entry(){
     float high_bins = SKIP_BINS; // 240 // currently used as "skip" bins
     float total_bins = low_bins + high_bins;
     
+    uint32_t irq_status = 0;
+    uint32_t loops_count = 0;
     
     while(1) {
+        //irq_status = save_and_disable_interrupts();
+        
+        //cyw43_arch_poll();
+        //restore_interrupts(irq_status);
+        
         if(exec_timing){
             new_time = get_absolute_time(); //Microseconds
             start_time = new_time;
         }
-        
+        loops_count = 0;
         // Waiting for new samples
         while (new_samples_captured == 0) {
-            tight_loop_contents();
+            
+            //printf("-> ");
+            cyw43_arch_poll();
+            //printf("%d| ", ++loops_count);
+            //tight_loop_contents();
         }
         if(exec_timing){
             cur_time = get_absolute_time();
@@ -127,7 +140,7 @@ void pdm_core1_entry(){
         temp_freq_data.high_freq_energy = 0;
 
         // map the FFT magnitude values to pixel values
-        for (int i = starting_bin; i < FFT_MAG_SIZE; i++) {
+        for (int i = starting_bin; i < low_bins; i++) {
             // get the current FFT magnitude value
             q15_t magnitude = fft_mag_q15[i];
             int bin = i-starting_bin;
@@ -179,7 +192,7 @@ void pdm_core1_entry(){
         freq_data.high_freq_energy = temp_freq_data.high_freq_energy;
         //printf("CORE1 %.0f %.0f %.0f\n", freq_data.low_freq_energy, freq_data.high_freq_energy, freq_data.freq_energy);
         updateSoundProfileLow();
-        updateSoundProfileHigh();
+        //updateSoundProfileHigh();
         if(exec_timing){
             //cur_time = get_absolute_time();
             printf("profile = %.1f us\n", (double)(get_absolute_time()-start_time));
