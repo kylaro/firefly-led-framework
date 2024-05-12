@@ -7,9 +7,7 @@ cmake_minimum_required(VERSION 3.13)
 # pico_sdk_import.cmake is a single file copied from this SDK
 # note: this must happen before project()
 include(pico_sdk_import.cmake)
-
-
-
+include(FreeRTOS_Kernel_import.cmake)
 
 # This is only for pico w
 message("Running makefsdata python script")
@@ -83,6 +81,8 @@ target_link_libraries(  firefly
                         CMSISDSPBasicMath
                         pico_cyw43_arch_lwip_poll # pico w only
                         pico_lwip_http # pico w only
+                        FreeRTOS-Kernel-Heap4                       # FreeRTOS kernel and dynamic heap
+                        FREERTOS_PORT                               # FreeRTOS config files
 )
 
 
