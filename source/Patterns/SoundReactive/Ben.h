@@ -1,7 +1,7 @@
 #pragma once
 #include "../Pattern.h"
 #include "../../kylarLEDs/Utility/Timing.h"
-#include "../../Effects/Basics/Firefly.h"
+#include "../../Effects/Basics/FireFly.h"
 #include <vector>
 class Ben : public Pattern{
 
