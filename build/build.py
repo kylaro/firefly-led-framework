@@ -1,30 +1,31 @@
-import os
+#!/usr/bin/env python3.10
+
 import os
 import shutil
 import time
 import sys
- 
 
+is_windows = sys.platform.startswith('win32') or sys.platform.startswith('cygwin')
+is_linux = sys.platform.startswith('linux')
+is_mac = sys.platform.startswith('darwin')
 
-# os.system('cmake -G \"NMake Makefiles\" ..')
-# os.system('nmake')
-
-
-
-is_windows = False
-windows_string = 'not recognized'
-stream = os.popen('ls')
-output = stream.read()
-if len(output) == 0:
-	is_windows = True
-	print("detected windows")
-is_linux = not is_windows
-if is_linux:
-	print("detected linux")
+if is_windows:
+	print("Detected Windows OS")
+	pico_dir = 'D:\\'
+elif is_linux:
+	print("Detected linux OS")
+	username = os.popen("whoami").read().strip() #username needed for linux copy path
+	pico_dir = "/media/" + username + "/RPI-RP2/"
+elif is_mac:
+	print("Detected mac OS")
+	pico_dir = "/Volumes/RPI-RP2/"
+else:
+	print("Unrecognized OS")
 
 def error(message):
 	print(message)
 	exit()
+
 
 def cmake():
 	print("Python style CMake Build...")
@@ -54,33 +55,22 @@ def nmake():
 	
 
 def upload():
-	print("Python waiting for Pico available")
+	print("Python waiting for Pico available at:\t", pico_dir)
 	count = 0
-	windows_dir = 'D:\\'
-	linux_dir = '/mnt/d'
-	mac_dir = "/Volumes/RPI-RP2/"
-	linux_mount1 = 'sudo mkdir /mnt/d'
-	linux_mount2 = 'sudo mount -t drvfs D: /mnt/d'
-	#pico_dir = windows_dir if is_windows else linux_dir
-	pico_dir = mac_dir # Sorry this is done so unmaintainably, just quick hack
 	while not os.path.isdir(pico_dir):
 		time.sleep(0.1)
 		print(".", end="", flush=True)
-		# if is_linux:
-		# 	os.popen(linux_mount1)
-		# 	os.popen(linux_mount2)
+		count += 1
+		if count >= 600: #60 secs timeout
+			print("\nTimeout...")
+			exit()
 
-
-	print("Uploading!")
+	print("\nUploading!")
 	build_name = 'firefly.uf2'
-	windows_copy_dir = 'D:\\'
-	linux_copy_dir = '/mnt/d/'
-	#copy_to = windows_copy_dir if is_windows else linux_copy_dir
-	copy_to = mac_dir
-	copy_to = copy_to + build_name
+	copy_to = pico_dir + build_name
 	
 	shutil.copyfile(build_name, copy_to)
-	print("Copying ", build_name, " to ", copy_to)
+	print("Copied ", build_name, " to ", copy_to)
 	print("Done!")
 
 
@@ -90,7 +80,10 @@ args_total = len(sys.argv)
 # Get the arguments list 
 cmdargs = str(sys.argv)
 
+
 if "nmake" not in cmdargs:
 	cmake()
 nmake()
+if "-b" in cmdargs: #for ordinary build options
+	exit()
 upload()
