@@ -14,9 +14,14 @@ FireFlyWController::FireFlyWController()
     initBrightness();
     initHue();
     initPatternButton();
-    //if(MICROPHONE_ENABLE){
+    if(MICROPHONE_ENABLE){
         initMicrophone();
-    //}
+    }else if(WIFI_ENABLE){
+        //initWifi(); // TODO - serve an HTML site
+    }else if(MQTT_ENABLE){
+        initMQTT();
+    }
+
     initOutput();
 
     this->timing = new Timing();
@@ -25,6 +30,11 @@ FireFlyWController::FireFlyWController()
 void FireFlyWController::initDMA(PIO pio, uint sm)
 {
 
+}
+
+void FireFlyWController::initMQTT()
+{
+    mqtt = new MQTT();
 }
 
 // Used in interrupt
@@ -92,12 +102,15 @@ void FireFlyWController::initCommunication()
 
     printf("Communication established\n");
 
-    // How to overclock (or underclock!)
-    if (!set_sys_clock_khz(250000, false)){
-      printf("system clock 250MHz failed\n");
-    }else{
-      printf("system clock now 250MHz\n");
+    if(OVERCLOCK){
+        // How to overclock (or underclock!)
+        if (!set_sys_clock_khz(250000, false)){
+        printf("system clock 250MHz failed\n");
+        }else{
+        printf("system clock now 250MHz\n");
+        }
     }
+    
 }
 
 uint64_t FireFlyWController::getCurrentTimeMicros()

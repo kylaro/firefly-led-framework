@@ -6,6 +6,7 @@
 #include "../Sensors/Button/Button.h"
 #include "../Sensors/Microphone/Microphone.h"
 #include "../../Utility/Timing.h"
+#include "../Sensors/MQTT/MQTT.h"
 
 #define PX_PINS 4
 
@@ -34,6 +35,7 @@ class FireFlyWController : public Controller{
         void initPatternButton(); // Change the patternIndex via button press
         void initOutput();
         void initMicrophone();
+        void initMQTT();
     private:
         void initDMA(PIO pio, uint sm);
         
@@ -52,4 +54,5 @@ class FireFlyWController : public Controller{
         Timing *timing;
         Button *button;
         Microphone *microphone;
+        MQTT *mqtt;
 };
