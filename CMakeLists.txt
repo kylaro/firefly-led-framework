@@ -52,8 +52,8 @@ file(GLOB_RECURSE HDRS source/*.h)
 
 list(APPEND ALL_SOURCES ${SRCSCPP} ${SRCSC} ${HDRS})
 list(FILTER ALL_SOURCES EXCLUDE REGEX /CMSIS_5/) # Exclude CMSIS files, they have their own CMAKE stuff above
-#message(STATUS "Include dir: ${ALL_SOURCES}")
 
+#message(STATUS "Include All Sources: ${ALL_SOURCES}")
 add_executable(firefly
     ${ALL_SOURCES}
     # ${SRCSCPP}

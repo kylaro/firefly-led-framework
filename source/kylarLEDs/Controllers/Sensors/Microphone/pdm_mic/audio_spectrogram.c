@@ -45,17 +45,6 @@ void pdm_core1_entry(){
     // initialize the hanning window and RFFT instance
     sleep_ms(10); //delay here so that the dma channel doesn't get claimed..
 
-    // Unfortunately, this is where I will initialize wifi
-    // I want it to be on core1
-    if(WIFI_ENABLE){
-        wifi_init();
-    }
-    if(!MICROPHONE_ENABLE){
-        while(1){
-            cyw43_arch_poll();
-        }
-    }
-    
 
     hanning_window_init_q15(window_q15, FFT_SIZE);
     arm_rfft_init_q15(&S_q15, FFT_SIZE, 0, 1);
