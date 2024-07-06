@@ -71,7 +71,9 @@ target_include_directories(firefly PRIVATE
 target_link_libraries(  firefly 
                         pico_stdlib 
                         pico_multicore 
+                        pico_sync
                         hardware_pio 
+                        hardware_spi
                         hardware_adc 
                         hardware_dma 
                         hardware_irq 
@@ -83,6 +85,8 @@ target_link_libraries(  firefly
                         CMSISDSPBasicMath
                         pico_cyw43_arch_lwip_poll # pico w only
                         pico_lwip_http # pico w only
+                        pico_lwip_sntp
+                        pico_lwip_netif
 )
 
 

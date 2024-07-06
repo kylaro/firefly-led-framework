@@ -34,7 +34,7 @@ void FireFlyWController::initDMA(PIO pio, uint sm)
 
 void FireFlyWController::initMQTT()
 {
-    mqtt = new MQTT();
+    MQTT::start();
 }
 
 // Used in interrupt

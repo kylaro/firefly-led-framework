@@ -118,7 +118,7 @@ uint64_t FireFlyController::getCurrentTimeMicros()
 
 uint64_t FireFlyController::getCurrentTimeMillis()
 {
-    absolute_time_t new_time = get_absolute_time(); // Microseconds
+    absolute_time_t new_time = get_absolute_time(); // Milliseconds
     uint64_t millis = new_time / 1000;
     return millis;
 }

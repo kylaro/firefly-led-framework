@@ -8,7 +8,10 @@
 #define DEBUG_PRINT 1
 #define OVERCLOCK 0 // set clock to 250MHz instead of 125MHz
 
+#define ARDUINO_RASPBERRY_PI_PICO_W 1
+
 // Choose only 1 of these:
 #define MICROPHONE_ENABLE 0
 #define WIFI_ENABLE 0 // picow only. (not implemented)
 #define MQTT_ENABLE 1 // picow only.
+
