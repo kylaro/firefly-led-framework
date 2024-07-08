@@ -1,6 +1,6 @@
 #pragma once
 #include "../Controllers/Controller.h"
-#include "ColorUtil.h"
+#include "colorUtil.h"
 #include "LEDChange.h"
 #include "../../config.h"
 
