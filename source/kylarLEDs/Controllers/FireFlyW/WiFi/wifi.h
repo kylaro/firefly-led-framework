@@ -12,6 +12,11 @@
 extern const char WIFI_SSID[];
 extern const char WIFI_PASSWORD[];
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 // Initializes the Wi-Fi module and connects to the network
 int wifi_init();
 
@@ -30,5 +35,9 @@ u16_t ssi_handler(int iIndex, char *pcInsert, int iInsertLen);
 
 // Initializes the SSI handler with the tags and the actual function that handles the replacements
 void ssi_init();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // WIFI_H

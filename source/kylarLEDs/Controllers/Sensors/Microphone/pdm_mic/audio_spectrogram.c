@@ -56,12 +56,12 @@ void pdm_core1_entry(){
         }
     }
     
-
+#ifndef WIFI_MQTT_TEST
     hanning_window_init_q15(window_q15, FFT_SIZE);
     arm_rfft_init_q15(&S_q15, FFT_SIZE, 0, 1);
-
+#endif
     multicore_lockout_victim_init();// NEEDED FOR MULTICORE LOCKOUT
-
+#ifndef WIFI_MQTT_TEST
     //Loop:
     // initialize the PDM microphone
     if (pdm_microphone_init(&pdm_config) < 0) {
@@ -78,7 +78,7 @@ void pdm_core1_entry(){
         printf("PDM microphone start failed!\n");
         while (pdm_microphone_start() < 0) { tight_loop_contents(); }
     }
-
+#endif
     int starting_bin = 2;
     float low_bins = LOW_BINS;  // 14
     float high_bins = SKIP_BINS; // 240 // currently used as "skip" bins
@@ -98,6 +98,7 @@ void pdm_core1_entry(){
             start_time = new_time;
         }
         loops_count = 0;
+#ifndef WIFI_MQTT_TEST
         // Waiting for new samples
         while (new_samples_captured == 0) {
             
@@ -106,13 +107,14 @@ void pdm_core1_entry(){
             //printf("%d| ", ++loops_count);
             //tight_loop_contents();
         }
+#endif
         if(exec_timing){
             cur_time = get_absolute_time();
             printf("wait = %.1f us\n", (double)(cur_time-start_time));
             start_time = get_absolute_time();
         }
         new_samples_captured = 0;
-
+#ifndef WIFI_MQTT_TEST
         // move input buffer values over by INPUT_BUFFER_SIZE samples
         arm_copy_q15(input_q15 + INPUT_BUFFER_SIZE, input_q15, (FFT_SIZE - INPUT_BUFFER_SIZE));
 
@@ -123,14 +125,14 @@ void pdm_core1_entry(){
         arm_mult_q15(window_q15, input_q15, windowed_input_q15, FFT_SIZE);
         arm_rfft_q15(&S_q15, windowed_input_q15, fft_q15);
         arm_cmplx_mag_q15(fft_q15, fft_mag_q15, FFT_MAG_SIZE);
-
+#endif
         if(exec_timing){
             cur_time = get_absolute_time();
             printf("arm stuff = %.1f us\n", (double)(cur_time-start_time));
             start_time = get_absolute_time();
         }
         
-
+#ifndef WIFI_MQTT_TEST
         // Audio processing:
         if(print){
             printf("|");
@@ -198,7 +200,7 @@ void pdm_core1_entry(){
             printf("profile = %.1f us\n", (double)(get_absolute_time()-start_time));
             start_time = get_absolute_time();
         }
-
+#endif
         if(exec_timing){
             printf("sound FPS = %.1f / sec\n\n", 1000000.0/(double)(get_absolute_time() - new_time));
         }

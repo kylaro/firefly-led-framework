@@ -9,6 +9,9 @@
 #define OVERCLOCK 0 // set clock to 250MHz instead of 125MHz
 
 // Choose only 1 of these:
-#define MICROPHONE_ENABLE 0
-#define WIFI_ENABLE 0 // picow only. (not implemented)
+#define MICROPHONE_ENABLE 1 // there is a wifi init in here as well
+#define WIFI_ENABLE 1 // picow only. (not implemented)
 #define MQTT_ENABLE 1 // picow only.
+
+// Isolate unrelated modules from task
+#define WIFI_MQTT_TEST

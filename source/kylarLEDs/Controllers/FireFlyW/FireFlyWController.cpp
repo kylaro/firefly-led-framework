@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "pico/time.h"
 #include "../../../config.h"
+// #include "WiFi/wifi.h"
 
 uint64_t FireFlyWController::channel_end_times[NUM_STRIPS];
 strip_t FireFlyWController::strips[NUM_STRIPS];
