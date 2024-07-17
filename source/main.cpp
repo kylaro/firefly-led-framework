@@ -20,9 +20,13 @@
 #include "pico/time.h"
 #include "config.h"
 
+// CJ: Put headers of new library for Home Assistant integration here
+#include "HomeAssistant/HAIntegration.h"
+
 using namespace std;
 int main(){
-
+    // CJ: Call the HA integration here
+    HAIntegration *haIntegration = new HAIntegration();
     // Initialize framework infrastructure
     Controller *ledController = new FireFlyWController();
     EffectEngine *effectEngine = new EffectEngine();
@@ -75,7 +79,7 @@ int main(){
         // mem usage:
         struct mallinfo mi = mallinfo();
         if(DEBUG_PRINT){
-            // printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )
+            printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )
         }
         if(currentPatternIndex == nextPatternIndex){
             //We are remaining on the same pattern

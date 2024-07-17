@@ -9,7 +9,7 @@
 #define OVERCLOCK 0 // set clock to 250MHz instead of 125MHz
 
 // Choose only 1 of these:
-#define MICROPHONE_ENABLE 1 // there is a wifi init in here as well
+#define MICROPHONE_ENABLE 0 // CJ: Enable this to call the WiFi / MQTT modules
 #define WIFI_ENABLE 1 // picow only. (not implemented)
 #define MQTT_ENABLE 1 // picow only.
 
