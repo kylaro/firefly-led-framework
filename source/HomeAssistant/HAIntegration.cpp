@@ -38,6 +38,8 @@ void ha_core1_entry() {
 	while(1) {
 		haIntegration.loop();
 	}
+
+	cyw43_arch_deinit();
 }
 
 HAIntegration::HAIntegration() {

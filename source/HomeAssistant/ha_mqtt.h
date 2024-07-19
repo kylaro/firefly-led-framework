@@ -6,7 +6,7 @@
 #define MQTT_LOGIN "ha"
 #define MQTT_PASSWORD "ha"
 
-#define MQTT_BROKER "172.18.124.38"
+#define MQTT_BROKER "192.168.1.18"
 #define MQTT_TOPIC "home/pico_w/led"
 
 #ifdef __cplusplus

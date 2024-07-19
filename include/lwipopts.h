@@ -90,3 +90,17 @@
 #define LWIP_HTTPD_CGI 1
 #define LWIP_HTTPD_SSI_INCLUDE_TAG 0
 #define HTTPD_FSDATA_FILE "htmldata.c"
+
+#define ALTCP_MBEDTLS_DEBUG         LWIP_DBG_ON
+#define MQTT_DEBUG                  LWIP_DBG_OFF
+#define ALTCP_MBEDTLS_MEM_DEBUG     LWIP_DBG_OFF
+
+#define LWIP_ALTCP               1
+#define LWIP_ALTCP_TLS           1
+#define LWIP_ALTCP_TLS_MBEDTLS   1
+
+/* You need to increase MEMP_NUM_SYS_TIMEOUT by one if you use MQTT!
+ * see https://forums.raspberrypi.com/viewtopic.php?t=341914
+ */
+#define MEMP_NUM_SYS_TIMEOUT   (LWIP_NUM_SYS_TIMEOUT_INTERNAL + 1)
+#define MQTT_REQ_MAX_IN_FLIGHT  (5) /* maximum of subscribe requests */
