@@ -1,22 +1,8 @@
-# == DO NEVER EDIT THE NEXT LINES for Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-   set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(PICO_SDK_PATH ${USERHOME}/.pico-sdk/sdk/1.5.1)
-set(PICO_TOOLCHAIN_PATH ${USERHOME}/.pico-sdk/toolchain/13_2_Rel1)
-if(WIN32)
-    set(pico-sdk-tools_DIR ${USERHOME}/.pico-sdk/tools/1.5.1)
-    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config.cmake)
-    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config-version.cmake)
-endif()
-# ====================================================================================
 cmake_minimum_required(VERSION 3.13)
 
 # optionally initialize pico_sdk from GIT
 # (note this can come from environment, CMake cache etc)
-# set(PICO_SDK_FETCH_FROM_GIT on)
+set(PICO_SDK_FETCH_FROM_GIT on)
 
 # pico_sdk_import.cmake is a single file copied from this SDK
 # note: this must happen before project()
@@ -97,6 +83,8 @@ target_link_libraries(  firefly
                         CMSISDSPBasicMath
                         pico_cyw43_arch_lwip_poll # pico w only
                         pico_lwip_http # pico w only
+                        pico_lwip_mqtt # mqtt client
+                        pico_lwip # for lwip init
 )
 
 

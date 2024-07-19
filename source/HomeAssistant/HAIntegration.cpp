@@ -3,13 +3,16 @@
 #include "pico/multicore.h"
 #include "../kylarLEDs/Controllers/FireFlyW/WiFi/wifi.h"
 #include "../config.h"
+#include "ha_mqtt.h"
 
 extern HAIntegration haIntegration;
 
 void ha_core1_entry();
 
 void HAIntegration::configure() {
-
+	if( MQTT_ENABLE ) {
+		ha_mqtt_init();
+	}
 }
 
 void HAIntegration::connect() {
@@ -23,7 +26,7 @@ void HAIntegration::switchHandler(bool state, HASwitch* sender) {
 }
 
 void HAIntegration::loop() {
-	printf("Welcome to the real world!\n");
+	// printf("Welcome to the real world!\n");
 }
 
 void ha_core1_entry() {
