@@ -122,7 +122,7 @@ err_t mqtt_test_publish(MQTT_CLIENT_T *state)
   u8_t qos = 0; /* 0 1 or 2, see MQTT specification.  AWS IoT does not support QoS 2 */
   u8_t retain = 0;
   cyw43_arch_lwip_begin();
-  err = mqtt_publish(state->mqtt_client, "pico_w/test", buffer, strlen(buffer), qos, retain, mqtt_pub_request_cb, state);
+  err = mqtt_publish(state->mqtt_client, MQTT_TOPIC, buffer, strlen(buffer), qos, retain, mqtt_pub_request_cb, state);
   cyw43_arch_lwip_end();
   if(err != ERR_OK) {
     printf("Publish err: %d\n", err);
@@ -208,7 +208,7 @@ void mqtt_run_test(MQTT_CLIENT_T *state) {
                     cyw43_arch_lwip_begin();
 
                     if (!subscribed) {
-                        mqtt_sub_unsub(state->mqtt_client, "pico_w/recv", 0, mqtt_sub_request_cb, 0, 1);
+                        mqtt_sub_unsub(state->mqtt_client, MQTT_TOPIC, 0, mqtt_sub_request_cb, 0, 1);
                         subscribed = true;
                     }
 
@@ -229,8 +229,8 @@ void mqtt_run_test(MQTT_CLIENT_T *state) {
 }
 
 void ha_mqtt_init() {
-    MQTT_CLIENT_T *state = mqtt_client_init();
+    MQTT_CLIENT_T *state = mqtt_client_init(); // memory alloc for mqtt instance
 
-    run_dns_lookup(state);
+    run_dns_lookup(state); // checks if mqtt broker is reachable
     mqtt_run_test(state);
 }
