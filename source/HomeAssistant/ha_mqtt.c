@@ -36,13 +36,13 @@ static MQTT_CLIENT_T* mqtt_client_init(void) {
     return state;
 }
 
-void dns_found(const char *name, const ip_addr_t *ipaddr, void *callback_arg) {
+static void dns_found(const char *name, const ip_addr_t *ipaddr, void *callback_arg) {
     MQTT_CLIENT_T *state = (MQTT_CLIENT_T*)callback_arg;
     printf("DNS query finished with resolved addr of %s.\n", ip4addr_ntoa(ipaddr));
     state->remote_addr = *ipaddr;
 }
 
-void run_dns_lookup(MQTT_CLIENT_T *state) {
+static void run_dns_lookup(MQTT_CLIENT_T *state) {
     printf("Running DNS query for %s.\n", MQTT_BROKER);
 
     cyw43_arch_lwip_begin();
@@ -102,17 +102,17 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection
     }
 }
 
-void mqtt_pub_request_cb(void *arg, err_t err) {
+static void mqtt_pub_request_cb(void *arg, err_t err) {
     MQTT_CLIENT_T *state = (MQTT_CLIENT_T *)arg;
     printf("mqtt_pub_request_cb: err %d\n", err);
     state->received++;
 }
 
-void mqtt_sub_request_cb(void *arg, err_t err) {
+static void mqtt_sub_request_cb(void *arg, err_t err) {
     printf("mqtt_sub_request_cb: err %d\n", err);
 }
 
-err_t mqtt_test_publish(MQTT_CLIENT_T *state)
+static err_t mqtt_test_publish(MQTT_CLIENT_T *state)
 {
   char buffer[128];
 
@@ -131,7 +131,7 @@ err_t mqtt_test_publish(MQTT_CLIENT_T *state)
   return err; 
 }
 
-err_t mqtt_test_connect(MQTT_CLIENT_T *state) {
+static err_t mqtt_test_connect(MQTT_CLIENT_T *state) {
     struct mqtt_connect_client_info_t ci;
     err_t err;
 
@@ -185,7 +185,7 @@ err_t mqtt_test_connect(MQTT_CLIENT_T *state) {
     return err;
 }
 
-void mqtt_run_test(MQTT_CLIENT_T *state) {
+static void mqtt_run(MQTT_CLIENT_T *state) {
     state->mqtt_client = mqtt_client_new();
 
     state->counter = 0;  
@@ -228,9 +228,10 @@ void mqtt_run_test(MQTT_CLIENT_T *state) {
     }
 }
 
+// Public interface
 void ha_mqtt_init() {
     MQTT_CLIENT_T *state = mqtt_client_init(); // memory alloc for mqtt instance
 
-    run_dns_lookup(state); // checks if mqtt broker is reachable
-    mqtt_run_test(state);
+    run_dns_lookup(state);  // checks if mqtt broker is reachable
+    mqtt_run(state);        // runs the mqtt
 }

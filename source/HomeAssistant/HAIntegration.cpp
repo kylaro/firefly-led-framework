@@ -21,24 +21,11 @@ void HAIntegration::connect() {
 	}
 }
 
-void HAIntegration::switchHandler(bool state, HASwitch* sender) {
-
-}
-
-void HAIntegration::loop() {
-	// printf("Welcome to the real world!\n");
-}
-
 void ha_core1_entry() {
 	sleep_ms(10); // so that the dma channel doesn't get claimed
 	haIntegration.connect();
 	multicore_lockout_victim_init();
 	haIntegration.configure();
-
-	while(1) {
-		haIntegration.loop();
-	}
-
 	cyw43_arch_deinit();
 }
 
