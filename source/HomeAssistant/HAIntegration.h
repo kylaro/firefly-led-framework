@@ -6,6 +6,7 @@ class HAIntegration {
     HAIntegration();
     void connect();
     void configure();
+    void loop();
 };
 
 #endif // HAINTEGRATION_H

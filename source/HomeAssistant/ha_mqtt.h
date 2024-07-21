@@ -11,7 +11,7 @@
 // #define MQTT_TOPIC_SUBSCRIBE "home/pico_w/led/set"
 // #define MQTT_TOPIC_PUBLISH "home/pico_w/led/state"
 #define MQTT_TOPIC_DISCOVERY "homeassistant/switch/pico_w_led/config"
-#define MQTT_HEARTBEAT 1
+#define MQTT_HEARTBEAT 0
 
 #ifdef __cplusplus
 extern "C" {

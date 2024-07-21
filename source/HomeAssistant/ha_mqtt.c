@@ -226,48 +226,53 @@ static void mqtt_run() {
     g_state->counter = 0;  
 
     if (mqtt_test_connect() == ERR_OK) {
-        absolute_time_t timeout = nil_time;
-        bool subscribed = false;
-        bool discovered = false;
-        err_t status = ERR_RST;
         mqtt_set_inpub_callback(g_state->mqtt_client, mqtt_pub_start_cb, mqtt_pub_data_cb, 0);
+    }
+}
 
-        while (true) {
-            cyw43_arch_poll();
-            absolute_time_t now = get_absolute_time();
-            if (is_nil_time(timeout) || absolute_time_diff_us(now, timeout) <= 0) {
-                if (mqtt_client_is_connected(g_state->mqtt_client)) {
-                    cyw43_arch_lwip_begin();
+// Public interface
+void ha_mqtt_loop() {
+    absolute_time_t timeout = nil_time;
+    bool subscribed = false;
+    bool discovered = false;
+    err_t status = ERR_RST;
 
-                    if (!subscribed) {
-                        mqtt_sub_unsub(g_state->mqtt_client, MQTT_TOPIC, 0, mqtt_sub_request_cb, 0, 1);
-                        subscribed = true;
-                    }
-                    if (!discovered) {
-                        status = _mqtt_publish_discovery();
-                        discovered = true;
-                    }
-                    else {
+    while (true) {
+        cyw43_arch_poll();
+        absolute_time_t now = get_absolute_time();
+        if (is_nil_time(timeout) || absolute_time_diff_us(now, timeout) <= 0) {
+            if (mqtt_client_is_connected(g_state->mqtt_client)) {
+                cyw43_arch_lwip_begin();
+
+                if (!subscribed) {
+                    mqtt_sub_unsub(g_state->mqtt_client, MQTT_TOPIC, 0, mqtt_sub_request_cb, 0, 1);
+                    subscribed = true;
+                }
+                if (!discovered) {
+                    status = _mqtt_publish_discovery();
+                    discovered = true;
+                }
+                else {
+                    if( MQTT_HEARTBEAT ) {
                         status = _mqtt_publish_heartbeat();
                     }
-
-                    if (ERR_OK == status) {
-                        if (g_state->counter != 0) {
-                            printf("published %d\n", g_state->counter);
-                        }
-                        timeout = make_timeout_time_ms(5000);
-                        g_state->counter++;
-                    } // else ringbuffer is full and we need to wait for messages to flush.
-                    cyw43_arch_lwip_end();
-                } else {
-                    // printf(".");
                 }
+
+                if (ERR_OK == status) {
+                    if (g_state->counter != 0) {
+                        printf("published %d\n", g_state->counter);
+                    }
+                    timeout = make_timeout_time_ms(5000);
+                    g_state->counter++;
+                } // else ringbuffer is full and we need to wait for messages to flush.
+                cyw43_arch_lwip_end();
+            } else {
+                // printf(".");
             }
         }
     }
 }
 
-// Public interface
 void ha_mqtt_init() {
     // memory alloc for mqtt instance
     if( NULL == mqtt_client_init() ) {

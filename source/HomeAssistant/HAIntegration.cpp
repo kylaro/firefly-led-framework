@@ -9,6 +9,10 @@ extern HAIntegration haIntegration;
 
 void ha_core1_entry();
 
+void HAIntegration::loop() {
+	ha_mqtt_loop();
+}
+
 void HAIntegration::configure() {
 	if( MQTT_ENABLE ) {
 		ha_mqtt_init();
@@ -26,6 +30,7 @@ void ha_core1_entry() {
 	haIntegration.connect();
 	multicore_lockout_victim_init();
 	haIntegration.configure();
+	haIntegration.loop();
 	cyw43_arch_deinit();
 }
 
