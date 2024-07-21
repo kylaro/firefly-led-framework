@@ -119,10 +119,10 @@ static void mqtt_pub_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
 
         if (strncmp((const char *)data, "ON", len) == 0) {
             cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-            // _mqtt_publish(MQTT_TOPIC, "ON", 1, 0);
+            _mqtt_publish(MQTT_TOPIC_PUBLISH, "ON", 0, 0);
         } else if (strncmp((const char *)data, "OFF", len) == 0) {
             cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
-            // _mqtt_publish(MQTT_TOPIC, "OFF", 1, 0);
+            _mqtt_publish(MQTT_TOPIC_PUBLISH, "OFF", 0, 0);
         }
     }
 }
@@ -139,25 +139,24 @@ static err_t _mqtt_publish_discovery() {
     char msg[256];
     uint8_t mac[6];
     cyw43_wifi_get_mac(NULL, CYW43_ITF_STA, mac);
-    char mac_str[18];
-    // snprintf(mac_str, sizeof(mac_str), "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    char mac_str[12];
     snprintf(mac_str, sizeof(mac_str), "%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-    printf("CJ MAC %s\n", mac_str);
     snprintf(msg, sizeof(msg),
         "{\"name\":\"Pico W LED\","
         "\"state_topic\":\"home/pico_w/led/state\","
-        "\"command_topic\":\"home/pico_w/led/state\","
+        "\"command_topic\":\"home/pico_w/led/set\","
+        "\"unique_id\":\"picow_%s\","
         "\"payload_on\":\"ON\","
         "\"payload_off\":\"OFF\","
         "\"qos\":1,"
-        "\"retain\":true}");
+        "\"retain\":false}", mac_str);
     _mqtt_publish(MQTT_TOPIC_DISCOVERY, msg, 1, 1);
 }
 
 static err_t _mqtt_publish_heartbeat() {
     char msg[256];
     sprintf(msg, "{\"message\":\"hello from picow %d / %d\"}", g_state->received, g_state->counter);
-    _mqtt_publish(MQTT_TOPIC, msg, 1, 0);
+    _mqtt_publish(MQTT_TOPIC_PUBLISH, msg, 0, 0);
 }
 
 static err_t mqtt_test_connect() {
@@ -214,6 +213,12 @@ static err_t mqtt_test_connect() {
     return err;
 }
 
+static void mqtt_connect() {
+    if (mqtt_test_connect() == ERR_OK) {
+        mqtt_set_inpub_callback(g_state->mqtt_client, mqtt_pub_start_cb, mqtt_pub_data_cb, 0);
+    }
+}
+
 static void mqtt_run() {
     g_client = mqtt_client_new();
     g_state->mqtt_client = g_client;
@@ -223,11 +228,9 @@ static void mqtt_run() {
         return;
     }
 
-    g_state->counter = 0;  
+    g_state->counter = 0;
 
-    if (mqtt_test_connect() == ERR_OK) {
-        mqtt_set_inpub_callback(g_state->mqtt_client, mqtt_pub_start_cb, mqtt_pub_data_cb, 0);
-    }
+    mqtt_connect();
 }
 
 // Public interface
@@ -245,7 +248,7 @@ void ha_mqtt_loop() {
                 cyw43_arch_lwip_begin();
 
                 if (!subscribed) {
-                    mqtt_sub_unsub(g_state->mqtt_client, MQTT_TOPIC, 0, mqtt_sub_request_cb, 0, 1);
+                    mqtt_sub_unsub(g_state->mqtt_client, MQTT_TOPIC_SUBSCRIBE, 0, mqtt_sub_request_cb, 0, 1);
                     subscribed = true;
                 }
                 if (!discovered) {
@@ -267,7 +270,7 @@ void ha_mqtt_loop() {
                 } // else ringbuffer is full and we need to wait for messages to flush.
                 cyw43_arch_lwip_end();
             } else {
-                // printf(".");
+                mqtt_connect();
             }
         }
     }
