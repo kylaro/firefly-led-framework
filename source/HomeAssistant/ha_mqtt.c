@@ -26,14 +26,18 @@ typedef struct MQTT_CLIENT_T_ {
     u32_t reconnect;
 } MQTT_CLIENT_T;
 
+// MQTT global
+static mqtt_client_t *g_client;
+static MQTT_CLIENT_T *g_state;
+
 static MQTT_CLIENT_T* mqtt_client_init(void) {
-    MQTT_CLIENT_T *state = calloc(1, sizeof(MQTT_CLIENT_T));
-    if (!state) {
+    g_state = calloc(1, sizeof(MQTT_CLIENT_T));
+    if (!g_state) {
         printf("failed to allocate state\n");
         return NULL;
     }
-    state->received = 0;
-    return state;
+    g_state->received = 0;
+    return g_state;
 }
 
 static void dns_found(const char *name, const ip_addr_t *ipaddr, void *callback_arg) {
@@ -42,11 +46,11 @@ static void dns_found(const char *name, const ip_addr_t *ipaddr, void *callback_
     state->remote_addr = *ipaddr;
 }
 
-static void run_dns_lookup(MQTT_CLIENT_T *state) {
+static void run_dns_lookup() {
     printf("Running DNS query for %s.\n", MQTT_BROKER);
 
     cyw43_arch_lwip_begin();
-    err_t err = dns_gethostbyname(MQTT_BROKER, &(state->remote_addr), dns_found, state);
+    err_t err = dns_gethostbyname(MQTT_BROKER, &(g_state->remote_addr), dns_found, g_state);
     cyw43_arch_lwip_end();
 
     if (err == ERR_ARG) {
@@ -59,10 +63,31 @@ static void run_dns_lookup(MQTT_CLIENT_T *state) {
         return;
     }
 
-    while (state->remote_addr.addr == 0) {
+    while (g_state->remote_addr.addr == 0) {
         cyw43_arch_poll();
         sleep_ms(1);
     }
+}
+
+static void mqtt_pub_request_cb(void *arg, err_t err) {
+    printf("mqtt_pub_request_cb: err %d\n", err);
+    g_state->received++;
+}
+
+static void mqtt_sub_request_cb(void *arg, err_t err) {
+    printf("mqtt_sub_request_cb: err %d\n", err);
+}
+
+static err_t _mqtt_publish(const char *topic, const char *msg, uint8_t retain, uint8_t qos) {
+    err_t err;
+    cyw43_arch_lwip_begin();
+    err = mqtt_publish(g_state->mqtt_client, topic, msg, strlen(msg), qos, retain, mqtt_pub_request_cb, g_state);
+    cyw43_arch_lwip_end();
+    if(err != ERR_OK) {
+        printf("Publish err: %d\n", err);
+    }
+
+    return err; 
 }
 
 // Global data
@@ -91,6 +116,14 @@ static void mqtt_pub_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
             buffer[data_len] = 0;
             printf("Message received: %s\n", &buffer);
         }
+
+        if (strncmp((const char *)data, "ON", len) == 0) {
+            cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+            // _mqtt_publish(MQTT_TOPIC, "ON", 1, 0);
+        } else if (strncmp((const char *)data, "OFF", len) == 0) {
+            cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+            // _mqtt_publish(MQTT_TOPIC, "OFF", 1, 0);
+        }
     }
 }
 
@@ -102,36 +135,32 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection
     }
 }
 
-static void mqtt_pub_request_cb(void *arg, err_t err) {
-    MQTT_CLIENT_T *state = (MQTT_CLIENT_T *)arg;
-    printf("mqtt_pub_request_cb: err %d\n", err);
-    state->received++;
+static err_t _mqtt_publish_discovery() {
+    char msg[256];
+    uint8_t mac[6];
+    cyw43_wifi_get_mac(NULL, CYW43_ITF_STA, mac);
+    char mac_str[18];
+    // snprintf(mac_str, sizeof(mac_str), "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    snprintf(mac_str, sizeof(mac_str), "%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    printf("CJ MAC %s\n", mac_str);
+    snprintf(msg, sizeof(msg),
+        "{\"name\":\"Pico W LED\","
+        "\"state_topic\":\"home/pico_w/led/state\","
+        "\"command_topic\":\"home/pico_w/led/state\","
+        "\"payload_on\":\"ON\","
+        "\"payload_off\":\"OFF\","
+        "\"qos\":1,"
+        "\"retain\":true}");
+    _mqtt_publish(MQTT_TOPIC_DISCOVERY, msg, 1, 1);
 }
 
-static void mqtt_sub_request_cb(void *arg, err_t err) {
-    printf("mqtt_sub_request_cb: err %d\n", err);
+static err_t _mqtt_publish_heartbeat() {
+    char msg[256];
+    sprintf(msg, "{\"message\":\"hello from picow %d / %d\"}", g_state->received, g_state->counter);
+    _mqtt_publish(MQTT_TOPIC, msg, 1, 0);
 }
 
-static err_t mqtt_test_publish(MQTT_CLIENT_T *state)
-{
-  char buffer[128];
-
-  sprintf(buffer, "{\"message\":\"hello from picow %d / %d\"}", state->received, state->counter);
-
-  err_t err;
-  u8_t qos = 0; /* 0 1 or 2, see MQTT specification.  AWS IoT does not support QoS 2 */
-  u8_t retain = 0;
-  cyw43_arch_lwip_begin();
-  err = mqtt_publish(state->mqtt_client, MQTT_TOPIC, buffer, strlen(buffer), qos, retain, mqtt_pub_request_cb, state);
-  cyw43_arch_lwip_end();
-  if(err != ERR_OK) {
-    printf("Publish err: %d\n", err);
-  }
-
-  return err; 
-}
-
-static err_t mqtt_test_connect(MQTT_CLIENT_T *state) {
+static err_t mqtt_test_connect() {
     struct mqtt_connect_client_info_t ci;
     err_t err;
 
@@ -149,7 +178,7 @@ static err_t mqtt_test_connect(MQTT_CLIENT_T *state) {
     #if MQTT_TLS
 
     struct altcp_tls_config *tls_config;
-  
+
     #if defined(CRYPTO_CA) && defined(CRYPTO_KEY) && defined(CRYPTO_CERT)
     printf("Setting up TLS with 2wayauth.\n");
     tls_config = altcp_tls_create_config_client_2wayauth(
@@ -176,7 +205,7 @@ static err_t mqtt_test_connect(MQTT_CLIENT_T *state) {
 
     const struct mqtt_connect_client_info_t *client_info = &ci;
 
-    err = mqtt_client_connect(state->mqtt_client, &(state->remote_addr), MQTT_PORT, mqtt_connection_cb, state, client_info);
+    err = mqtt_client_connect(g_state->mqtt_client, &(g_state->remote_addr), MQTT_PORT, mqtt_connection_cb, g_state, client_info);
     
     if (err != ERR_OK) {
         printf("mqtt_connect return %d\n", err);
@@ -185,39 +214,49 @@ static err_t mqtt_test_connect(MQTT_CLIENT_T *state) {
     return err;
 }
 
-static void mqtt_run(MQTT_CLIENT_T *state) {
-    state->mqtt_client = mqtt_client_new();
+static void mqtt_run() {
+    g_client = mqtt_client_new();
+    g_state->mqtt_client = g_client;
 
-    state->counter = 0;  
-
-    if (state->mqtt_client == NULL) {
+    if (g_state->mqtt_client == NULL) {
         printf("Failed to create new mqtt client\n");
         return;
-    } 
+    }
 
-    if (mqtt_test_connect(state) == ERR_OK) {
+    g_state->counter = 0;  
+
+    if (mqtt_test_connect() == ERR_OK) {
         absolute_time_t timeout = nil_time;
         bool subscribed = false;
-        mqtt_set_inpub_callback(state->mqtt_client, mqtt_pub_start_cb, mqtt_pub_data_cb, 0);
+        bool discovered = false;
+        err_t status = ERR_RST;
+        mqtt_set_inpub_callback(g_state->mqtt_client, mqtt_pub_start_cb, mqtt_pub_data_cb, 0);
 
         while (true) {
             cyw43_arch_poll();
             absolute_time_t now = get_absolute_time();
             if (is_nil_time(timeout) || absolute_time_diff_us(now, timeout) <= 0) {
-                if (mqtt_client_is_connected(state->mqtt_client)) {
+                if (mqtt_client_is_connected(g_state->mqtt_client)) {
                     cyw43_arch_lwip_begin();
 
                     if (!subscribed) {
-                        mqtt_sub_unsub(state->mqtt_client, MQTT_TOPIC, 0, mqtt_sub_request_cb, 0, 1);
+                        mqtt_sub_unsub(g_state->mqtt_client, MQTT_TOPIC, 0, mqtt_sub_request_cb, 0, 1);
                         subscribed = true;
                     }
+                    if (!discovered) {
+                        status = _mqtt_publish_discovery();
+                        discovered = true;
+                    }
+                    else {
+                        status = _mqtt_publish_heartbeat();
+                    }
 
-                    if (mqtt_test_publish(state) == ERR_OK) {
-                        if (state->counter != 0) {
-                            printf("published %d\n", state->counter);
+                    if (ERR_OK == status) {
+                        if (g_state->counter != 0) {
+                            printf("published %d\n", g_state->counter);
                         }
                         timeout = make_timeout_time_ms(5000);
-                        state->counter++;
+                        g_state->counter++;
                     } // else ringbuffer is full and we need to wait for messages to flush.
                     cyw43_arch_lwip_end();
                 } else {
@@ -230,8 +269,12 @@ static void mqtt_run(MQTT_CLIENT_T *state) {
 
 // Public interface
 void ha_mqtt_init() {
-    MQTT_CLIENT_T *state = mqtt_client_init(); // memory alloc for mqtt instance
+    // memory alloc for mqtt instance
+    if( NULL == mqtt_client_init() ) {
+        printf("Failed to create new mqtt instance\n");
+        return;
+    }
 
-    run_dns_lookup(state);  // checks if mqtt broker is reachable
-    mqtt_run(state);        // runs the mqtt
+    run_dns_lookup();  // checks if mqtt broker is reachable
+    mqtt_run();        // runs the mqtt
 }
