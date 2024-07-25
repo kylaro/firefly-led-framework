@@ -117,6 +117,8 @@ static void mqtt_pub_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
             printf("Message received: %s\n", &buffer);
         }
 
+        // Process received MQTT messages here.
+
         if (strncmp((const char *)data, "ON", len) == 0) {
             cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
             _mqtt_publish(MQTT_TOPIC_PUBLISH, "ON", 0, 0);

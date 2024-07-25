@@ -20,15 +20,19 @@
 #include "pico/time.h"
 #include "config.h"
 
+
 // CJ: Put headers of new library for Home Assistant integration here
 #include "HomeAssistant/HAIntegration.h"
+HAIntegration *haIntegration;
 
 using namespace std;
 int main(){
-    // CJ: Call the HA integration here
-    HAIntegration *haIntegration = new HAIntegration();
     // Initialize framework infrastructure
     Controller *ledController = new FireFlyWController();
+        
+    // CJ: Call the HA integration here
+    haIntegration = new HAIntegration(ledController);
+    
     EffectEngine *effectEngine = new EffectEngine();
     LEDs::init(NUM_STRIPS); // Initializing # of outputs
     LEDs::setNum(NUM_LEDS); // Setting all strips to 120 LEDs
@@ -46,11 +50,7 @@ int main(){
     patterns->push_back(new CirclesPattern());
     patterns->push_back(new Shakeel());
     patterns->push_back(new ShakeelFlash());
-    
-    
-    
-    //patterns->push_back(new FireFliesSame());
-    
+
 
     //Initialize main loop variables
     uint32_t numPatterns = patterns->size();

@@ -34,6 +34,7 @@ void ha_core1_entry() {
 	cyw43_arch_deinit();
 }
 
-HAIntegration::HAIntegration() {
+HAIntegration::HAIntegration(Controller *ledController) {
+	this->ledController = ledController;
 	multicore_launch_core1(ha_core1_entry);
 }

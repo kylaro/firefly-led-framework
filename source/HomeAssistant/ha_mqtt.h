@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 
-#define MQTT_LOGIN "ha"
-#define MQTT_PASSWORD "ha"
-#define MQTT_BROKER "192.168.1.18"
+#define MQTT_LOGIN "kylar"
+#define MQTT_PASSWORD "SudoRoot42069"
+#define MQTT_BROKER "192.168.1.227"
 
 #define MQTT_TOPIC_SUBSCRIBE "home/pico_w/led/set"
 #define MQTT_TOPIC_PUBLISH "home/pico_w/led/state"
