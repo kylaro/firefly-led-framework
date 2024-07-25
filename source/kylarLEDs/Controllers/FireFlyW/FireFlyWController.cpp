@@ -194,6 +194,7 @@ double FireFlyWController::getBrightness()
     if (timing->takeMsEvery(10))
     {
         double newPot = analogPot->getValue();
+        set_ha_temperature(newPot);
         brightness = (lastPot * 400 + newPot) / 401.0;
         lastPot = (lastPot * 2.0 + newPot) / 3.0;
     }

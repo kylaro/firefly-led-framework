@@ -10,7 +10,7 @@
 #define MQTT_TOPIC_SUBSCRIBE "home/pico_w/led/set"
 #define MQTT_TOPIC_PUBLISH "home/pico_w/led/state"
 #define MQTT_TOPIC_DISCOVERY "homeassistant/switch/pico_w_led/config"
-#define MQTT_HEARTBEAT 0
+#define MQTT_HEARTBEAT 1
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,10 +28,13 @@ typedef struct{
     float value;
     float r, g, b;
     int pattern_index; 
-} ha_data_t;
+} ha_data_t; // Different struct for sending  / receiving from HomeAssistant?
+
 
 
 ha_data_t *get_ha_data();
+
+bool set_ha_temperature(double celsius); // Please redo this in a better way, just doing Proof of concept.
 
 #ifdef __cplusplus
 }

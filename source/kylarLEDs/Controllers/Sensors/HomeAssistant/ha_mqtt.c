@@ -31,6 +31,7 @@ static mqtt_client_t *g_client;
 static MQTT_CLIENT_T *g_state;
 
 ha_data_t ha_data;
+double temperature; // Please redo this in a better way, just doing Proof of concept.
 
 static MQTT_CLIENT_T* mqtt_client_init(void) {
     g_state = calloc(1, sizeof(MQTT_CLIENT_T));
@@ -163,6 +164,9 @@ static err_t _mqtt_publish_heartbeat() {
     char msg[256];
     sprintf(msg, "{\"message\":\"hello from picow %d / %d\"}", g_state->received, g_state->counter);
     _mqtt_publish(MQTT_TOPIC_PUBLISH, msg, 0, 0);
+
+    sprintf(msg, "%f", temperature);
+    _mqtt_publish("home/pico_w/temperature", msg, 0, 0);
 }
 
 static err_t mqtt_test_connect() {
@@ -298,4 +302,10 @@ void ha_mqtt_init() {
 
 ha_data_t* get_ha_data() {
     return &ha_data;
+}
+
+bool set_ha_temperature(double celsius) {
+    temperature = celsius;
+    // Just setting it in memory here, because this function is called by core0, but we want core1 to actually do the wifi/mqtt
+    return true; // "success"
 }
