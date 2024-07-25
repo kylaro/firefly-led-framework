@@ -1,15 +1,18 @@
 #ifndef HAINTEGRATION_H
 #define HAINTEGRATION_H
-#include "../kylarLEDs/Controllers/Controller.h"
+
+extern "C" {
+    #include "ha_mqtt.h"
+}
 
 class HAIntegration {
     public:
-        HAIntegration(Controller* ledController);
+        HAIntegration();
         void connect();
         void configure();
         void loop();
-    private:
-        Controller* ledController;
+
+        bool getEnabled();
 };
 
 #endif // HAINTEGRATION_H

@@ -6,7 +6,8 @@
 #include "../Sensors/Button/Button.h"
 #include "../Sensors/Microphone/Microphone.h"
 #include "../../Utility/Timing.h"
-#include "../Sensors/MQTT/MQTT.h"
+// CJ: Put headers of new library for Home Assistant integration here
+#include "../Sensors/HomeAssistant/HAIntegration.h"
 
 #define PX_PINS 4
 
@@ -35,7 +36,7 @@ class FireFlyWController : public Controller{
         void initPatternButton(); // Change the patternIndex via button press
         void initOutput();
         void initMicrophone();
-        void initMQTT();
+        void initHomeAssistant();
     private:
         void initDMA(PIO pio, uint sm);
         
@@ -54,5 +55,5 @@ class FireFlyWController : public Controller{
         Timing *timing;
         Button *button;
         Microphone *microphone;
-        MQTT *mqtt;
+        HAIntegration *haIntegration;
 };

@@ -30,6 +30,8 @@ typedef struct MQTT_CLIENT_T_ {
 static mqtt_client_t *g_client;
 static MQTT_CLIENT_T *g_state;
 
+ha_data_t ha_data;
+
 static MQTT_CLIENT_T* mqtt_client_init(void) {
     g_state = calloc(1, sizeof(MQTT_CLIENT_T));
     if (!g_state) {
@@ -122,9 +124,11 @@ static void mqtt_pub_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
         if (strncmp((const char *)data, "ON", len) == 0) {
             cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
             _mqtt_publish(MQTT_TOPIC_PUBLISH, "ON", 0, 0);
+            ha_data.enabled = true;
         } else if (strncmp((const char *)data, "OFF", len) == 0) {
             cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
             _mqtt_publish(MQTT_TOPIC_PUBLISH, "OFF", 0, 0);
+            ha_data.enabled = false;
         }
     }
 }
@@ -279,6 +283,9 @@ void ha_mqtt_loop() {
 }
 
 void ha_mqtt_init() {
+    // setup data structure (maybe need to move this when enabled is persisted)
+    ha_data.enabled = true;
+
     // memory alloc for mqtt instance
     if( NULL == mqtt_client_init() ) {
         printf("Failed to create new mqtt instance\n");
@@ -287,4 +294,8 @@ void ha_mqtt_init() {
 
     run_dns_lookup();  // checks if mqtt broker is reachable
     mqtt_run();        // runs the mqtt
+}
+
+ha_data_t* get_ha_data() {
+    return &ha_data;
 }

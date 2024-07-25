@@ -21,17 +21,11 @@
 #include "config.h"
 
 
-// CJ: Put headers of new library for Home Assistant integration here
-#include "HomeAssistant/HAIntegration.h"
-HAIntegration *haIntegration;
 
 using namespace std;
 int main(){
     // Initialize framework infrastructure
     Controller *ledController = new FireFlyWController();
-        
-    // CJ: Call the HA integration here
-    haIntegration = new HAIntegration(ledController);
     
     EffectEngine *effectEngine = new EffectEngine();
     LEDs::init(NUM_STRIPS); // Initializing # of outputs

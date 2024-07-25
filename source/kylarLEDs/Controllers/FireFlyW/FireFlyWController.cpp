@@ -17,10 +17,12 @@ FireFlyWController::FireFlyWController()
     initPatternButton();
     if(MICROPHONE_ENABLE){
         initMicrophone();
-    }else if(WIFI_ENABLE){
+    }
+    if(WIFI_ENABLE){
         //initWifi(); // TODO - serve an HTML site
-    }else if(MQTT_ENABLE){
-        initMQTT();
+    }
+    if(MQTT_ENABLE){
+        initHomeAssistant();
     }
 
     initOutput();
@@ -33,9 +35,10 @@ void FireFlyWController::initDMA(PIO pio, uint sm)
 
 }
 
-void FireFlyWController::initMQTT()
+void FireFlyWController::initHomeAssistant()
 {
-    mqtt = new MQTT();
+    // CJ: Call the HA integration here
+    haIntegration = new HAIntegration();
 }
 
 // Used in interrupt
@@ -180,6 +183,14 @@ double FireFlyWController::getBrightness()
 {
     static double brightness = 0;
     static double lastPot = 0;
+
+    if(MQTT_ENABLE){
+        if (haIntegration->getEnabled() == false){
+            // For now, just return 0 brightness when disabled.
+            return 0;
+        }
+    }
+
     if (timing->takeMsEvery(10))
     {
         double newPot = analogPot->getValue();

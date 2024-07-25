@@ -19,6 +19,20 @@ extern "C" {
 void ha_mqtt_init();
 void ha_mqtt_loop();
 
+typedef struct{
+    // We know the centers, and can track their movement
+    bool enabled;
+    float brightness;
+    float hue;
+    float saturation;
+    float value;
+    float r, g, b;
+    int pattern_index; 
+} ha_data_t;
+
+
+ha_data_t *get_ha_data();
+
 #ifdef __cplusplus
 }
 #endif

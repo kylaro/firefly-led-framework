@@ -1,40 +1,42 @@
 #include "HAIntegration.h"
 #include "pico/time.h"
 #include "pico/multicore.h"
-#include "../kylarLEDs/Controllers/FireFlyW/WiFi/wifi.h"
-#include "../config.h"
+#include "../../FireFlyW/WiFi/wifi.h"
+#include "../../../../config.h"
 #include "ha_mqtt.h"
 
-extern HAIntegration haIntegration;
 
 void ha_core1_entry();
 
 void HAIntegration::loop() {
-	ha_mqtt_loop();
+	
 }
 
 void HAIntegration::configure() {
-	if( MQTT_ENABLE ) {
-		ha_mqtt_init();
-	}
+	
 }
 
 void HAIntegration::connect() {
-	if( WIFI_ENABLE ) {
-		wifi_init();
-	}
+	
+}
+
+bool HAIntegration::getEnabled() {
+	return get_ha_data()->enabled;
 }
 
 void ha_core1_entry() {
 	sleep_ms(10); // so that the dma channel doesn't get claimed
-	haIntegration.connect();
+	if( WIFI_ENABLE ) {
+		wifi_init();
+	}
 	multicore_lockout_victim_init();
-	haIntegration.configure();
-	haIntegration.loop();
+	if( MQTT_ENABLE ) {
+		ha_mqtt_init();
+	}
+	ha_mqtt_loop();
 	cyw43_arch_deinit();
 }
 
-HAIntegration::HAIntegration(Controller *ledController) {
-	this->ledController = ledController;
+HAIntegration::HAIntegration() {
 	multicore_launch_core1(ha_core1_entry);
 }
