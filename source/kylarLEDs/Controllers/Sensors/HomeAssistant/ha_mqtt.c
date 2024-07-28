@@ -18,6 +18,10 @@
 #include "lwip/altcp_tcp.h"
 #include "lwip/altcp_tls.h"
 
+#include "flash.h"
+
+extern device_info_t device_info;
+
 typedef struct MQTT_CLIENT_T_ {
     ip_addr_t remote_addr;
     mqtt_client_t *mqtt_client;
@@ -131,6 +135,23 @@ static void mqtt_pub_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
             _mqtt_publish(MQTT_TOPIC_PUBLISH, "OFF", 0, 0);
             ha_data.enabled = false;
         }
+#if 0
+        else if (strncmp((const char *)data, update_name_t, strlen(update_name_t)) == 0) {
+            strncpy(device_info.device_name, (const char *)data, len);
+            device_info.device_name[len] = '\0';
+            flash_write_device_info();
+        } else if (strncmp((const char *)data, update_model_t, strlen(update_model_t)) == 0) {
+            strncpy(device_info.device_model, (const char *)data, len);
+            device_info.device_model[len] = '\0';
+            flash_write_device_info();
+        } else if (strncmp((const char *)data, update_mfg_t, strlen(update_mfg_t)) == 0) {
+            strncpy(device_info.device_manufacturer, (const char *)data, len);
+            device_info.device_manufacturer[len] = '\0';
+            flash_write_device_info();
+        } else {
+            // do nothing
+        }
+#endif
     }
 }
 
@@ -143,20 +164,22 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection
 }
 
 static err_t _mqtt_publish_discovery() {
-    char msg[256];
+    char msg[512];
     uint8_t mac[6];
     cyw43_wifi_get_mac(NULL, CYW43_ITF_STA, mac);
     char mac_str[12];
     snprintf(mac_str, sizeof(mac_str), "%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
     snprintf(msg, sizeof(msg),
-        "{\"name\":\"Pico W LED\","
+        "{\"name\":\"MinimumConfig\","
         "\"state_topic\":\"home/pico_w/led/state\","
         "\"command_topic\":\"home/pico_w/led/set\","
-        "\"unique_id\":\"picow_%s\","
-        "\"payload_on\":\"ON\","
-        "\"payload_off\":\"OFF\","
-        "\"qos\":1,"
-        "\"retain\":false}", mac_str);
+        "\"unique_id\":\"%s\","
+        "\"device\":{\"identifiers\":\"%s\","
+        "\"name\":\"Pico_W\","
+        "\"sw_version\":\"0.02\"}}",
+        // "\"model\":\"Mowdel\"}}",
+        // "\"manufacturer\":\"MfgMsgAjinomoto\"}}",
+        mac_str, mac_str);
     _mqtt_publish(MQTT_TOPIC_DISCOVERY, msg, 1, 1);
 }
 
@@ -216,7 +239,7 @@ static err_t mqtt_test_connect() {
 
     err = mqtt_client_connect(g_state->mqtt_client, &(g_state->remote_addr), MQTT_PORT, mqtt_connection_cb, g_state, client_info);
     
-    if (err != ERR_OK) {
+    if (ERR_OK != err) {
         printf("mqtt_connect return %d\n", err);
     }
 
@@ -224,7 +247,7 @@ static err_t mqtt_test_connect() {
 }
 
 static void mqtt_connect() {
-    if (mqtt_test_connect() == ERR_OK) {
+    if (ERR_OK == mqtt_test_connect()) {
         mqtt_set_inpub_callback(g_state->mqtt_client, mqtt_pub_start_cb, mqtt_pub_data_cb, 0);
     }
 }
@@ -289,6 +312,9 @@ void ha_mqtt_loop() {
 void ha_mqtt_init() {
     // setup data structure (maybe need to move this when enabled is persisted)
     ha_data.enabled = true;
+
+    // Read device information from flash memory
+    flash_read_device_info();
 
     // memory alloc for mqtt instance
     if( NULL == mqtt_client_init() ) {
