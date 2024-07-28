@@ -7,10 +7,15 @@
 #define MQTT_PASSWORD "SudoRoot42069"
 #define MQTT_BROKER "192.168.1.227"
 
-#define MQTT_TOPIC_SUBSCRIBE "home/pico_w/led/set"
-#define MQTT_TOPIC_PUBLISH "home/pico_w/led/state"
-#define MQTT_TOPIC_DISCOVERY "homeassistant/switch/pico_w_led/config"
-#define MQTT_HEARTBEAT 1
+/* Topic definitions are replaced with char array so it
+ * could be dynamically tied with the Unique ID (WiFi MAC)
+ */
+// #define MQTT_TOPIC_SUBSCRIBE "home/pico_w/led/set"
+// #define MQTT_TOPIC_PUBLISH "home/pico_w/led/state"
+// #define MQTT_TOPIC_DISCOVERY "homeassistant/switch/pico_w/config"
+#define MQTT_HEARTBEAT 0
+
+#define SW_VERSION "0.01" /* Placeholder */
 
 #ifdef __cplusplus
 extern "C" {

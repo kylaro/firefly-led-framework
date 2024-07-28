@@ -33,6 +33,14 @@ typedef struct MQTT_CLIENT_T_ {
 // MQTT global
 static mqtt_client_t *g_client;
 static MQTT_CLIENT_T *g_state;
+char mac_str[12];          // WiFi MAC Address string
+char led_set_t[64];        // ha/<unique_id>/led/set_t      /* old: MQTT_TOPIC_SUBSCRIBE */
+char led_stat_t[64];       // ha/<unique_id>/led/cmd_t      /* old: MQTT_TOPIC_PUBLISH */
+char discovery_t[64];      // homeassistant/switch/<unique_id>/config /* old: MQTT_TOPIC_DISCOVERY */
+char update_devname_t[64]; // ha/<unique_id>/update/devname /* device name  (i.e. Firefly) */
+char update_entname_t[64]; // ha/<unique_id>/update/entname /* entity name  (i.e. Board LED) */
+char update_model_t[64];   // ha/<unique_id>/update/mdl     /* device model (i.e. Pico W) */
+char update_mf_t[64];      // ha/<unique_id>/update/mf      /* device manufacturer (i.e. Raspberry) */
 
 ha_data_t ha_data;
 double temperature; // Please redo this in a better way, just doing Proof of concept.
@@ -97,6 +105,27 @@ static err_t _mqtt_publish(const char *topic, const char *msg, uint8_t retain, u
     return err; 
 }
 
+static void mqtt_build_topics() {
+    uint8_t mac[6];
+    cyw43_wifi_get_mac(NULL, CYW43_ITF_STA, mac);
+    // Unique ID
+    snprintf(mac_str, sizeof(mac_str), "%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    // Discovery topic (PicoW to Home Assistant)
+    snprintf(discovery_t, sizeof(discovery_t), "homeassistant/switch/%s/config", mac_str);
+    // LED state topic (PicoW to Home Assistant)
+    snprintf(led_stat_t, sizeof(led_stat_t), "ha/%s/led/stat_t", mac_str);
+    // LED set topic (Home Assistant to PicoW)
+    snprintf(led_set_t, sizeof(led_set_t), "ha/%s/led/set_t", mac_str);
+    // Update device name topic (Home Assistant to PicoW)
+    snprintf(update_devname_t, sizeof(update_devname_t), "ha/%s/update/devname", mac_str);
+    // Update entity name topic (Home Assistant to PicoW)
+    snprintf(update_entname_t, sizeof(update_entname_t), "ha/%s/update/entname", mac_str);
+    // Update device model topic (Home Assistant to PicoW)
+    snprintf(update_model_t, sizeof(update_model_t), "ha/%s/update/mdl", mac_str);
+    // Update device manufacturer topic (Home Assistant to PicoW)
+    snprintf(update_mf_t, sizeof(update_mf_t), "ha/%s/update/mf", mac_str);
+}
+
 // Global data
 u32_t data_in = 0;
 u8_t buffer[1025];
@@ -125,33 +154,33 @@ static void mqtt_pub_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
         }
 
         // Process received MQTT messages here.
-
         if (strncmp((const char *)data, "ON", len) == 0) {
             cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-            _mqtt_publish(MQTT_TOPIC_PUBLISH, "ON", 0, 0);
+            _mqtt_publish(led_stat_t, "ON", 0, 0);
             ha_data.enabled = true;
         } else if (strncmp((const char *)data, "OFF", len) == 0) {
             cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
-            _mqtt_publish(MQTT_TOPIC_PUBLISH, "OFF", 0, 0);
+            _mqtt_publish(led_stat_t, "OFF", 0, 0);
             ha_data.enabled = false;
-        }
-#if 0
-        else if (strncmp((const char *)data, update_name_t, strlen(update_name_t)) == 0) {
-            strncpy(device_info.device_name, (const char *)data, len);
-            device_info.device_name[len] = '\0';
+        } else if (strncmp((const char *)data, update_devname_t, strlen(update_devname_t)) == 0) {
+            strncpy(device_info.name, (const char *)data, len);
+            device_info.name[len] = '\0';
             flash_write_device_info();
         } else if (strncmp((const char *)data, update_model_t, strlen(update_model_t)) == 0) {
-            strncpy(device_info.device_model, (const char *)data, len);
-            device_info.device_model[len] = '\0';
+            strncpy(device_info.model, (const char *)data, len);
+            device_info.model[len] = '\0';
             flash_write_device_info();
-        } else if (strncmp((const char *)data, update_mfg_t, strlen(update_mfg_t)) == 0) {
-            strncpy(device_info.device_manufacturer, (const char *)data, len);
-            device_info.device_manufacturer[len] = '\0';
+        } else if (strncmp((const char *)data, update_mf_t, strlen(update_mf_t)) == 0) {
+            strncpy(device_info.manufacturer, (const char *)data, len);
+            device_info.manufacturer[len] = '\0';
+            flash_write_device_info();
+        } else if (strncmp((const char *)data, update_entname_t, strlen(update_entname_t)) == 0) {
+            strncpy(device_info.entity, (const char *)data, len);
+            device_info.entity[len] = '\0';
             flash_write_device_info();
         } else {
-            // do nothing
+            // topic is not subscribed to
         }
-#endif
     }
 }
 
@@ -165,28 +194,25 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection
 
 static err_t _mqtt_publish_discovery() {
     char msg[512];
-    uint8_t mac[6];
-    cyw43_wifi_get_mac(NULL, CYW43_ITF_STA, mac);
-    char mac_str[12];
-    snprintf(mac_str, sizeof(mac_str), "%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
     snprintf(msg, sizeof(msg),
-        "{\"name\":\"MinimumConfig\","
-        "\"state_topic\":\"home/pico_w/led/state\","
-        "\"command_topic\":\"home/pico_w/led/set\","
-        "\"unique_id\":\"%s\","
-        "\"device\":{\"identifiers\":\"%s\","
-        "\"name\":\"Pico_W\","
-        "\"sw_version\":\"0.02\"}}",
-        // "\"model\":\"Mowdel\"}}",
-        // "\"manufacturer\":\"MfgMsgAjinomoto\"}}",
-        mac_str, mac_str);
-    _mqtt_publish(MQTT_TOPIC_DISCOVERY, msg, 1, 1);
+        "{\"name\":\"%s\","
+        "\"stat_t\":\"%s\","
+        "\"cmd_t\":\"%s\","
+        "\"uniq_id\":\"%s\","
+        "\"dev\":{\"ids\":\"%s\","
+        "\"name\":\"%s\","
+        "\"sw\":\"%s\","
+        "\"mdl\":\"%s\","
+        "\"mf\":\"%s\"}}",
+        device_info.entity, led_stat_t, led_set_t, mac_str, mac_str,
+        device_info.name, SW_VERSION, device_info.model, device_info.manufacturer);
+    _mqtt_publish(discovery_t, msg, 1, 1);
 }
 
 static err_t _mqtt_publish_heartbeat() {
     char msg[256];
     sprintf(msg, "{\"message\":\"hello from picow %d / %d\"}", g_state->received, g_state->counter);
-    _mqtt_publish(MQTT_TOPIC_PUBLISH, msg, 0, 0);
+    _mqtt_publish(led_stat_t, msg, 0, 0);
 
     sprintf(msg, "%f", temperature);
     _mqtt_publish("home/pico_w/temperature", msg, 0, 0);
@@ -238,9 +264,13 @@ static err_t mqtt_test_connect() {
     const struct mqtt_connect_client_info_t *client_info = &ci;
 
     err = mqtt_client_connect(g_state->mqtt_client, &(g_state->remote_addr), MQTT_PORT, mqtt_connection_cb, g_state, client_info);
-    
+
     if (ERR_OK != err) {
         printf("mqtt_connect return %d\n", err);
+    } else if (ERR_OK == err) {
+        mqtt_build_topics();
+    } else {
+        // handler for other return type
     }
 
     return err;
@@ -281,7 +311,7 @@ void ha_mqtt_loop() {
                 cyw43_arch_lwip_begin();
 
                 if (!subscribed) {
-                    mqtt_sub_unsub(g_state->mqtt_client, MQTT_TOPIC_SUBSCRIBE, 0, mqtt_sub_request_cb, 0, 1);
+                    mqtt_sub_unsub(g_state->mqtt_client, led_set_t, 0, mqtt_sub_request_cb, 0, 1);
                     subscribed = true;
                 }
                 if (!discovered) {
