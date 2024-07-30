@@ -45,8 +45,14 @@
 ////////////////////////////////////////////////////////////
 /////////                MQTT                   ////////////
 ////////////////////////////////////////////////////////////
+#define MQTT_LOGIN "kylar"
+#define MQTT_PASSWORD "SudoRoot42069"
+#define MQTT_BROKER "192.168.1.227"
+#define MQTT_HEARTBEAT 0
 
-
+// WIFI Credentials - take care if pushing to github!
+#define WIFI_SSID "trojan-virus" // "Starlink";
+#define WIFI_PASSWORD "dmesg1-W-clear!" // "spacelasers42069";
 
 
 

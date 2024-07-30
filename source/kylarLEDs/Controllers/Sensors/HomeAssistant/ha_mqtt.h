@@ -2,10 +2,8 @@
 #define HA_MQTT_H
 
 #include <stdint.h>
+#include "../../../../config.h" // Get MQTT Broker / User / Pass
 
-#define MQTT_LOGIN "kylar"
-#define MQTT_PASSWORD "SudoRoot42069"
-#define MQTT_BROKER "192.168.1.227"
 
 /* Topic definitions are replaced with char array so it
  * could be dynamically tied with the Unique ID (WiFi MAC)
@@ -13,7 +11,7 @@
 // #define MQTT_TOPIC_SUBSCRIBE "home/pico_w/led/set"
 // #define MQTT_TOPIC_PUBLISH "home/pico_w/led/state"
 // #define MQTT_TOPIC_DISCOVERY "homeassistant/switch/pico_w/config"
-#define MQTT_HEARTBEAT 0
+
 
 #define SW_VERSION "0.01" /* Placeholder */
 
@@ -25,7 +23,6 @@ void ha_mqtt_init();
 void ha_mqtt_loop();
 
 typedef struct{
-    // We know the centers, and can track their movement
     bool enabled;
     float brightness;
     float hue;

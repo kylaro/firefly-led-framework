@@ -4,13 +4,11 @@
 #include "lwip/apps/httpd.h"
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
+#include "../../../../config.h"
 
 // External declarations for CGI and SSI handler functionalities
 // These are defined in wifi.c but can be used elsewhere if needed
 
-// WIFI Credentials - It's good practice to keep these secure and not hard-coded in your source files
-extern const char WIFI_SSID[];
-extern const char WIFI_PASSWORD[];
 
 #ifdef __cplusplus
 extern "C"
