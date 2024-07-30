@@ -6,6 +6,8 @@
 #include "../Sensors/Button/Button.h"
 #include "../Sensors/Microphone/Microphone.h"
 #include "../../Utility/Timing.h"
+// CJ: Put headers of new library for Home Assistant integration here
+#include "../Sensors/HomeAssistant/HAIntegration.h"
 
 #define PX_PINS 4
 
@@ -16,9 +18,9 @@ typedef struct {
     uint8_t outPointer[NUM_LEDS*3];
 } strip_t;
 
-class FireFlyController : public Controller{
+class FireFlyWController : public Controller{
     public:
-        FireFlyController();
+        FireFlyWController();
         //using Controller::Controller;
         void outputLEDs(uint8_t strip, uint8_t *leds, uint32_t N); // leds is an array, N is the length
         uint64_t getCurrentTimeMillis();
@@ -34,6 +36,7 @@ class FireFlyController : public Controller{
         void initPatternButton(); // Change the patternIndex via button press
         void initOutput();
         void initMicrophone();
+        void initHomeAssistant();
     private:
         void initDMA(PIO pio, uint sm);
         
@@ -52,4 +55,5 @@ class FireFlyController : public Controller{
         Timing *timing;
         Button *button;
         Microphone *microphone;
+        HAIntegration *haIntegration;
 };

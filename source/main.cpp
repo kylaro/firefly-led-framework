@@ -5,10 +5,11 @@
 #include "Effects/Effect.h"
 #include "kylarLEDs/LEDInterface/LEDs.h"
 #include "kylarLEDs/EffectEngine/EffectEngine.h"
-#include "kylarLEDs/Controllers/FireFly/FireFlyController.h"
+#include "kylarLEDs/Controllers/FireFlyW/FireFlyWController.h"
 #include "Patterns/Examples/ExamplePattern.h"
 #include "Patterns/Examples/FireFlies.h"
 #include "Patterns/Examples/FireFliesSame.h"
+#include "Patterns/Wireless/WirelessPattern.h"
 #include "Patterns/SoundReactive/Shakeel.h"
 #include "Patterns/SoundReactive/ShakeelFlash.h"
 #include "Patterns/SoundReactive/SpaceX.h"
@@ -19,11 +20,13 @@
 #include "pico/time.h"
 #include "config.h"
 
+
+
 using namespace std;
 int main(){
-
     // Initialize framework infrastructure
-    Controller *ledController = new FireFlyController();
+    Controller *ledController = new FireFlyWController();
+    
     EffectEngine *effectEngine = new EffectEngine();
     LEDs::init(NUM_STRIPS); // Initializing # of outputs
     LEDs::setNum(NUM_LEDS); // Setting all strips to 120 LEDs
@@ -34,16 +37,14 @@ int main(){
     //Push back all the patterns you want!
     //ADD YOUR PATTERNS HERE!
     //ex. patterns->push_back(new ExamplePattern());
+    patterns->push_back(new FireFlies());
+    patterns->push_back(new WirelessPattern());
     patterns->push_back(new HeartPattern());
     patterns->push_back(new SpaceX());
     patterns->push_back(new CirclesPattern());
     patterns->push_back(new Shakeel());
     patterns->push_back(new ShakeelFlash());
-    patterns->push_back(new FireFlies());
-    
-    
-    //patterns->push_back(new FireFliesSame());
-    
+
 
     //Initialize main loop variables
     uint32_t numPatterns = patterns->size();
@@ -72,7 +73,7 @@ int main(){
         // mem usage:
         struct mallinfo mi = mallinfo();
         if(DEBUG_PRINT){
-            printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )
+            // printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )~
         }
         if(currentPatternIndex == nextPatternIndex){
             //We are remaining on the same pattern
@@ -87,7 +88,7 @@ int main(){
             timer->add("LEDs::apply()");
             LEDs::output();         // Output to strip via controller
             timer->add("LEDs::output()");
-            if(DEBUG_PRINT) timer->print();
+            // if(DEBUG_PRINT) timer->print();
         }else{
             //We are changing pattern
             currentPattern->release();                      //Finish the current pattern

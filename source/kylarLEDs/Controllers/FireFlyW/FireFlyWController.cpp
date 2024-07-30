@@ -1,14 +1,15 @@
-#include "FireFlyController.h"
+#include "FireFlyWController.h"
 #include "pico/stdlib.h"
 #include "hardware/dma.h"
 #include "hardware/irq.h"
 #include <stdio.h>
 #include "pico/time.h"
 #include "../../../config.h"
+// #include "WiFi/wifi.h"
 
-uint64_t FireFlyController::channel_end_times[NUM_STRIPS];
-strip_t FireFlyController::strips[NUM_STRIPS];
-FireFlyController::FireFlyController()
+uint64_t FireFlyWController::channel_end_times[NUM_STRIPS];
+strip_t FireFlyWController::strips[NUM_STRIPS];
+FireFlyWController::FireFlyWController()
 {
     initCommunication();
     initBrightness();
@@ -17,18 +18,31 @@ FireFlyController::FireFlyController()
     if(MICROPHONE_ENABLE){
         initMicrophone();
     }
+    if(WIFI_ENABLE){
+        //initWifi(); // TODO - serve an HTML site
+    }
+    if(MQTT_ENABLE){
+        initHomeAssistant();
+    }
+
     initOutput();
 
     this->timing = new Timing();
 }
 
-void FireFlyController::initDMA(PIO pio, uint sm)
+void FireFlyWController::initDMA(PIO pio, uint sm)
 {
 
 }
 
+void FireFlyWController::initHomeAssistant()
+{
+    // CJ: Call the HA integration here
+    haIntegration = new HAIntegration();
+}
+
 // Used in interrupt
-void FireFlyController::handleDMA()
+void FireFlyWController::handleDMA()
 {
     //Loops through the strips and checks if the channel is done. If it is, it sets the channel_end_times to the current time.
     uint8_t dma_chan;
@@ -43,13 +57,13 @@ void FireFlyController::handleDMA()
 
 }
 
-void FireFlyController::initOutput()
+void FireFlyWController::initOutput()
 {
     
     // initDMA();
 
     uint offset = pio_add_program(pio, &ws2812_program);
-    irq_set_exclusive_handler(DMA_IRQ_1, &FireFlyController::handleDMA);
+    irq_set_exclusive_handler(DMA_IRQ_1, &FireFlyWController::handleDMA);
     irq_set_enabled(DMA_IRQ_1, true);
     // Init 4 strips
     for (uint8_t i = 0; i < PX_PINS; i++)
@@ -80,7 +94,7 @@ void FireFlyController::initOutput()
 
 }
 
-void FireFlyController::initCommunication()
+void FireFlyWController::initCommunication()
 {
     int LED_PIN = 25; // Built-in LED pin
     stdio_init_all();
@@ -88,42 +102,36 @@ void FireFlyController::initCommunication()
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
-    for (int i = 0; i < 10; i++)
-    {
-        gpio_put(LED_PIN, 1);
-        sleep_ms(20);
-        gpio_put(LED_PIN, 0);
-        sleep_ms(20);
-    }
+
 
     printf("Communication established\n");
 
     if(OVERCLOCK){
         // How to overclock (or underclock!)
         if (!set_sys_clock_khz(250000, false)){
-          printf("system clock 250MHz failed\n");
+        printf("system clock 250MHz failed\n");
         }else{
-          printf("system clock now 250MHz\n");
+        printf("system clock now 250MHz\n");
         }
     }
     
 }
 
-uint64_t FireFlyController::getCurrentTimeMicros()
+uint64_t FireFlyWController::getCurrentTimeMicros()
 {
     absolute_time_t new_time = get_absolute_time(); // Microseconds
     uint64_t micros = new_time;
     return micros;
 }
 
-uint64_t FireFlyController::getCurrentTimeMillis()
+uint64_t FireFlyWController::getCurrentTimeMillis()
 {
     absolute_time_t new_time = get_absolute_time(); // Microseconds
     uint64_t millis = new_time / 1000;
     return millis;
 }
 
-void FireFlyController::outputLEDs(uint8_t strip_i, uint8_t *leds, uint32_t N)
+void FireFlyWController::outputLEDs(uint8_t strip_i, uint8_t *leds, uint32_t N)
 {
     uint32_t numBytes = N * 3; // N is numLEDs, which each require 3 bytes
     uint8_t *pixels = leds;
@@ -171,13 +179,22 @@ void FireFlyController::outputLEDs(uint8_t strip_i, uint8_t *leds, uint32_t N)
     // }
 }
 
-double FireFlyController::getBrightness()
+double FireFlyWController::getBrightness()
 {
     static double brightness = 0;
     static double lastPot = 0;
+
+    if(MQTT_ENABLE){
+        if (haIntegration->getEnabled() == false){
+            // For now, just return 0 brightness when disabled.
+            return 0;
+        }
+    }
+
     if (timing->takeMsEvery(10))
     {
         double newPot = analogPot->getValue();
+        set_ha_temperature(newPot);
         brightness = (lastPot * 400 + newPot) / 401.0;
         lastPot = (lastPot * 2.0 + newPot) / 3.0;
     }
@@ -189,35 +206,55 @@ double FireFlyController::getBrightness()
     return brightness;
 }
 
-double FireFlyController::getHue()
+double FireFlyWController::getHue()
 {
     int count = encoder->getCount();
     double hue = (count) / 360.0;
     return hue;
 }
 
-void FireFlyController::initHue()
+void FireFlyWController::initHue()
 {
     encoder = new Encoder(26, 22);
 }
 
-void FireFlyController::initBrightness()
+void FireFlyWController::initBrightness()
 {
     this->analogPot = new Potentiometer(27, 1);
 }
 
-void FireFlyController::initPatternButton()
+void FireFlyWController::initPatternButton()
 {
     this->button = new Button(28);
 }
 
-void FireFlyController::givePatternIndex(uint32_t *patternIndex)
+void FireFlyWController::givePatternIndex(uint32_t *patternIndex)
 {
     this->patternIndex = patternIndex;
     Button::givePatternIndex(this->patternIndex);
 }
 
-void FireFlyController::initMicrophone()
+void FireFlyWController::initMicrophone()
 {
+    // This will go to the multicore init which also enables WiFi
     Microphone::start();
 }
+
+// What do I need to do:
+// I need to get the wifi interrupt to effect the Effects and pattern ?
+// I could ignore the pattern index for now... 
+// It's more important for the wifi to be able to trigger effects
+// The pattern set by the user is a little less important?
+// I need just a "listening" pattern, that has an array of effects that are all options 
+
+// Another thing I can work on is separating microphone from wifi
+// But maybe I like spaghetti when it is working
+// 
+
+// I could just be polling a uint32_t, and look for changes in bits
+
+// I could have an array where I set elements to uint8_ts
+// Kind of like a FiFo
+
+// Maybe the FiFo can be in the FireFlyWController
+// 

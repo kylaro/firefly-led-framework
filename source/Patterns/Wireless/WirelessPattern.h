@@ -1,9 +1,8 @@
 #pragma once
 #include "../Pattern.h"
 #include "../../kylarLEDs/Utility/Timing.h"
-#include "../../Effects/Basics/FireFly.h"
-#include <vector>
-class Ben : public Pattern{
+
+class WirelessPattern : public Pattern{
 
     public:
         using Pattern::Pattern;
@@ -12,6 +11,8 @@ class Ben : public Pattern{
         void release();
     
     private:
-        Timing *myTiming;        
+        Timing *myTiming;
+        int initted = 0;
+        
 
 };

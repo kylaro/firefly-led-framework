@@ -1,6 +1,6 @@
 #include "SoundPixel.h"
 #include "stdio.h"
-#include "../../kylarLEDs/Controllers/FireFly/Sensors/Microphone/Microphone.h"
+#include "../../kylarLEDs/Controllers/Sensors/Microphone/Microphone.h"
 
 void SoundPixel::init(){
     

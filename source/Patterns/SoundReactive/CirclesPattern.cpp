@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "../../Effects/SoundReactive/CircleEffect.h"
 #include "../../Effects/Effect.h"
-#include "../../kylarLEDs/Controllers/FireFly/Sensors/Microphone/Microphone.h"
+#include "../../kylarLEDs/Controllers/Sensors/Microphone/Microphone.h"
 
 
 void CirclesPattern::init(){
