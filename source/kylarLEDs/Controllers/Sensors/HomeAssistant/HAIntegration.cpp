@@ -26,14 +26,13 @@ bool HAIntegration::getEnabled() {
 
 void ha_core1_entry() {
 	sleep_ms(10); // so that the dma channel doesn't get claimed
-	if( WIFI_ENABLE ) {
-		wifi_init();
-	}
+	wifi_init();
+
 	multicore_lockout_victim_init();
-	if( MQTT_ENABLE ) {
-		ha_mqtt_init();
-	}
+
+	ha_mqtt_init();
 	ha_mqtt_loop();
+	
 	cyw43_arch_deinit();
 }
 

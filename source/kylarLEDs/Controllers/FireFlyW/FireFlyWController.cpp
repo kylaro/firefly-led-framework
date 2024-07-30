@@ -18,12 +18,13 @@ FireFlyWController::FireFlyWController()
     if(MICROPHONE_ENABLE){
         initMicrophone();
     }
-    if(WIFI_ENABLE){
-        //initWifi(); // TODO - serve an HTML site
-    }
-    if(MQTT_ENABLE){
+    else if (MQTT_ENABLE){
         initHomeAssistant();
     }
+    else if(WIFI_ENABLE){
+        //initWifi(); // TODO - serve an HTML site
+    }
+    
 
     initOutput();
 
