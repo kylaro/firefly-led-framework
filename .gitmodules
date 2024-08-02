@@ -1,0 +1,3 @@
+[submodule "utils/picotool"]
+	path = utils/picotool
+	url = https://github.com/raspberrypi/picotool.git

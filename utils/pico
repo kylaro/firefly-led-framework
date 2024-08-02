@@ -1,0 +1,105 @@
+#!/bin/bash
+
+usage() {
+cat <<EOF
+Usage:
+./picow.sh build
+  - Builds project
+./picow.sh flash
+  - Builds project and flash firmware to PicoW
+EOF
+exit
+}
+
+if [ $# -eq 0 ];then
+	usage
+fi
+
+VID="2e8a"
+PID="000a"
+PICOW_DEV=""
+PICOTOOL_DIR="picotool"
+
+UP_ONE_DIR=".." 		# Project base folder is up one folder
+UTILS_DIR="utils" 	# Utilities folder
+BUILD_DIR="build"	# Build folder
+
+# Change to base project folder
+cd $UP_ONE_DIR
+
+# Check if build folder exists
+if [ ! -d "$BUILD_DIR" ]; then
+	mkdir build
+fi
+
+# Change to build directory
+cd $BUILD_DIR
+
+# Build project
+echo "Building project..."
+cmake ..
+make
+
+if [ $1 = "flash" ]; then
+	# Change to utils folder
+	cd $UP_ONE_DIR/$UTILS_DIR
+
+	# Flash to PicoW
+	echo
+	echo "Flashing to PicoW..."
+	# Show PicoW dev
+	for sysdevpath in $(find /sys/bus/usb/devices/usb*/ -name dev); do
+		syspath="${sysdevpath%/dev}"
+		devname="$(udevadm info -q name -p $syspath)"
+
+		if [[ "$devname" == "tty"* ]]; then
+			eval "$(udevadm info -q property --export -p $syspath)"
+			if [[ "$ID_VENDOR_ID" == "$VID" && "$ID_MODEL_ID" == "$PID" ]]; then
+				PICOW_DEV="/dev/${devname}"
+				break
+			fi
+		fi
+	done
+
+	# Check if the picotool repository exists
+	echo "Checking if Picotool exists..."
+	if [ ! -d "$PICOTOOL_DIR/$BUILD_DIR" ]; then
+		echo "Picotool is missing. Cloning repository..."
+		git submodule update --init
+
+		# Change to the cloned repository
+		cd "$PICOTOOL_DIR"
+
+		# Create build folder
+		mkdir $BUILD_DIR && cd $BUILD_DIR
+		echo "Building picotool..."
+		cmake ..
+		make
+
+		# Check if a picotool exists
+		if [ ! -f "picotool" ]; then
+			echo "picotool not found, was the repository cloned properly?"
+			echo "Flashing aborted..."
+			exit
+		else
+			cd $UP_ONE_DIR/$UP_ONE_DIR
+		fi
+	else
+		echo "Picotool - okay"
+	fi
+
+	echo "PicoW is $PICOW_DEV"
+
+	# Reset PicoW
+	if [ "$PICOW_DEV" == "" ]; then
+		echo "PicoW is not detected, is it plugged in? Exiting..."
+		exit
+	else
+		echo "Resetting $PICOW_DEV to 1200bps"
+		stty -F ${PICOW_DEV} 1200
+		sleep 1 # Let the system redetect PicoW in bootloader mode
+		${PICOTOOL_DIR}/build/./picotool load -f -x ${UP_ONE_DIR}/build/firefly.uf2
+	fi
+
+	echo "Flashing done..."
+fi
