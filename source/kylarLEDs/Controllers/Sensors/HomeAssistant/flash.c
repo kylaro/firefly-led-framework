@@ -33,11 +33,9 @@ void flash_read_device_info() {
     memcpy(&device_info, flash_data, sizeof(device_info_t));
 
     // If the flash data is invalid, use default values
-    if (strlen(device_info.name) == 0 || strlen(device_info.model) == 0 || strlen(device_info.manufacturer) == 0 || strlen(device_info.entity) == 0) {
+    if (strlen(device_info.name) == 0 || strlen(device_info.model) == 0) {
         snprintf(device_info.name, sizeof(device_info.name), DEFAULT_DEVICE_NAME);
         snprintf(device_info.entity, sizeof(device_info.entity), DEFAULT_ENTITY_NAME);
-        snprintf(device_info.model, sizeof(device_info.model), DEFAULT_DEVICE_MODEL);
-        snprintf(device_info.manufacturer, sizeof(device_info.manufacturer), DEFAULT_DEVICE_MANUFACTURER);
     }
 }
 

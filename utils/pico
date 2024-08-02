@@ -15,6 +15,10 @@ if [ $# -eq 0 ];then
 	usage
 fi
 
+if [ $1 != "build" ] && [ $1 != "flash" ]; then
+	usage
+fi
+
 VID="2e8a"
 PID="000a"
 PICOW_DEV=""
@@ -38,7 +42,13 @@ cd $BUILD_DIR
 # Build project
 echo "Building project..."
 cmake ..
-make
+if make; then
+	echo "Build done"
+else
+	echo "Build failed."
+	echo "Try deleting the <base dir>/build folder and retry"
+	exit
+fi
 
 if [ $1 = "flash" ]; then
 	# Change to utils folder

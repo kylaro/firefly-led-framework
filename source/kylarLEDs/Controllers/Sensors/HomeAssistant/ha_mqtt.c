@@ -120,10 +120,6 @@ static void mqtt_build_topics() {
     snprintf(update_devname_t, sizeof(update_devname_t), "ha/%s/update/devname", mac_str);
     // Update entity name topic (Home Assistant to PicoW)
     snprintf(update_entname_t, sizeof(update_entname_t), "ha/%s/update/entname", mac_str);
-    // Update device model topic (Home Assistant to PicoW)
-    snprintf(update_model_t, sizeof(update_model_t), "ha/%s/update/mdl", mac_str);
-    // Update device manufacturer topic (Home Assistant to PicoW)
-    snprintf(update_mf_t, sizeof(update_mf_t), "ha/%s/update/mf", mac_str);
 }
 
 // Global data
@@ -201,11 +197,9 @@ static err_t _mqtt_publish_discovery() {
         "\"uniq_id\":\"%s\","
         "\"dev\":{\"ids\":\"%s\","
         "\"name\":\"%s\","
-        "\"sw\":\"%s\","
-        "\"mdl\":\"%s\","
-        "\"mf\":\"%s\"}}",
+        "\"sw\":\"%s\"}}",
         device_info.entity, led_stat_t, led_set_t, mac_str, mac_str,
-        device_info.name, SW_VERSION, device_info.model, device_info.manufacturer);
+        device_info.name, SW_VERSION);
     _mqtt_publish(discovery_t, msg, 1, 1);
 }
 
