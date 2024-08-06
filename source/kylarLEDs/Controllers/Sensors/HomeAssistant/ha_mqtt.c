@@ -116,8 +116,6 @@ static void mqtt_build_topics() {
     snprintf(led_stat_t, sizeof(led_stat_t), "ha/%s/led/stat_t", mac_str);
     // LED set topic (Home Assistant to PicoW)
     snprintf(led_set_t, sizeof(led_set_t), "ha/%s/led/set_t", mac_str);
-    // Update device name topic (Home Assistant to PicoW)
-    snprintf(update_devname_t, sizeof(update_devname_t), "ha/%s/update/devname", mac_str);
     // Update entity name topic (Home Assistant to PicoW)
     snprintf(update_entname_t, sizeof(update_entname_t), "ha/%s/update/entname", mac_str);
 }
@@ -135,6 +133,49 @@ static void mqtt_pub_start_cb(void *arg, const char *topic, u32_t tot_len) {
     } else {
         data_in = tot_len;
         data_len = 0;
+    }
+}
+
+void mqtt_parse_custom_data(const char *data_str) {
+    // Define the key we are looking for
+    const char *key = "value:";
+    size_t key_len = strlen(key);
+
+    // Find the key in the input string
+    const char *key_pos = strstr(data_str, key);
+    if (key_pos != NULL) {
+        // Skip past the key to the value
+        const char *value_pos = key_pos + key_len;
+
+        // Trim leading whitespace
+        while (*value_pos == ' ' || *value_pos == '\t' || *value_pos == '"') {
+            value_pos++;
+        }
+
+        // Copy the value into a buffer
+        char value[MAX_NAME_LENGTH] = {0};
+        strncpy(value, value_pos, MAX_NAME_LENGTH - 1);
+        value[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null-termination
+
+        // Trim trailing whitespace
+        char *end = value + strlen(value) - 1;
+        while (end > value && (*end == ' ' || *end == '\t' || *end == '\n' || *end == '\r' || *end == '"')) {
+            *end = '\0';
+            end--;
+        }
+
+        if("None" != ((const char *)value)) {
+            // Save into flash and mark the data as valid
+            char default_name[128] = {0};
+            snprintf(default_name, sizeof(default_name), "%s %s", DEFAULT_DEVICE_NAME, DEFAULT_ENTITY_NAME);
+            if(strncmp(value, default_name, sizeof(value)) != 0) {
+                printf("%d\n\r", __LINE__);
+                snprintf(device_info.entity, strlen(value), value);
+                flash_write_device_info();
+            }
+        }
+    } else {
+        printf("Key 'value:' not found in input string\n");
     }
 }
 
@@ -158,24 +199,11 @@ static void mqtt_pub_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
             cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
             _mqtt_publish(led_stat_t, "OFF", 0, 0);
             ha_data.enabled = false;
-        } else if (strncmp((const char *)data, update_devname_t, strlen(update_devname_t)) == 0) {
-            strncpy(device_info.name, (const char *)data, len);
-            device_info.name[len] = '\0';
-            flash_write_device_info();
-        } else if (strncmp((const char *)data, update_model_t, strlen(update_model_t)) == 0) {
-            strncpy(device_info.model, (const char *)data, len);
-            device_info.model[len] = '\0';
-            flash_write_device_info();
-        } else if (strncmp((const char *)data, update_mf_t, strlen(update_mf_t)) == 0) {
-            strncpy(device_info.manufacturer, (const char *)data, len);
-            device_info.manufacturer[len] = '\0';
-            flash_write_device_info();
-        } else if (strncmp((const char *)data, update_entname_t, strlen(update_entname_t)) == 0) {
-            strncpy(device_info.entity, (const char *)data, len);
-            device_info.entity[len] = '\0';
-            flash_write_device_info();
         } else {
-            // topic is not subscribed to
+            printf("%d\n\r", __LINE__);
+            mqtt_parse_custom_data(buffer);
+            printf("%d\n\r", __LINE__);
+
         }
     }
 }
@@ -306,6 +334,7 @@ void ha_mqtt_loop() {
 
                 if (!subscribed) {
                     mqtt_sub_unsub(g_state->mqtt_client, led_set_t, 0, mqtt_sub_request_cb, 0, 1);
+                    mqtt_sub_unsub(g_state->mqtt_client, update_entname_t, 0, mqtt_sub_request_cb, 0, 1);
                     subscribed = true;
                 }
                 if (!discovered) {
