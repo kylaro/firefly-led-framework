@@ -1,8 +1,8 @@
 #include "wifi.h"
 
 // WIFI Credentials - take care if pushing to github!
-const char WIFI_SSID[] = "trojan-virus"; // "Starlink";
-const char WIFI_PASSWORD[] = "dmesg1-W-clear!"; // "spacelasers42069";
+const char WIFI_SSID[] = "Starlink";
+const char WIFI_PASSWORD[] = "spacelasers42069";
 
 int wifi_init() {
     cyw43_arch_init();
