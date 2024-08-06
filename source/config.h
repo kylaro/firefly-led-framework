@@ -35,11 +35,11 @@
 ////////////////////////////////////////////////////////////
 /////////                MICROPHONE             ////////////
 ////////////////////////////////////////////////////////////
+/**
+ * Signal Processing Options
+ */
 #define LOW_BINS 20
 #define SKIP_BINS 0
-#define DEBUG_PRINT 0
-
-
 
 
 ////////////////////////////////////////////////////////////
@@ -50,11 +50,28 @@
 #define MQTT_BROKER "192.168.1.227"
 #define MQTT_HEARTBEAT 0
 
-// WIFI Credentials - take care if pushing to github!
+
+////////////////////////////////////////////////////////////
+/////////                WIFI                   ////////////
+////////////////////////////////////////////////////////////
+/**
+ * WIFI_SSID and WIFI_PASSWORD are used when joining a wifi network (mqtt)
+ * AP_WIFI_SSID and AP_WIFI_PASSWORD are used when creating the wifi network (wifi access point)
+ * The AP stuff is not implemented yet.
+ */
 #define WIFI_SSID "trojan-virus" // "Starlink";
 #define WIFI_PASSWORD "dmesg1-W-clear!" // "spacelasers42069";
+#define AP_WIFI_SSID "picow"
+#define AP_WIFI_PASSWORD "12345678"
 
 
+////////////////////////////////////////////////////////////
+/////////                DEBUG                   ////////////
+////////////////////////////////////////////////////////////
+#define DEBUG_PRINT_MAIN 0
+#define DEBUG_PRINT_MIC 1
+#define DEBUG_PRINT_MIC_TIMING 1
+#define DEBUG_PRINT_OTHER 1
 
 ////////////////////////////////////////////////////////////
 /////////                MISC                   ////////////

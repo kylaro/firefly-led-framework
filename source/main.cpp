@@ -70,10 +70,10 @@ int main(){
     ExecTimer *timer = new ExecTimer();
     //Main loop
     while(1){
-        // mem usage:
-        struct mallinfo mi = mallinfo();
-        if(DEBUG_PRINT){
-            // printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )~
+        if(DEBUG_PRINT_MAIN){
+             // mem usage:
+            struct mallinfo mi = mallinfo();
+            printf("Total allocated space (bytes):      %d\n", mi.uordblks); // max is about 238516 bytes ( unless there is ghost memory )~
         }
         if(currentPatternIndex == nextPatternIndex){
             //We are remaining on the same pattern
@@ -88,7 +88,7 @@ int main(){
             timer->add("LEDs::apply()");
             LEDs::output();         // Output to strip via controller
             timer->add("LEDs::output()");
-            // if(DEBUG_PRINT) timer->print();
+            if(DEBUG_PRINT_MAIN) timer->print();
         }else{
             //We are changing pattern
             currentPattern->release();                      //Finish the current pattern
