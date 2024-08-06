@@ -106,10 +106,6 @@ static err_t _mqtt_publish(const char *topic, const char *msg, uint8_t retain, u
 }
 
 static void mqtt_build_topics() {
-    uint8_t mac[6];
-    cyw43_wifi_get_mac(NULL, CYW43_ITF_STA, mac);
-    // Unique ID
-    snprintf(mac_str, sizeof(mac_str), "%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
     // Discovery topic (PicoW to Home Assistant)
     snprintf(discovery_t, sizeof(discovery_t), "homeassistant/switch/%s/config", mac_str);
     // LED state topic (PicoW to Home Assistant)
@@ -245,8 +241,11 @@ static err_t mqtt_test_connect() {
     err_t err;
 
     memset(&ci, 0, sizeof(ci));
-
-    ci.client_id = "PicoW";
+    uint8_t mac[6];
+    cyw43_wifi_get_mac(NULL, CYW43_ITF_STA, mac);
+    // Unique ID
+    snprintf(mac_str, sizeof(mac_str), "%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    ci.client_id = mac_str;
     ci.client_user = NULL;
     ci.client_pass = NULL;
     ci.keep_alive = 0;

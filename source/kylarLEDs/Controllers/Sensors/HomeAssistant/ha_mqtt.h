@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 
-#define MQTT_LOGIN "ha" // "kylar"
-#define MQTT_PASSWORD "ha" // "SudoRoot42069"
-#define MQTT_BROKER "192.168.1.18" // 227"
+#define MQTT_LOGIN "kylar"
+#define MQTT_PASSWORD "SudoRoot42069"
+#define MQTT_BROKER "192.168.1.227"
 
 /* Topic definitions are replaced with char array so it
  * could be dynamically tied with the Unique ID (WiFi MAC)

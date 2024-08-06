@@ -30,9 +30,9 @@ docker run -itd \
 --name=mqtt \
 --restart=always \
 --net=host \
--v /home/cj/mosquitto/config:/mosquitto/config \
--v /home/cj/mosquitto/data:/mosquitto/data \
--v /home/cj/mosquitto/log:/mosquitto/log \
+-v <folder_path>/mosquitto/config:/mosquitto/config \
+-v <folder_path>>/mosquitto/data:/mosquitto/data \
+-v <folder_path>>/mosquitto/log:/mosquitto/log \
 eclipse-mosquitto
 
 
@@ -48,7 +48,7 @@ docker run -d \
   --privileged \
   --restart=unless-stopped \
   -e TZ=Asia/Manila \
-  -v /home/cj/ha:/config \
+  -v <folder_path>/ha:/config \
   -v /run/dbus:/run/dbus:ro \
   --network=host \
   ghcr.io/home-assistant/home-assistant:stable
@@ -76,20 +76,4 @@ How to
 Supposedly, the Pico-W board will automatically be added to the Home Assistant dashboard!
 
 How?
-- Initially there is no device configuration in the MQTT broker
-- When the Pico-W fired up, it automagically enrolled a device in the MQTT broker
-- On the Home Assistant side, since it has the MQTT integration and the credentials of the MQTT broker,
-  it sees the updated device list in the MQTT broker and subsequently displays it in Home Assistant dashboard
-
-How?
-- The firmware has
- - network integration (basically wifi config)
- - home assistant integration (mqtt and home assistant)
- - endless loop (waits for state change)
-
-What is home assistant integration?
-- Device - It contains here the name of the device and version number
-- Mqtt - Mqtt configuration
-- Switch - Entity
-
-State change is monitored by a PubSub class?
+- The Home Assistant supports auto discovery. The PicoW creates a discovery message within the firmware and publishes it to the topic that Home Assistant for configuration.
