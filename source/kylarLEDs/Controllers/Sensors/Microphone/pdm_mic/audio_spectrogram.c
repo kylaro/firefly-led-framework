@@ -110,7 +110,7 @@ void pdm_core1_entry(){
 #endif
         if(exec_timing){
             cur_time = get_absolute_time();
-            printf("wait = %.1f us\n", (double)(cur_time-start_time));
+            printf("wait = %.1f us\n", (double)(to_us_since_boot(cur_time)-to_us_since_boot(start_time)));
             start_time = get_absolute_time();
         }
         new_samples_captured = 0;
@@ -128,7 +128,7 @@ void pdm_core1_entry(){
 #endif
         if(exec_timing){
             cur_time = get_absolute_time();
-            printf("arm stuff = %.1f us\n", (double)(cur_time-start_time));
+            printf("arm stuff = %.1f us\n", (double)(to_us_since_boot(cur_time)-to_us_since_boot(start_time)));
             start_time = get_absolute_time();
         }
         
@@ -202,7 +202,7 @@ void pdm_core1_entry(){
         }
 #endif
         if(exec_timing){
-            printf("sound FPS = %.1f / sec\n\n", 1000000.0/(double)(get_absolute_time() - new_time));
+            printf("sound FPS = %.1f / sec\n\n", 1000000.0/(double)(to_us_since_boot(get_absolute_time()) - to_us_since_boot(new_time)));
         }
     }
 }

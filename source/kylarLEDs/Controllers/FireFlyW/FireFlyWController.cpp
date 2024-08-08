@@ -7,7 +7,7 @@
 #include "../../../config.h"
 // #include "WiFi/wifi.h"
 
-uint64_t FireFlyWController::channel_end_times[NUM_STRIPS];
+absolute_time_t FireFlyWController::channel_end_times[NUM_STRIPS];
 strip_t FireFlyWController::strips[NUM_STRIPS];
 FireFlyWController::FireFlyWController()
 {
@@ -119,15 +119,15 @@ void FireFlyWController::initCommunication()
 
 uint64_t FireFlyWController::getCurrentTimeMicros()
 {
-    absolute_time_t new_time = get_absolute_time(); // Microseconds
-    uint64_t micros = new_time;
+    // absolute_time_t new_time = get_absolute_time(); // Microseconds
+    uint64_t micros = to_us_since_boot(get_absolute_time());
     return micros;
 }
 
 uint64_t FireFlyWController::getCurrentTimeMillis()
 {
-    absolute_time_t new_time = get_absolute_time(); // Microseconds
-    uint64_t millis = new_time / 1000;
+    // absolute_time_t new_time = get_absolute_time(); // Microseconds
+    uint64_t millis = to_us_since_boot(get_absolute_time()) / 1000;
     return millis;
 }
 

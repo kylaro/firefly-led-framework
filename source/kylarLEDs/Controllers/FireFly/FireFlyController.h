@@ -41,7 +41,7 @@ class FireFlyController : public Controller{
         uint8_t PX_pins[PX_PINS] = {16, 17, 8, 9};
         uint8_t PX_sms[PX_PINS] = {0, 1, 2, 3};
         uint8_t bitflipLUT[256];
-        static uint64_t channel_end_times[NUM_STRIPS];
+        static absolute_time_t channel_end_times[NUM_STRIPS];
         
         //uint8_t PX_pin = 17; // 16 for 1, 17 for 2
         //uint8_t PX_sm = 0;

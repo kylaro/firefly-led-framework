@@ -13,7 +13,7 @@ void Button::interrupt(uint gpio, uint32_t event){
         Encoder::interrupt(gpio, event);
         return;
     }
-    static absolute_time_t last_time = 0;
+    static absolute_time_t last_time = {0};
     static int press_state = 0;// 0 Waiting for press, 1 waiting for release
     absolute_time_t new_time = get_absolute_time();
     

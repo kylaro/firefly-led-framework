@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.13)
 
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 # optionally initialize pico_sdk from GIT
 # (note this can come from environment, CMake cache etc)
 set(PICO_SDK_FETCH_FROM_GIT on)

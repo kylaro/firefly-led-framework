@@ -11,7 +11,7 @@ uint8_t Encoder::pinB;
 
 void Encoder::interrupt(uint gpio, uint32_t event)
 {
-    static absolute_time_t last_time = 0;
+    static absolute_time_t last_time = {0};
     static double velocity = 0; // measure how many times the encoder has been turned in the last second
     absolute_time_t new_time = get_absolute_time();
 
