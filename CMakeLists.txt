@@ -86,12 +86,12 @@ target_link_libraries(  firefly
                         CMSISDSPComplexMath 
                         CMSISDSPFastMath 
                         CMSISDSPBasicMath
-                        pico_cyw43_arch_lwip_poll # pico w only
-                        pico_lwip_http # pico w only
-                        pico_lwip_mqtt # mqtt client
-                        pico_lwip # for lwip init
-                        pico_lwip_mbedtls
-                        pico_mbedtls
+                        # pico_cyw43_arch_lwip_poll # pico w only
+                        # pico_lwip_http # pico w only
+                        # pico_lwip_mqtt # mqtt client
+                        # pico_lwip # for lwip init
+                        # pico_lwip_mbedtls
+                        # pico_mbedtls
 )
 
 

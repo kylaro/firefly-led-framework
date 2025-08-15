@@ -1,6 +1,5 @@
 #include "audio_spectrogram.h"
 #include "pico/time.h"
-#include "../../../FireFlyW/WiFi/wifi.h"
 #include "../../../../../config.h"
 #include "hardware/adc.h"
 #include "hardware/dma.h"

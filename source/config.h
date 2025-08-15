@@ -13,10 +13,10 @@
  * TODO: Make the strips able to turn on / off output pins.
  * 
  */
-#define NUM_STRIPS 1
-#define NUM_LEDS 49
-#define LEDS_OFFSET -6
-//#define HARDCODE_BRIGHTNESS 0.7 // Comment this out if you don't want to hardcode the brightness. This overrides the Potentiometer.
+#define NUM_STRIPS 2
+#define NUM_LEDS 120
+#define LEDS_OFFSET 0
+#define HARDCODE_BRIGHTNESS 0.5 // Comment this out if you don't want to hardcode the brightness. This overrides the Potentiometer.
 
 ////////////////////////////////////////////////////////////
 /////////                 HARDWARE              ////////////
@@ -29,7 +29,7 @@
  * MQTT Enable: Turn on Wifi in Core1, but for MQTT + Home Assistant in Station mode
  * WiFi Enable: Turn on Wifi in Core1, but host a network + website in Access Point mode
  */
-#define MICROPHONE_ENABLE 1
+#define MICROPHONE_ENABLE 0
 #define MQTT_ENABLE 0 // picow only.
 #define WIFI_ENABLE 0 // picow only.
 
@@ -87,10 +87,10 @@
 /////////                DEBUG                   ////////////
 ////////////////////////////////////////////////////////////
 #define DEBUG_DELAY_MAIN 0 // Used to give time to start Serial Monitoring
-#define DEBUG_PRINT_MAIN 1
+#define DEBUG_PRINT_MAIN 0
 #define DEBUG_PRINT_MIC 0
 #define DEBUG_PRINT_MIC_TIMING 0
-#define DEBUG_PRINT_FLASH 1
+#define DEBUG_PRINT_FLASH 0
 #define DEBUG_PRINT_OTHER 0
 
 ////////////////////////////////////////////////////////////
